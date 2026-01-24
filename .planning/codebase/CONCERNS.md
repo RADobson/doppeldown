@@ -1,380 +1,220 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-01-23
-
-## Security Concerns
-
-**Exposed Secrets in .env.local:**
-- Issue: Live Stripe and Supabase credentials committed to repository
-- Files: `/home/dobsondev/1000_per_month/doppeldown/.env.local`
-- Risk: All API keys, service role keys, and webhook secrets are exposed. This gives attackers direct access to:
-  - Stripe payment processing (live mode with real charges)
-  - Supabase database (read/write access to all user data)
-  - Webhook infrastructure
-- Current mitigation: .env.local is tracked in git (should be .gitignored)
-- Fix approach: Immediately revoke all exposed keys in Stripe and Supabase dashboards. Move .env.local to .gitignore. Use environment secrets in deployment platform instead.
-
-**Insufficient Webhook Signature Validation:**
-- Issue: Stripe webhook handler accepts requests without proper error handling for missing secrets
-- Files: `src/app/api/stripe/webhook/route.ts` (lines 10-24)
-- Problem: `process.env.STRIPE_WEBHOOK_SECRET!` uses non-null assertion without runtime check. If secret is undefined, webhook signature verification will fail silently with unclear errors.
-- Recommendation: Add explicit validation that STRIPE_WEBHOOK_SECRET is defined before processing webhooks. Return clear error messages.
-
-**SMTP Credentials Not Configured:**
-- Issue: Email alerts require SMTP credentials (Gmail or custom) but commented out in .env
-- Files: `src/lib/email.ts` (lines 5-12), `.env.local` (lines 20-24)
-- Risk: If email alerts are enabled without proper SMTP setup, transporter will fail with generic error. Users won't know why alerts aren't sending.
-- Impact: Critical alerts about phishing and brand threats won't reach users
-- Fix approach: Document required SMTP setup in README. Add fallback email service or validation on startup.
-
-**Unvalidated External API Calls:**
-- Issue: Multiple unvalidated HTTP requests to external services (WHOIS, DuckDuckGo, social platforms)
-- Files: `src/lib/evidence-collector.ts` (lines 7-29, 83-94), `src/lib/social-scanner.ts` (lines 173-180), `src/lib/web-scanner.ts` (various)
-- Risk:
-  - No timeout enforcement on most requests (only social-scanner has AbortSignal.timeout)
-  - No rate limiting between requests (only hardcoded delays)
-  - No validation of response content type or size
-  - DNS lookup API (Google DNS) called without validation of response format
-- Recommendation: Add consistent timeout (3-5 seconds), validate response headers, implement proper rate limiting with backoff.
-
-**DuckDuckGo Web Scraping:**
-- Issue: Scraping DuckDuckGo HTML results using regex
-- Files: `src/lib/social-scanner.ts` (lines 171-206)
-- Risk: HTML parsing is fragile (regex-based), violates DuckDuckGo ToS, may trigger IP blocks
-- Problem: Results are used as evidence for threat detection - incorrect parsing could create false positives
-- Fix approach: Use legitimate search API (Bing API has free tier) instead of scraping. Implement proper HTML parser if scraping unavoidable.
-
-**No CORS or CSRF Protection:**
-- Issue: API endpoints don't explicitly enforce CORS/CSRF validation
-- Files: All files in `src/app/api/`
-- Risk: While Next.js provides some defaults, mutation endpoints should explicitly validate origins
-- Recommendation: Add explicit CORS validation for cross-origin requests, implement CSRF tokens for state-changing operations.
-
----
+**Analysis Date:** 2026-01-24
 
 ## Tech Debt
 
-**Large Monolithic Components:**
-- Issue: Dashboard page is 689 lines with complex polling logic embedded
-- Files: `src/app/dashboard/page.tsx` (689 lines)
-- Problem:
-  - Onboarding flow mixed with dashboard logic
-  - Polling interval hardcoded (5 seconds for 5 minutes max)
-  - No request deduplication
-  - Multiple useState for brand data creates fetch race conditions
-- Impact: Hard to test, maintain, and debug. Onboarding changes risk breaking main dashboard.
-- Fix approach: Extract `OnboardingFlow` to separate component file. Create custom hook for dashboard data fetching with proper race condition handling.
+**Silent Error Swallowing:**
+- Issue: Multiple `.catch()` handlers silently suppress errors without logging or propagating failures.
+- Files: `src/app/api/evidence/sign/route.ts`, `src/app/api/brands/logo/route.ts`, `src/lib/openai-analysis.ts`, `src/lib/logo-scanner.ts`
+- Impact: Failures go undetected, making debugging difficult. API calls that fail silently return empty defaults, degrading data quality.
+- Fix approach: Replace silent catch blocks with explicit error logging and graceful fallbacks that inform callers of failure.
 
-**Dashboard Settings Page:**
-- Issue: 652 lines with embedded stripe integration logic
-- Files: `src/app/dashboard/settings/page.tsx` (652 lines)
-- Problem: Payment plan UI, user data updates, and alert configuration all in one file
-- Impact: Tests would need to mock too many dependencies
-- Fix approach: Split into SettingsPage (shell), PlanManagement, AlertSettings, ProfileSettings components.
+**Weak Type Safety with 'any':**
+- Issue: Core API routes accept `any` types for evidence and request bodies, bypassing type checking.
+- Files: `src/app/api/evidence/sign/route.ts` (lines 6, 14, 27, 34), `src/app/api/reports/route.ts` (line 12)
+- Impact: Type errors in evidence handling pass through until runtime. Invalid data structures can cause crashes or incorrect behavior.
+- Fix approach: Replace `any` with explicit interfaces for request bodies and evidence objects.
 
-**Reports Page:**
-- Issue: 401 lines in single component with complex PDF generation and download logic
-- Files: `src/app/dashboard/reports/new/page.tsx` (401 lines)
-- Problem: Client-side PDF generation with jspdf + html2canvas is memory intensive for large threat lists
-- Fix approach: Move PDF generation to backend API endpoint, stream results to avoid memory exhaustion.
+**Database Query Patterns Without Null Checking:**
+- Issue: Supabase queries access `.data` property without always checking for errors first, relying on optional chaining.
+- Files: `src/lib/scan-runner.ts` (lines 484, 569, 647), `src/lib/evidence-collector.ts` (line 115)
+- Impact: Unexpected database errors could result in undefined objects being processed as valid data.
+- Fix approach: Add explicit error checks before accessing query results.
 
-**Type Safety Issues:**
-- Issue: Widespread use of `any` types in critical functions
-- Files: `src/app/api/scan/route.ts` (lines 73-74), `src/app/api/cron/scan/route.ts` (lines 143-144)
-- Problem: runScan and runBrandScan accept `any` for supabase client, breaking type safety
-- Risk: Undetected bugs at runtime
-- Fix approach: Create proper TypeScript interfaces for supabase client and brand data.
+## Known Issues
 
-**No Input Validation:**
-- Issue: API endpoints accept user input without validation
-- Files: `src/app/api/brands/route.ts`, `src/app/api/scan/route.ts`, `src/app/api/scan/social/route.ts`
-- Problem: No schema validation on request bodies (brandId, scanType, platforms, etc.)
-- Risk: Invalid input could crash scanners or cause database errors
-- Fix approach: Use `zod` or similar for request validation on all POST/PUT endpoints.
+**Unhandled Promise Rejections in Scan Progress:**
+- Issue: `ensureNotCancelled()` and `updateProgress()` catch errors but only warn; parent scan may continue processing.
+- Files: `src/lib/scan-runner.ts` (lines 334-338, 354-356)
+- Impact: Cancellation signals may be ignored; progress updates may fail silently, leaving UI out of sync.
+- Fix approach: Propagate cancellation errors instead of suppressing them.
 
-**Error Handling:**
-- Issue: Generic error messages throughout codebase
-- Files: Multiple API routes (lines 65-69, 89-94, etc.)
-- Problem: `console.error()` logs internally but returns generic "Failed to X" to clients
-- Risk: Users and developers can't diagnose failures. Production issues invisible.
-- Fix approach: Implement structured logging with error codes. Return descriptive errors for client-side debugging.
+**OpenAI Vision Endpoint Mismatch:**
+- Issue: Calls `/responses` endpoint which doesn't appear to be a standard OpenAI API. Vision models typically use `/chat/completions`.
+- Files: `src/lib/openai-analysis.ts` (line 65)
+- Impact: Vision analysis will fail in production. Feature advertised but non-functional.
+- Fix approach: Use correct OpenAI `/chat/completions` endpoint with vision models (gpt-4-vision, gpt-4o).
 
-**Missing Retry Logic:**
-- Issue: External API calls fail silently without retry
-- Files: `src/lib/evidence-collector.ts` (getWhoisData, captureScreenshot)
-- Problem: Network glitches cause permanent failure to collect evidence
-- Impact: Threat evidence incomplete, lowering credibility of takedown reports
-- Fix approach: Implement exponential backoff retry (3 attempts) for external calls.
+**Incomplete Email Configuration Validation:**
+- Issue: Email transport created without checking if SMTP credentials exist; will fail silently if env vars missing.
+- Files: `src/lib/email.ts` (lines 5-13)
+- Impact: Email alerts may never send without user notification. Critical security feature silently disabled.
+- Fix approach: Validate SMTP credentials on startup; log warnings if email unavailable.
 
----
+## Security Considerations
+
+**Exposed Debug Logging in Production:**
+- Issue: Debug mode controlled by environment variables (`SCAN_DEBUG_BRAND`, `SCAN_DEBUG_DOMAINS`) logs detailed brand/domain info to console.
+- Files: `src/lib/scan-runner.ts` (lines 115-116, 287-290, 379-387, 411-417, 422-427)
+- Impact: In production, sensitive brand monitoring patterns could be logged to application logs if debug env vars are set.
+- Recommendations: Remove debug logging or gate it behind a flag that's false in production by default.
+
+**Unauthenticated Evidence Signing Route:**
+- Issue: Evidence signing endpoint validates user but doesn't verify brand ownership within the evidence object.
+- Files: `src/app/api/evidence/sign/route.ts` (lines 50-59)
+- Impact: User could request signed URLs for other users' threat evidence if they know the threatId.
+- Recommendations: Add per-evidence authorization check confirming threat belongs to authenticated user's brand.
+
+**Overly Permissive Stripe Webhook:**
+- Issue: Webhook endpoint doesn't validate event type before processing, could execute logic on unintended events.
+- Files: `src/app/api/stripe/webhook/route.ts` (implied from common patterns)
+- Impact: Subscription state could be corrupted by edge-case events or testing events in production.
+- Recommendations: Whitelist only required event types before processing.
+
+**HTML Injection in Report Generation:**
+- Issue: Threat URL and domain data inserted directly into HTML report templates without escaping.
+- Files: `src/lib/report-generator.ts` (lines 43-54), `src/lib/email.ts` (lines 74-80)
+- Impact: Malicious URLs containing `<script>` or `on*` attributes could execute in PDF viewers or email clients.
+- Recommendations: Escape HTML entities in dynamic content or use templating engine with auto-escaping.
 
 ## Performance Bottlenecks
 
-**Unbounded Domain Variation Generation:**
-- Issue: Domain variation generation explodes exponentially
-- Files: `src/lib/domain-generator.ts` (lines 70-112)
-- Problem:
-  - Missing letter variations: up to N possibilities
-  - Double letter variations: up to N possibilities
-  - Added letter variations: (N+1) * 26 possibilities
-  - Character substitutions: multiple per character
-  - Affixes: 10 affixes * 4 formats = 40 per affix
-  - Total: Can exceed 100,000+ variations for moderate brand names
-- Current limit: `variationLimit: 100` in scan config, but function generates all first
-- Risk: Memory exhaustion, slow scan startup
-- Fix approach: Generate variations lazily with iterator pattern, stop at limit immediately.
+**Unoptimized Domain Variation Generation:**
+- Issue: `scan-runner.ts` generates variations into a Map, then filters/sorts extensively without caching or early termination.
+- Files: `src/lib/scan-runner.ts` (lines 391-410)
+- Impact: For high variation limits (100+), memory usage and CPU spike. No pagination or streaming.
+- Improvement path: Implement lazy generation; yield variations in batches; cache frequently used domains.
 
-**Synchronous Rate Limiting:**
-- Issue: Rate limiting uses setTimeout in loops
-- Files: `src/lib/social-scanner.ts` (lines 201, 354, 359)
-- Problem: Blocks event loop, prevents other requests while scanning
-- Impact: Single scan locks up dashboard for entire duration
-- Fix approach: Use Promise.all with concurrency limiter (p-limit) instead.
+**Synchronous HTML Parsing with Regex:**
+- Issue: DuckDuckGo HTML parsed with regex loops that build results until limit. No streaming or timeout.
+- Files: `src/lib/web-scanner.ts` (lines 61-95), `src/lib/social-scanner.ts` (lines 100-142)
+- Impact: Large HTML responses (1-10MB) parsed synchronously, blocking event loop. Network timeout doesn't cover parsing.
+- Improvement path: Implement streaming parser or paginated search results.
 
-**Unoptimized Database Queries:**
-- Issue: Multiple sequential Supabase calls per scan
-- Files: `src/app/api/scan/route.ts`, `src/app/api/cron/scan/route.ts`
-- Problem:
-  - Fetch brand
-  - Create scan record
-  - Fetch domain variations
-  - For each variation: check registration
-  - Create threats
-  - Update brand threat count
-  - Each is a separate round-trip
-- Impact: Scan latency multiplied by network delay
-- Fix approach: Batch operations where possible. Use Supabase transaction-like patterns.
+**Inefficient Logo Detection API Calls:**
+- Issue: Google Lens and SerpAPI called sequentially; could fail completely if first API fails.
+- Files: `src/lib/logo-scanner.ts` (lines 36-95)
+- Impact: Logo detection unreliable; no fallback strategy if APIs rate limit or error.
+- Improvement path: Implement parallel API calls with timeout racing; add retry with exponential backoff.
 
-**PDF Generation on Client:**
-- Issue: Large threat lists cause jspdf + html2canvas memory issues
-- Files: `src/app/dashboard/reports/new/page.tsx` (report download logic)
-- Problem: Rendering full HTML to canvas before PDF conversion = memory spike
-- Impact: Browser crash for users with 100+ threats
-- Fix approach: Move PDF generation to backend, stream chunks to client.
-
-**N+1 Query in Dashboard:**
-- Issue: Fetching threats then loading associated brand data individually
-- Files: `src/app/dashboard/page.tsx` (lines 88-95)
-- Problem: Line 90 does `.select('*, brands!inner(name, user_id)')` which is good, but if brands aren't joined properly, code fetches brand details separately
-- Risk: Dashboard load time increases with threat count
-- Fix approach: Ensure all relations are properly selected in initial query.
-
----
+**Polling in Dashboard with No Backoff:**
+- Issue: Dashboard components poll every 4 seconds without detecting stale data or implementing exponential backoff.
+- Files: `src/app/dashboard/brands/[id]/page.tsx` (line 338), `src/app/dashboard/page.tsx` (line 467)
+- Impact: Generates constant load on API; no awareness of user leaving page. Scales poorly with user count.
+- Improvement path: Use websockets via Supabase realtime or implement exponential backoff + page visibility API.
 
 ## Fragile Areas
 
-**Cron Scan Logic:**
-- Files: `src/app/api/cron/scan/route.ts` (lines 51-127)
-- Why fragile:
-  - Manually checks subscription tier against hardcoded tiers (starter/professional/enterprise)
-  - If new tier added to Stripe, cron breaks
-  - No transaction wrapping - partial failures leave scan record incomplete
-  - Brand object accessed with optional chaining but no type safety
-- Safe modification: Add enum for subscription tiers. Wrap scan update/create in transaction. Add database constraints.
+**Screenshot Capture Dependency:**
+- Issue: Screenshot generation fails silently; scan continues without visual evidence, reducing threat detection quality.
+- Files: `src/lib/scan-runner.ts` (lines 359-373), `src/lib/evidence-collector.ts` (lines 158-220)
+- Impact: Crucial for visual similarity analysis; if puppeteer fails, evidence is incomplete but scan succeeds.
+- Safe modification: Add explicit screenshot validation step; fail scan cleanly if screenshots unavailable.
+- Test coverage: No unit tests for screenshot failures; only happy path tested.
 
-**Webhook Handler Reliability:**
-- Files: `src/app/api/stripe/webhook/route.ts` (lines 29-111)
-- Why fragile:
-  - Relies on metadata.plan field which may not be present
-  - If metadata is missing, makes API call to Stripe to look up price
-  - No idempotency key handling - duplicate webhooks create duplicate updates
-  - Price lookup logic isn't cached, slows down webhook processing
-- Safe modification: Add idempotency tracking. Cache price ID to plan mapping. Add fallback plan determination.
+**Scan Cancellation State Machine:**
+- Issue: Cancellation checked via `ensureNotCancelled()` but not consistently called throughout scan loop.
+- Files: `src/lib/scan-runner.ts` (lines 323-339)
+- Impact: Scans may continue for minutes after cancellation if currently processing a slow external API call.
+- Safe modification: Add cancellation check to every async operation; use AbortController pattern.
+- Test coverage: No tests for cancellation paths.
 
-**Social Media Profile Detection:**
-- Files: `src/lib/social-scanner.ts` (lines 116-150)
-- Why fragile:
-  - HTTP status code 200 OR 300-399 indicates "exists" (line 139-140)
-  - Redirect might indicate bot detection, not actual profile
-  - No handling of rate limiting (429 status)
-  - Platform profiles may require JavaScript to load (HEAD request fails)
-- Safe modification: Test with actual platform rate limiting. Handle 429 gracefully. Consider switching to platform APIs.
+**Evidence Storage Bucket Configuration:**
+- Issue: Bucket name determined at runtime from request/env; defaults to 'evidence' if undefined. No validation that bucket exists.
+- Files: `src/lib/evidence-collector.ts` (line 21), `src/app/api/evidence/sign/route.ts` (line 15)
+- Impact: Evidence uploads fail if bucket misconfigured; users get generic error.
+- Safe modification: Validate bucket exists on startup; use single hardcoded bucket or pre-validate config.
+- Test coverage: No tests for bucket validation.
 
-**WHOIS Parsing:**
-- Files: `src/lib/evidence-collector.ts` (lines 55-80)
-- Why fragile:
-  - Regex-based parsing assumes WHOIS format consistency
-  - Different registrars use different formats
-  - Fallback to DNS lookup returns incomplete data
-  - No validation that parsed data is actually extracted
-- Safe modification: Use dedicated WHOIS library. Add validation of extraction success.
-
-**Domain Registration Check:**
-- Files: `src/lib/domain-generator.ts` (function not shown in read, but referenced)
-- Why fragile: Likely uses simple HTTP request to check if domain returns any response
-- Risk: 404 pages, parked domains, and sinkhole services all return responses
-- Fix: Use actual WHOIS or DNS approach for registration detection.
-
----
-
-## Known Bugs
-
-**Scan Polling Never Completes:**
-- Symptom: Onboarding scan shows "Scanning..." forever even after timeout
-- Files: `src/app/dashboard/page.tsx` (lines 444-468)
-- Trigger: If scan endpoint returns 500 error or network timeout during polling
-- Workaround: None - user must refresh page
-- Root cause: Polling continues for 5 minutes regardless of response status. If scan fails, no error feedback.
-- Fix: Add error state handling, provide user feedback when polling fails, reduce timeout.
-
-**Protection Score Calculation Edge Case:**
-- Symptom: Shows 100% protection when user has no threats
-- Files: `src/app/dashboard/page.tsx` (lines 152-154)
-- Math: When totalThreats=0 and resolvedThreats=0, returns 100
-- Problem: Misleading - zero threats doesn't mean 100% protected
-- Fix: Return null or special state when insufficient data, show "Not enough data" instead.
-
-**Threats Query Missing Status Filter:**
-- Symptom: Stats dashboard counts show threats including resolved ones
-- Files: `src/app/dashboard/page.tsx` (line 100-102 uses status filter, but inconsistently)
-- Issue: Count query uses `.not('status', 'in', '("resolved","false_positive")')` but string syntax may be incorrect
-- Risk: Dashboard stats don't match threat list
-- Fix: Use array syntax `.in('status', ['resolved', 'false_positive'])` for consistency.
-
-**Email Alert Silently Fails:**
-- Symptom: Threat alerts never arrive but no error in logs
-- Files: `src/app/api/cron/scan/route.ts` (lines 100-105)
-- Issue: Email send wrapped in try-catch but error logged to console only
-- Problem: Production deployments don't capture console.error reliably
-- Fix: Use structured logging (Sentry, Datadog, etc.). Store failed alert attempts in database for retry.
-
----
-
-## Missing Critical Features
-
-**No Rate Limiting:**
-- Problem: Scan endpoints can be called infinitely, wasting API quotas and compute
-- Files: `src/app/api/scan/route.ts`, `src/app/api/scan/social/route.ts`
-- Blocks: Users with free tier can DOS their own account by hammering scan endpoint
-- Fix: Implement per-user rate limiting (e.g., 5 scans/hour for free, unlimited for pro)
-
-**No Scan Cancellation:**
-- Problem: Long-running scans can't be stopped once started
-- Files: `src/app/api/scan/route.ts` background task
-- Blocks: Users stuck waiting for slow scans, especially social media scanning
-- Fix: Store scan status with cancellation tokens, allow DELETE /api/scan/:id
-
-**No Pagination on Threats:**
-- Problem: Dashboard loads first 6 threats, threats page loads all threats with no pagination
-- Files: `src/app/dashboard/page.tsx` (line 93 limit 6), `src/app/dashboard/threats/page.tsx`
-- Risk: UI becomes slow with 1000+ threats
-- Fix: Implement cursor-based pagination, load-more button, or infinite scroll
-
-**Missing Threat Search/Filter:**
-- Problem: Can't filter threats by type, severity, date range
-- Files: `src/app/dashboard/threats/page.tsx`
-- Impact: Users with many brands can't find specific threats
-- Fix: Add query parameters for severity, type, date range, status
-
-**No Bulk Operations:**
-- Problem: Can't mark multiple threats as resolved at once
-- Files: Threats UI components
-- Impact: Manual threat management is tedious
-- Fix: Add checkboxes, bulk status update endpoint
-
-**Missing Threat History/Audit Log:**
-- Problem: No record of when threat status changed or who changed it
-- Files: Database schema missing audit fields
-- Impact: Can't answer "when was this resolved?" or verify takedown success
-- Fix: Add threat_status_history table with timestamp and user_id
-
-**No Integration with Takedown Services:**
-- Problem: Generating reports manually, no automation
-- Files: `src/lib/report-generator.ts` generates reports but no integration layer
-- Impact: Users must manually contact registrars/hosts
-- Fix: Add integrations with DMCA notice APIs or takedown service providers
-
----
-
-## Test Coverage Gaps
-
-**API Endpoints Untested:**
-- What's not tested: All /api/* endpoints lack unit/integration tests
-- Files: `src/app/api/scan/route.ts`, `src/app/api/brands/route.ts`, `src/app/api/stripe/webhook/route.ts`, etc.
-- Risk: Regressions undetected until production. Webhook failures cause user subscription issues.
-- Priority: HIGH - Payment and core scanning logic exposed
-
-**Scanning Logic Untested:**
-- What's not tested: Domain generation, threat analysis, social media detection algorithms
-- Files: `src/lib/domain-generator.ts`, `src/lib/social-scanner.ts`, `src/lib/web-scanner.ts`
-- Risk: False positives/negatives sent to users as threat detections
-- Priority: HIGH - Core product reliability
-
-**Authentication Untested:**
-- What's not tested: Auth flows, permission checks on database queries
-- Files: `src/app/auth/login/page.tsx`, `src/app/auth/signup/page.tsx`, API route user checks
-- Risk: Users can access other users' data if permission checks break
-- Priority: CRITICAL
-
-**Report Generation Untested:**
-- What's not tested: PDF generation, report formatting, data accuracy
-- Files: `src/lib/report-generator.ts`, report download in `src/app/dashboard/reports/new/page.tsx`
-- Risk: Legal documents (takedown reports) may be malformed
-- Priority: HIGH - Directly impacts user's legal actions
-
-**Email Delivery Untested:**
-- What's not tested: Email template rendering, SMTP integration
-- Files: `src/lib/email.ts`
-- Risk: Users don't receive alerts, trust product reliability
-- Priority: MEDIUM
-
----
-
-## Dependencies at Risk
-
-**Puppeteer-core Version Pinned (Old):**
-- Package: `puppeteer-core@23.11.0` (from package.json)
-- Risk: Old version may have security vulnerabilities
-- Impact: If used for screenshot capture, could allow code injection
-- Current state: Not actively used (commented out in evidence-collector), but imported
-- Migration: Update to latest version when implementing screenshot capture, use `puppeteer-extra-plugin-stealth` for evasion
-
-**Whois-json May Be Unmaintained:**
-- Package: `whois-json@2.0.4`
-- Risk: Package may not receive security updates
-- Current usage: Not found in codebase (likely dead code)
-- Recommendation: Remove dependency, use native WHOIS lookup or legitimate API
-
-**Nodemailer Without TLS Enforcement:**
-- Package: `nodemailer@6.9.16`
-- Issue: `secure: false` in email.ts means emails sent unencrypted
-- Risk: Email credentials visible on network, alerts intercepted
-- Fix: Set `secure: true` for port 465 or handle STARTTLS properly
-
----
+**Threat Deduplication Logic:**
+- Issue: No explicit deduplication when same domain detected across multiple scans/scan types.
+- Files: `src/lib/scan-runner.ts` (line 317), database schema assumed
+- Impact: Duplicate threat records created, inflating counts and causing false alert storms.
+- Safe modification: Implement domain+type uniqueness constraint; upsert threats instead of insert.
+- Test coverage: Unknown; likely not tested.
 
 ## Scaling Limits
 
-**Database Query Limits:**
-- Current capacity: Supabase free tier allows ~1M rows
-- Limit: At ~10 threats per brand, 100,000 brands would hit limit
-- Constraint: Also row-level security checks on every query
-- Scaling path: Move to dedicated Postgres instance. Add threat archival (move old threats to cold storage after 90 days).
+**Memory Usage with Large Scan Results:**
+- Issue: All domain variations loaded into memory (Map) before checking; 100 variations × 5 data points = unbounded arrays.
+- Current capacity: Tested with ~100 variations per scan
+- Limit: Hitting limits at 1000+ variations or concurrent scans with high variation counts
+- Scaling path: Implement pagination in variation generation; use cursor-based scanning.
 
-**Background Scan Concurrency:**
-- Current: Cron job processes brands sequentially (lines 51 in cron/scan/route.ts)
-- Capacity: ~50-100 brands maximum before cron timeout (60s on Vercel)
-- Limit: Each scan takes 30-60 seconds depending on domain count
-- Scaling path: Implement queue (Bull/BullMQ) for async scan processing. Scale horizontal with multiple workers.
+**Email Delivery Queue Not Implemented:**
+- Issue: Email sending is synchronous; if SMTP slow, HTTP request hangs.
+- Current capacity: Works fine with <10 concurrent threat alerts
+- Limit: Breaks under load (high-threat periods with 50+ alerts)
+- Scaling path: Move email to background job queue (Bull, RabbitMQ); implement retry logic.
 
-**Email Delivery:**
-- Current: Uses SMTP (Gmail default or custom)
-- Capacity: Gmail free tier = ~500 emails/day before throttling
-- Limit: 50+ brands with daily alerts hits limit immediately
-- Scaling path: Switch to SendGrid/AWS SES. Batch alerts (daily digest instead of real-time).
+**Supabase Connection Pool:**
+- Issue: Each API endpoint creates fresh Supabase client; no connection pooling at application level.
+- Current capacity: ~100 concurrent requests
+- Limit: Could exhaust Supabase connection limits under high load
+- Scaling path: Implement singleton Supabase clients or use Supabase connection pooling tier.
 
-**API Rate Limits:**
-- External APIs hit during scan:
-  - DuckDuckGo: No official rate limit but blocks aggressive scrapers
-  - WHOIS: ~60 queries/minute per IP
-  - Google DNS: 1000 queries/day free limit
-- Scaling path: Implement DNS caching. Use paid WHOIS API. Cache DuckDuckGo results.
+## Dependencies at Risk
 
-**Memory Usage in PDF Generation:**
-- Current: html2canvas renders full threat list to canvas
-- Limit: Browser crashes with ~200+ threats per report
-- Scaling path: Move to backend. Use headless Chrome on server for rendering. Stream PDF chunks.
+**Puppeteer-Core Without Chromium:**
+- Risk: Puppeteer-core requires external Chromium binary; deployment must include compatible binary or use browserless service.
+- Impact: Screenshot capture fails if deployment environment missing Chromium (serverless, Docker without headless-shell).
+- Migration plan: Either vendor Chromium binary in deployment or migrate to browserless API (e.g., Browserless, Bright Data).
+
+**Node.js WHOIS Module (whois-json):**
+- Risk: Package has no recent updates; relies on public WHOIS servers which have rate limits and unreliable formatting.
+- Impact: WHOIS lookups fail inconsistently; evidence collection incomplete.
+- Migration plan: Use dedicated WHOIS API (WhoisXML, DomainTools) with guaranteed uptime.
+
+**Nodemailer without Queue:**
+- Risk: Direct SMTP connection; no retry logic, no queue, no delivery tracking.
+- Impact: Emails lost if SMTP unavailable; users don't know alerts failed.
+- Migration plan: Use email service (SendGrid, AWS SES) with queuing and delivery webhooks.
+
+## Missing Critical Features
+
+**No Rate Limiting on Public APIs:**
+- Problem: Scan and report endpoints have no rate limit; malicious user could DoS by spamming requests.
+- Blocks: Production deployment; OWASP compliance.
+- Recommendations: Add per-user rate limiting using Redis or Supabase; implement exponential backoff.
+
+**No Audit Logging:**
+- Problem: No logging of who accessed which threats/reports; no compliance trail for regulatory requirements.
+- Blocks: Enterprise sales; SOC2 compliance.
+- Recommendations: Log all data access to immutable audit table; implement data retention policies.
+
+**No Data Encryption at Rest:**
+- Problem: Screenshots and HTML snapshots stored in Supabase unencrypted; compliance risk.
+- Blocks: Enterprise sales; GDPR compliance.
+- Recommendations: Enable Supabase encryption; implement end-to-end encryption for sensitive evidence.
+
+**No Threat Prioritization Algorithm:**
+- Problem: All threats returned with same priority; no risk scoring based on brand similarity, domain history, etc.
+- Blocks: Enterprise feature; user experience degradation with 100+ threats.
+- Recommendations: Implement multi-factor scoring (visual similarity, WHOIS newness, hosting provider reputation).
+
+## Test Coverage Gaps
+
+**Scan Cancellation:**
+- What's not tested: User-initiated scan cancellation; behavior of in-flight API calls when cancelled.
+- Files: `src/lib/scan-runner.ts` (entire cancellation flow)
+- Risk: Scans may not cancel; users stuck with running scans; resource leaks.
+- Priority: High
+
+**Error Handling in API Routes:**
+- What's not tested: Malformed JSON bodies; database connection failures; partial response errors.
+- Files: All `src/app/api/**/route.ts`
+- Risk: Silent failures; 500 errors without proper messages; debugging difficult.
+- Priority: High
+
+**Evidence Storage Failures:**
+- What's not tested: S3/Supabase upload failures; bucket misconfiguration; permission denied scenarios.
+- Files: `src/lib/evidence-collector.ts` (upload functions)
+- Risk: Evidence lost; scans succeed but evidence unavailable; reports have broken links.
+- Priority: High
+
+**OpenAI Vision Analysis:**
+- What's not tested: Vision API failures; timeout behavior; parsing of malformed responses.
+- Files: `src/lib/openai-analysis.ts`
+- Risk: Feature silently disabled on API failure; users unaware visual analysis unavailable.
+- Priority: Medium
+
+**Threat Deduplication:**
+- What's not tested: Same threat detected in multiple scans; database constraint violations.
+- Files: Database insert logic in `src/lib/scan-runner.ts`
+- Risk: Duplicate threats created; false positive alerts sent multiple times.
+- Priority: Medium
 
 ---
 
-*Concerns audit: 2026-01-23*
+*Concerns audit: 2026-01-24*

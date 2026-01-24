@@ -1,160 +1,223 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-01-23
+**Analysis Date:** 2026-01-24
 
 ## Naming Patterns
 
 **Files:**
-- Components: PascalCase in directories (e.g., `src/components/dashboard/`, `src/components/ui/`)
-- Page files: kebab-case directory names with `page.tsx` file (e.g., `src/app/dashboard/brands/[id]/page.tsx`)
-- API routes: kebab-case directory names with `route.ts` file (e.g., `src/app/api/scan/social/route.ts`)
-- Utility/library files: camelCase (e.g., `domain-generator.ts`, `report-generator.ts`, `supabase/client.ts`)
-- Type definition files: camelCase in `src/types/index.ts`
+- Page files: `page.tsx` (Next.js app router pages)
+- Route handlers: `route.ts` (Next.js API routes)
+- Components: `ComponentName.tsx` (PascalCase)
+- Utilities/helpers: `kebab-case.ts` (e.g., `domain-generator.ts`, `evidence-collector.ts`)
+- Type definitions: `index.ts` (centralized in `src/types/`)
 
 **Functions:**
-- camelCase for all function names (e.g., `generateDomainVariations`, `checkDomainRegistration`, `fetchData`, `generateTakedownReport`)
-- Private/internal functions: lowercase camelCase prefixed with underscore in component files (e.g., `_generateThreatAnalysis`)
-- API handlers: uppercase HTTP method name as function (e.g., `POST()`, `GET()`)
-- React event handlers: camelCase prefixed with `handle` (e.g., `handleCreateBrand`, `handleStartScan`)
+- Named exports: camelCase (e.g., `runScanForBrand`, `generateDomainVariations`, `checkDomainRegistration`)
+- React components: PascalCase (e.g., `HomePage`, `BrandsPage`, `Card`)
+- Async functions: camelCase prefix with `async` keyword (e.g., `async function fetchImageBuffer()`)
+- Helper/utility functions: camelCase (e.g., `sanitizeKeywords()`, `normalizeDomain()`)
 
 **Variables:**
-- camelCase for all variables and constants (e.g., `brandData`, `threatCount`, `domainsChecked`, `scanConfig`)
-- Constants in uppercase with underscores (e.g., `ALLOWED_SCAN_TYPES`, `BRAND_LIMITS`, `COMMON_TLDS`, `HOMOGLYPHS`, `KEYBOARD_PROXIMITY`)
-- State variables in React components: camelCase with descriptive names (e.g., `loading`, `scanning`, `scanComplete`, `brandData`)
-- Type/interface instance variables match their type structure (e.g., `brands: Brand[]`, `threats: Threat[]`)
+- Constants: UPPER_SNAKE_CASE (e.g., `BRAND_LIMITS`, `ALLOWED_SOCIAL_PLATFORMS`, `SCAN_CONFIG`)
+- Regular variables: camelCase (e.g., `supabase`, `threats`, `domainsChecked`)
+- Booleans: camelCase with `is`, `has`, `can` prefix (e.g., `isDebugBrand`, `hasOpenAiKey`, `canRunOpenAIVision`)
+- Database fields: snake_case (e.g., `user_id`, `brand_id`, `social_handles`, `created_at`)
 
-**Types & Interfaces:**
-- PascalCase for all types and interfaces (e.g., `User`, `Brand`, `Threat`, `ThreatReport`, `DomainVariation`)
-- Union type names: PascalCase (e.g., `ThreatType`, `ThreatSeverity`, `ThreatStatus`, `VariationType`)
-- Record/mapping objects with lowercase keys matching database field names (e.g., `BRAND_LIMITS: Record<string, number>`, `threatTypeLabels: Record<string, string>`)
+**Types:**
+- Interfaces: PascalCase with descriptive names (e.g., `CardProps`, `User`, `Brand`, `Threat`)
+- Type aliases: PascalCase (e.g., `SocialHandleValue`, `ThreatSeverity`, `VariationType`)
+- Enum-like types: UPPER_SNAKE_CASE values (e.g., `'typo' | 'homoglyph' | 'hyphen'`)
 
 ## Code Style
 
 **Formatting:**
-- No explicit formatter configured (no .prettierrc file detected)
-- Consistent use of 2-space indentation throughout codebase
-- Import statements organized with 1-2 empty lines before type declarations
-- Trailing commas in multiline objects/arrays
+- Tool: Not explicitly configured (Next.js default with TypeScript strict mode)
+- Uses Tailwind CSS classes directly in JSX (no separate CSS files)
+- Single quotes for strings: Not enforced but observe codebase
+- Semicolons: Required (TypeScript strict)
+- Indentation: 2 spaces (observed in all files)
+- Line length: No hard limit observed, practical limit ~100 characters for readability
 
 **Linting:**
-- ESLint configured via Next.js (eslint-config-next v14.2.35)
-- TypeScript strict mode enabled (`"strict": true`)
-- No custom ESLint configuration file detected beyond Next.js defaults
+- ESLint: `next lint` command available (from `eslint-config-next`)
+- TypeScript: `strict: true` in `tsconfig.json` - enforces strong type safety
+- No custom `.eslintrc` present; using Next.js default rules via `eslint-config-next`
 
 ## Import Organization
 
 **Order:**
-1. External library imports (React, Next.js, third-party packages)
-2. Type imports from external libraries (e.g., `type ClassValue from 'clsx'`)
-3. Blank line
-4. Internal type/interface imports (e.g., `import { User, Brand } from '@/types'`)
-5. Internal utility/lib imports (e.g., `import { cn, formatDate } from '@/lib/utils'`)
-6. Component imports (e.g., `import { Card } from '@/components/ui/card'`)
+1. External packages (React, Next.js) - e.g., `import Link from 'next/link'`
+2. Third-party UI/utility libraries - e.g., `import { Shield } from 'lucide-react'`
+3. Type imports - e.g., `import type { Threat } from '../types'`
+4. Internal absolute imports - e.g., `import { createClient } from '@/lib/supabase/server'`
+5. Relative imports - e.g., `import { cn } from '@/lib/utils'`
 
 **Path Aliases:**
-- `@/*` maps to `./src/*` (configured in `tsconfig.json`)
-- Used consistently throughout codebase for all internal imports
-- Examples: `@/lib/utils`, `@/types`, `@/components/ui/badge`, `@/lib/supabase/server`
+- `@/*` resolves to `./src/*` (defined in `tsconfig.json`)
+- Always use absolute imports with `@/` prefix - never use relative paths like `../../../`
 
-**Example pattern from codebase:**
+**Examples from codebase:**
 ```typescript
+// src/app/api/brands/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
-import { generateDomainVariations, checkDomainRegistration } from '@/lib/domain-generator'
-import { Threat, Brand } from '@/types'
+
+// src/app/page.tsx
+import Link from 'next/link'
+import { Shield, Search, FileText, Bell, CheckCircle, AlertTriangle, Globe, Lock } from 'lucide-react'
+
+// src/lib/scan-runner.ts
+import { generateDomainVariations, checkDomainRegistration, assessThreatLevel, splitDomainAndTld } from './domain-generator'
+import type { Threat, ThreatSeverity, ThreatType, VariationType } from '../types'
 ```
 
 ## Error Handling
 
 **Patterns:**
-- Try-catch blocks wrapping async operations in API routes and client functions
-- Error logging to console with `console.error()` including descriptive context (e.g., `console.error('Error creating brand:', error)`)
-- NextResponse.json error returns with status codes:
-  - 401: Unauthorized (missing/invalid auth)
-  - 400: Bad request (missing required fields)
-  - 403: Forbidden (brand limit reached, permission denied)
-  - 404: Not found (resource doesn't exist)
-  - 500: Internal server error (unhandled exceptions)
-- Error object type checking: `error instanceof Error ? error.message : 'Unknown error'`
-- Database errors thrown directly: `if (error) throw error`
-- Client-side fallback handling with `.catch()` on promises
-- Empty catch blocks used for fallback cases (e.g., DNS resolution fallbacks)
+- Try-catch blocks used for async operations, especially with database/API calls
+- Supabase errors checked immediately after queries: `if (error) throw error`
+- Authentication errors return 401: `return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })`
+- Validation errors return 400: `return NextResponse.json({ error: 'validation message' }, { status: 400 })`
+- Not found errors return 404: `return NextResponse.json({ error: 'Brand not found' }, { status: 404 })`
+- Business logic errors (like brand limits) return 403: `return NextResponse.json({ error: 'message', code: 'BRAND_LIMIT_REACHED' }, { status: 403 })`
+- Generic server errors return 500 with wrapped error message
+- Errors caught in outer try-catch are logged and return generic 500 response
 
-**Error responses include:**
-- `{ error: 'message' }` object with status code
-- Optional error code field for programmatic handling: `{ error: '...', code: 'BRAND_LIMIT_REACHED' }`
+**Example from `src/app/api/brands/route.ts`:**
+```typescript
+if (authError || !user) {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+}
+
+const { data: brands, error } = await supabase
+  .from('brands')
+  .select('*')
+  .eq('user_id', user.id)
+  .order('created_at', { ascending: false })
+
+if (error) throw error
+
+try {
+  // ... operations ...
+} catch (error) {
+  console.error('Error creating brand:', error)
+  return NextResponse.json(
+    { error: 'Failed to create brand' },
+    { status: 500 }
+  )
+}
+```
 
 ## Logging
 
-**Framework:** Native `console` object
+**Framework:** `console.error()` and `console.warn()` for structured logging
 
 **Patterns:**
-- `console.error()` for exceptions and failures (all API routes and async operations)
-- `console.log()` for informational messages (e.g., `console.log('Starting social media scan...')`, `console.log(\`Found ${socialThreats.length} potential fake social media accounts\`)`)
-- No debug or info levels - only error/log distinction
-- Messages include context prefix: `'Error fetching scan:', error` or `'Scan error:', error`
+- Log errors with context in catch blocks: `console.error('Error description:', error)`
+- Log operation warnings: `console.warn('Failed to update scan progress:', err)`
+- Debug logging for specific brands: `console.log('[scan-debug] description', { context })`
+- No production logging library configured (using native console)
+
+**Example from `src/lib/scan-runner.ts`:**
+```typescript
+if (isDebugBrand) {
+  console.log('[scan-debug] domain split', {
+    brandId: brand.id,
+    brandDomain: brand.domain,
+    baseName,
+    tld,
+    seeds: seedNames
+  })
+}
+
+console.error(`Error checking domain ${variation.domain}:`, err)
+console.warn('Failed to update scan progress:', err)
+```
 
 ## Comments
 
 **When to Comment:**
-- Limited use of comments in source code
-- Comments used for section headers: `// 1. Generate and check domain variations`, `// 2. Web scanning for lookalike pages`
-- Comments explain why, not what: `// Collect evidence for registered domains`, `// Rate limiting`
-- Inline HTML comments in generated report templates for structure clarity
+- Complex domain logic explained with comments (e.g., seed name generation in `scan-runner.ts`)
+- Algorithm explanation (e.g., prioritizing domain variations)
+- Important business rules (e.g., brand limits, scan types)
+- Configuration sections explaining purpose (e.g., SCAN_CONFIG object)
+- Generally minimal inline comments; prefer clear function/variable names
 
 **JSDoc/TSDoc:**
-- Not used in project - no JSDoc-style documentation found
-- Type annotations via TypeScript serve as inline documentation
-- Function purposes inferred from names and parameter/return types
+- Not extensively used in codebase
+- Interface properties sometimes have inline documentation
+- Function parameters documented implicitly via TypeScript types
 
 ## Function Design
 
-**Size:**
-- Helper functions kept small and focused (typically 5-30 lines)
-- Larger functions break out internal logic into separate typed objects (e.g., `scanConfig` object in `runScan`)
-- Page components allowed to be larger (100+ lines) with internal helper functions
+**Size:** Generally 20-50 lines; some utility functions are 2-5 lines
 
 **Parameters:**
-- Named parameters using object destructuring in larger functions: `{ brandId, scanType = 'full' }` with defaults
-- Type annotations for all parameters (TypeScript strict mode)
-- Object parameters over multiple positional parameters
-- Optional parameters marked with `?` in interfaces
+- Options objects preferred for multiple parameters (e.g., `runScanForBrand(options: { supabase, brand, scanId, ... })`)
+- Destructuring used in function signatures
+- Type annotations always provided for TypeScript strict mode
 
 **Return Values:**
-- Explicit return type annotations on all functions
+- Explicit return types specified (e.g., `Promise<void>`, `string[]`, `Threat[]`)
 - Async functions return `Promise<T>`
-- React components return JSX.Element
-- API handlers return `NextResponse<T>`
-- Helper functions return typed values: `string`, `boolean`, `Record<string, string>[]`
-- Early returns for guard conditions (auth checks, validation)
+- Database operations return results directly from Supabase client
+- No implicit returns; always use `return` statement
+
+**Examples:**
+```typescript
+// Sanitization function with clear inputs/outputs
+function sanitizeKeywords(input: unknown): string[] | null {
+  if (!Array.isArray(input)) return null
+  const cleaned = input
+    .filter((item): item is string => typeof item === 'string')
+    .map(item => item.trim())
+    .filter(Boolean)
+  return Array.from(new Set(cleaned))
+}
+
+// Options object pattern for complex functions
+async function runScanForBrand(options: {
+  supabase: any
+  brand: any
+  scanId: string
+  scanType: string
+  jobPayload?: ScanJobPayload
+  triggerAlerts?: boolean
+}) {
+  // ...
+}
+
+// Simple utility function
+export function formatDate(date: string | Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(date))
+}
+```
 
 ## Module Design
 
 **Exports:**
-- Named exports for utility functions: `export function generateDomainVariations()`, `export async function checkDomainRegistration()`
-- Default exports for React pages and components: `export default function DashboardPage()`
-- Interface/type exports in centralized `src/types/index.ts`
-- Internal helpers not exported (private to module)
+- Named exports used for utilities and components (e.g., `export function cn()`, `export function Card()`)
+- Default exports used for Next.js pages and route handlers (required by Next.js)
+- Type exports use `export type` to prevent runtime overhead
 
 **Barrel Files:**
-- `src/types/index.ts` consolidates all type definitions for app
-- No barrel files for components or utilities
-- Components imported directly from their directories
+- Centralized types in `src/types/index.ts` - exports all type definitions
+- Component exports use barrel pattern: `src/components/ui/card.tsx` exports multiple card subcomponents (`Card`, `CardHeader`, `CardTitle`, etc.)
+- Not used extensively for API routes or pages
 
-## Type Usage
-
-**Interface patterns:**
-- Database entities use snake_case fields to match Supabase column names (e.g., `user_id`, `created_at`, `threat_count`, `last_scan_at`)
-- Type unions for limited sets (e.g., `'free' | 'active' | 'cancelled'`)
-- Optional fields marked with `?` (e.g., `logo_url?: string`, `screenshot_url?: string`)
-- Nested interfaces for complex structures (e.g., `Evidence` contains `ScreenshotEvidence[]`)
-
-**Generic type usage:**
-- `Record<string, T>` for key-value mappings
-- `Map<K, V>` for mutable collections with deduplication
-- Array types explicitly typed: `string[]`, `DomainVariation[]`
-- `any` avoided; use proper typing (found in `/api/scan/route.ts` as `any` for service client - indicates technical debt)
+**Example barrel file from `src/components/ui/card.tsx`:**
+```typescript
+export function Card({ children, className }: CardProps) { }
+export function CardHeader({ children, className }: CardProps) { }
+export function CardTitle({ children, className }: CardProps) { }
+export function CardContent({ children, className }: CardProps) { }
+export function CardFooter({ children, className }: CardProps) { }
+```
 
 ---
 
-*Convention analysis: 2026-01-23*
+*Convention analysis: 2026-01-24*

@@ -1,264 +1,223 @@
 # Architecture
 
-**Analysis Date:** 2026-01-23
+**Analysis Date:** 2026-01-24
 
 ## Pattern Overview
 
-**Overall:** Full-stack Next.js application with server-client architecture following Next.js App Router patterns. The system implements a layered architecture with clear separation between presentation (React components), API layer (Next.js route handlers), business logic (utility libraries), and data access (Supabase).
+**Overall:** Next.js 14 full-stack application with layered separation between frontend (React Client/Server Components), API routes, and business logic services.
 
 **Key Characteristics:**
-- Server-Side Rendering with client-side interactivity via 'use client' directives
-- API routes as middlemen between frontend and external services
-- Service layer architecture for threat detection, domain generation, and evidence collection
-- Database-driven with Supabase as primary data store
-- Subscription-based business logic with Stripe integration
-- Background scanning operations triggered via API endpoints
+- App Router-based with Server Components as default
+- API routes handle auth, brand management, scanning, and payment processing
+- Business logic separated into `/lib` utility modules
+- Supabase for database, auth, and file storage
+- Real-time scanning with progress tracking and cancellation support
 
 ## Layers
 
 **Presentation Layer:**
-- Purpose: User interface components and pages for landing, authentication, and dashboard
-- Location: `src/app/` (page routes) and `src/components/` (reusable components)
-- Contains: React pages, layouts, UI components (button, card, badge, input)
-- Depends on: Supabase client, utilities for formatting and styling
-- Used by: End users and authenticated dashboard users
+- Purpose: Render UI and handle user interactions
+- Location: `src/app/` (pages, layouts) and `src/components/` (reusable components)
+- Contains: React Client/Server Components, page layouts, form handling
+- Depends on: API routes, Supabase client, utility functions
+- Used by: Browser client
 
-**API/Route Handler Layer:**
-- Purpose: Endpoints for handling HTTP requests, authentication, and orchestrating business logic
+**API Layer:**
+- Purpose: Handle HTTP requests, auth checks, data validation, and orchestration
 - Location: `src/app/api/`
-- Contains: POST/GET handlers that coordinate scanning, data persistence, Stripe webhooks
-- Key routes:
-  - `api/brands/route.ts`: Brand CRUD operations with subscription limits
-  - `api/scan/route.ts`: Initiates background threat scanning
-  - `api/scan/social/route.ts`: Social media threat detection
-  - `api/reports/route.ts`: Report generation and retrieval
-  - `api/stripe/*`: Payment processing and webhook handling
-  - `api/cron/scan/route.ts`: Scheduled background scanning
-- Depends on: Supabase (client + service), scanning libraries, stripe
-- Error Handling: Returns standardized JSON responses with status codes (400, 401, 403, 404, 500)
+- Contains: Route handlers (POST/GET) for brands, scans, reports, payments, auth, webhooks
+- Depends on: Supabase, business logic services, utility modules
+- Used by: Frontend components and external systems (Stripe webhooks, cron jobs)
 
 **Business Logic Layer:**
-- Purpose: Core domain logic for threat detection, domain variation generation, evidence collection
+- Purpose: Core scanning, analysis, and data processing
 - Location: `src/lib/`
-- Key Modules:
-  - `domain-generator.ts`: Generates 500+ domain variations (typos, homoglyphs, TLD swaps, bitsquats)
-  - `web-scanner.ts`: Searches for lookalike websites and phishing pages using DuckDuckGo
-  - `social-scanner.ts`: Detects fake social media accounts
-  - `evidence-collector.ts`: Captures screenshots, WHOIS data, HTML snapshots
-  - `report-generator.ts`: Creates takedown request and evidence package PDFs
-  - `stripe.ts`: Stripe SDK initialization and plan mapping
-  - `email.ts`: Nodemailer integration for sending alerts and reports
-  - `webhooks.ts`: Webhook signature validation
-- Depends on: External APIs (DuckDuckGo, Puppeteer for screenshots, WHOIS lookups)
+- Contains: Domain generation, threat analysis, evidence collection, report generation, email/webhooks
+- Depends on: Types, utilities, external APIs (OpenAI, Puppeteer, Bing, Google Images)
+- Used by: API routes, scan worker
 
-**Data Access Layer:**
-- Purpose: Database communication and Supabase client management
-- Location: `src/lib/supabase/`
-- Contains:
-  - `client.ts`: Browser-based Supabase client with SSR support
-  - `server.ts`: Server-side Supabase clients (user and service role)
-- Abstracts: Supabase authentication, cookie management, cookie-based session handling
-- Depends on: @supabase/ssr, @supabase/supabase-js
+**Data Layer:**
+- Purpose: Database and state management
+- Location: Supabase (PostgreSQL database)
+- Contains: Users, brands, threats, scans, reports, evidence storage
+- Depends on: Supabase SDK
+- Used by: All API routes and client-side fetches
 
-**Type System:**
-- Purpose: Central TypeScript type definitions for all domain models
-- Location: `src/types/index.ts`
-- Contains: User, Brand, Threat, ScanResult, Report, DomainVariation, AlertSettings, SubscriptionPlan
-- Used throughout: All layers reference these types for type safety
-
-**UI Component Library:**
-- Purpose: Reusable UI components
-- Location: `src/components/ui/`
-- Contains: Tailwind-based components (Button, Input, Card, Badge)
-- Pattern: Headless components with Tailwind styling
+**Worker/Background Process:**
+- Purpose: Execute long-running scans asynchronously
+- Location: `scripts/scan-worker.ts`
+- Contains: Scan job processor
+- Depends on: Business logic services, Supabase
+- Used by: Cron jobs and direct invocation
 
 ## Data Flow
 
-**Brand Creation Flow:**
+**User Registration & Auth:**
 
-1. User submits form in `src/app/dashboard/brands/new/page.tsx` (client component)
-2. POST request to `api/brands/route.ts`
-3. Route handler authenticates user via Supabase, checks subscription tier against brand limit
-4. Brand record inserted into `brands` table with user_id, metadata
-5. Service returns brand object to client
-6. Client redirects to brand detail page
+1. User signs up via `src/app/auth/signup/page.tsx`
+2. Form POST to `/api/auth/` routes (Supabase handles auth)
+3. User record created in `auth.users` table
+4. Supabase session stored in cookies via `src/lib/supabase/server.ts`
 
-**Threat Scanning Flow:**
+**Brand Creation:**
 
-1. User initiates scan from `src/app/dashboard/brands/[id]/page.tsx` (client)
-2. POST to `api/scan/route.ts` with brandId and scanType
-3. Route handler:
-   - Authenticates user
-   - Fetches brand details
-   - Creates scan record with `status: 'running'`
-   - **Returns immediately** (returns scanId)
-   - Spawns background `runScan()` function asynchronously (fire and forget)
-4. Client polls or fetches scan status via GET `api/scan?id={scanId}`
-5. Background `runScan()` function executes based on scan mode:
-   - **Domain-only mode**: Generates variations → checks registration → collects evidence
-   - **Web mode**: Searches for lookalike pages using DuckDuckGo API
-   - **Social mode**: Scans social platforms for fake accounts
-   - **Full mode**: All three above with up to 100 domain variations
-6. For each detected threat:
-   - Evidence collected (screenshots via Puppeteer, WHOIS data, HTML)
-   - Threat records inserted into `threats` table
-7. Scan record updated with `status: 'completed'`, threat counts, timestamps
-8. Brand's threat_count aggregated and last_scan_at updated
+1. User submits brand form in `src/app/dashboard/brands/new/page.tsx`
+2. POST to `src/app/api/brands/route.ts`
+3. Route validates user auth, creates `brands` table record
+4. Logo uploaded via `src/app/api/brands/logo/route.ts` to Supabase storage
+5. Returns brand object to frontend
 
-**Report Generation Flow:**
+**Scan Initiation:**
 
-1. User selects threats and initiates report generation from `dashboard/reports/new`
-2. POST to `api/reports/route.ts`
-3. Route handler creates report record with `status: 'generating'`
-4. Report generator library:
-   - Fetches threat details from database
-   - Uses jspdf + html2canvas to render professional PDF
-   - Stores PDF in accessible location (storage_path)
-   - Updates report status to `'ready'`
-5. Client can download or email report
+1. User clicks "Run Scan" on `src/app/dashboard/brands/[id]/page.tsx`
+2. POST to `src/app/api/scan/route.ts` with brandId and scanType
+3. Route creates `scans` record and `scan_jobs` record with 'queued' status
+4. Returns scanId to frontend
+5. Frontend polls `GET /api/scan?id=scanId` for status updates
 
-**Subscription/Payment Flow:**
+**Scan Execution:**
 
-1. User selects pricing tier on landing page
-2. Initiates checkout → POST `api/stripe/checkout/route.ts`
-3. Route creates Stripe checkout session, redirects to Stripe
-4. User completes payment
-5. Stripe sends webhook to `api/stripe/webhook/route.ts`
-6. Webhook handler verifies signature, processes event:
-   - `checkout.session.completed`: Updates user subscription_status to 'active', sets subscription_tier and subscription_id
-   - `customer.subscription.updated`: Syncs subscription status changes
-   - `customer.subscription.deleted`: Sets subscription to 'cancelled'
-   - `invoice.payment_failed`: Sets subscription_status to 'past_due'
-7. User can now access dashboard with subscription features
+1. Worker/cron fetches queued jobs from `scan_jobs` table
+2. Calls `src/lib/scan-runner.ts::runScanForBrand()` with brand and scan config
+3. Scan process (based on scanType):
+   - Domain variations generation via `src/lib/domain-generator.ts`
+   - Domain registration checks and threat assessment
+   - Evidence collection via `src/lib/evidence-collector.ts` (screenshots, WHOIS, HTML)
+   - Web threat scanning via `src/lib/web-scanner.ts`
+   - Logo usage search via `src/lib/logo-scanner.ts`
+   - Social media account scanning via `src/lib/social-scanner.ts`
+4. Threat analysis via `src/lib/threat-analysis.ts` (domain risk + visual similarity + phishing intent)
+5. Threats inserted to `threats` table
+6. Scan marked 'completed', brand updated with threat count
+7. Alerts sent via `src/lib/email.ts` and `src/lib/webhooks.ts`
+
+**Report Generation:**
+
+1. User selects threats and requests report via `src/app/dashboard/reports/new/page.tsx`
+2. POST to `src/app/api/reports/route.ts`
+3. Route calls `src/lib/report-generator.ts` to generate HTML/PDF/CSV
+4. Report file uploaded to Supabase storage
+5. Report record created in `reports` table
+6. Returns PDF URL to frontend
+
+**Payment Processing:**
+
+1. User selects plan on pricing page, clicks "Start Free Trial" or upgrade
+2. Redirects to `src/app/api/stripe/checkout/route.ts`
+3. Creates Stripe checkout session, stores plan selection in metadata
+4. User completes payment in Stripe-hosted checkout
+5. Stripe webhooks POST to `src/app/api/stripe/webhook/route.ts`
+6. Webhook updates user's `subscription_status` and `subscription_tier`
 
 **State Management:**
 
-- **Server State**: Supabase handles all persistent data (users, brands, threats, scans, reports)
-- **Session State**: Supabase Auth (via cookies) manages user authentication
-- **Client State**: React component state for UI interactions (sidebar open/close, form inputs)
-- **Background Jobs**: runScan() spawned as background process, no explicit job queue (suitable for small-medium scale)
+- **Client-side:** React hooks (useState, useEffect) for UI state; Supabase client for reactive queries
+- **Server-side:** Supabase as source of truth; no global state library
+- **Real-time updates:** Frontend polling for scan progress (not subscriptions)
+- **Persistent data:** All user data in Supabase PostgreSQL
 
 ## Key Abstractions
 
-**Threat Type System:**
-- Purpose: Categorizes detected threats
-- Examples: `typosquat_domain`, `lookalike_website`, `phishing_page`, `fake_social_account`, `brand_impersonation`
-- Pattern: Discriminated union via TypeScript type literals
+**ScanRunner:**
+- Purpose: Orchestrate multi-phase threat scanning process
+- Examples: `src/lib/scan-runner.ts`
+- Pattern: Async function that coordinates domain generation, web scanning, social scanning, evidence collection, and threat analysis; includes progress updates and cancellation support
 
-**Threat Severity System:**
-- Purpose: Prioritizes remediation
-- Values: `'critical'` → `'high'` → `'medium'` → `'low'`
-- Logic: Assessed in `domain-generator.ts` based on variation type (homoglyphs are critical, TLD swaps are low)
+**EvidenceCollector:**
+- Purpose: Capture and store evidence for threats (screenshots, WHOIS, HTML)
+- Examples: `src/lib/evidence-collector.ts`
+- Pattern: Functions that use Puppeteer for screenshots, whois-json for domain data, fetch HTML snapshots, store artifacts in Supabase storage
 
-**Threat Status Workflow:**
-- Purpose: Tracks lifecycle of each threat
-- States: `new` → `investigating` → `confirmed` → `takedown_requested` → `resolved` | `false_positive`
-- Pattern: State machine managed by frontend and backend
+**ThreatAnalysis:**
+- Purpose: Build composite threat severity using multiple ML/heuristic signals
+- Examples: `src/lib/threat-analysis.ts`
+- Pattern: Combines domain risk scoring (registration patterns), visual similarity (OpenAI Vision optional), and phishing intent detection
 
-**Domain Variation Generation:**
-- Purpose: Create candidate domains to check for brand abuse
-- Algorithm: Generates 500+ variations including:
-  - Typos: missing letter, double letter, added letter
-  - Homoglyphs: visually similar Unicode characters
-  - Keyboard proximity: adjacent key typos
-  - TLD swaps: alternative top-level domains
-  - Bitsquats: single bit flips in ASCII
-  - Vowel swaps and hyphens
-- Module: `src/lib/domain-generator.ts`
+**ReportGenerator:**
+- Purpose: Generate takedown reports in multiple formats (HTML, PDF, CSV)
+- Examples: `src/lib/report-generator.ts`
+- Pattern: Functions that build structured threat data and render to HTML templates, converted to PDF via jspdf/html2canvas
 
-**Evidence Collection:**
-- Purpose: Gather proof for legal takedown requests
-- Types of evidence:
-  - Screenshots: rendered via Puppeteer-core
-  - WHOIS snapshots: domain registration data
-  - HTML snapshots: page content archival
-  - Timestamps: proof of existence
-- Storage: Embedded in threat records, may reference external storage paths
-
-**Scan Modes:**
-- Purpose: Allow users to choose scanning scope/depth
-- Types:
-  - `full`: domains + web + social (100 variations, all platforms)
-  - `quick`: domains + web (25 variations)
-  - `domain_only`: 100 domain variations
-  - `web_only`: lookalike website search
-  - `social_only`: all social platforms
-  - `automated`: cron-triggered full scan
+**DomainGenerator:**
+- Purpose: Generate typosquatting domain variations
+- Examples: `src/lib/domain-generator.ts`
+- Pattern: Algorithmic generation of 10+ variation types (homoglyph, keyboard proximity, TLD swap, etc.); seed-based expansion from brand name
 
 ## Entry Points
 
-**Landing Page:**
-- Location: `src/app/page.tsx`
-- Triggers: User visits root URL
-- Responsibilities: Marketing content, navigation to auth pages, pricing display
-
-**Authentication:**
-- Location: `src/app/auth/login/page.tsx`, `src/app/auth/signup/page.tsx`
-- Triggers: User clicks login/signup from landing or navigation
-- Responsibilities: Supabase Auth form submission, redirect to dashboard on success
-
-**Dashboard:**
-- Location: `src/app/dashboard/layout.tsx` (wrapper), `src/app/dashboard/page.tsx` (overview)
-- Triggers: Authenticated user navigates to /dashboard
-- Responsibilities: Protected layout with navigation sidebar, displays user's brands and recent threats
+**Web Application:**
+- Location: `src/app/layout.tsx` (root layout) → `src/app/page.tsx` (landing) / `src/app/dashboard/layout.tsx` (authenticated)
+- Triggers: Browser navigation
+- Responsibilities: Render UI, handle auth state, manage client-side navigation
 
 **API Endpoints:**
-- `POST /api/scan`: Initiates threat scanning (requires auth)
-- `GET /api/scan?id={scanId}`: Fetches scan status and results
-- `POST /api/brands`: Creates new brand to monitor
-- `GET /api/brands`: Fetches user's brands
-- `POST /api/reports`: Generates takedown report PDF
-- `GET /api/reports`: Fetches user's reports
-- `POST /api/stripe/checkout`: Initiates Stripe payment
-- `POST /api/stripe/webhook`: Handles Stripe events
-- `GET /api/cron/scan`: Scheduled background scan (typically called by external scheduler)
+- Location: `src/app/api/**/route.ts`
+- Triggers: HTTP requests from client or external systems
+- Responsibilities: Auth verification, request validation, orchestration of business logic, response serialization
+
+**Scan Worker:**
+- Location: `scripts/scan-worker.ts`
+- Triggers: Node.js CLI invocation or cron job
+- Responsibilities: Fetch scan jobs, execute runScanForBrand, handle errors, mark jobs as complete
+
+**Webhooks:**
+- Location: `src/app/api/stripe/webhook/route.ts`
+- Triggers: Stripe POST requests
+- Responsibilities: Verify webhook signature, process payment events, update user subscription
 
 ## Error Handling
 
-**Strategy:** Consistent JSON error responses with HTTP status codes and error messages.
+**Strategy:** Try-catch blocks at API route level; errors logged to console; user-friendly error messages returned as JSON responses
 
 **Patterns:**
 
-- **Authentication errors (401)**: Missing or invalid Supabase session
-  - Example: `{ error: 'Unauthorized' }`
+- **API Routes:** Wrap business logic in try-catch; return 400/401/404/500 with error message
+  ```typescript
+  try {
+    const result = await businessLogic()
+    return NextResponse.json(result)
+  } catch (error) {
+    console.error('Error:', error)
+    return NextResponse.json({ error: 'Failed to process' }, { status: 500 })
+  }
+  ```
 
-- **Authorization errors (403)**: User lacks permission or hits subscription limits
-  - Example: `{ error: 'Brand limit reached. Your free plan allows 1 brand...', code: 'BRAND_LIMIT_REACHED' }`
+- **Auth Errors:** Check `supabase.auth.getUser()` result; return 401 if missing
+  ```typescript
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  if (authError || !user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  ```
 
-- **Validation errors (400)**: Missing required fields or invalid input
-  - Example: `{ error: 'Brand ID is required' }`
+- **Database Errors:** Catch errors from insert/update/select operations; provide context
+  ```typescript
+  const { data, error } = await supabase.from('table').select()
+  if (error) throw error
+  ```
 
-- **Not found errors (404)**: Resource doesn't exist or belongs to different user
-  - Example: `{ error: 'Brand not found' }`
-
-- **Server errors (500)**: Unhandled exceptions in route handlers or business logic
-  - Example: `{ error: 'Failed to start scan' }`
-  - All 500 errors logged to console for debugging
-
-- **Background job errors**: Caught in `runScan()`, scan record updated with status='failed' and error message, user never sees exception
+- **Scan Failures:** Mark scan as 'failed' with error message; update UI via polling
 
 ## Cross-Cutting Concerns
 
-**Logging:**
-- Approach: Console.error/console.log in route handlers and business logic
-- Pattern: Log errors at decision points and before external API calls
-- Notable logs: domain check errors, scan completion, webhook processing
+**Logging:** console.error(), console.warn(), console.log() for debugging; includes context in messages (brandId, scanId, userId)
 
 **Validation:**
-- API routes: Manual validation of request bodies (e.g., checking brandId, domain name format)
-- Database: Supabase handles schema validation (required fields, types)
-- Front-end: Form validation in signup/login pages
+- Input validation at API routes (required fields, type checks)
+- Scan type validation via ALLOWED_SCAN_TYPES whitelist
+- Email format validation via regex
 
 **Authentication:**
-- Approach: Supabase Auth with email/password, stored in browser cookies
-- Pattern: All API routes call `supabase.auth.getUser()` to get authenticated user
-- Session: Managed by @supabase/ssr middleware (cookies in server routes, localStorage in client)
+- Supabase auth session validated on every API request
+- User ID cross-checked with resource ownership (e.g., brand.user_id must match authenticated user)
+- Service role key used for sensitive operations (email sending, webhook verification)
 
 **Authorization:**
-- Pattern: Resource checks after auth (e.g., verify brand.user_id === user.id)
-- Subscription: Brand limits enforced in POST `/api/brands` based on subscription_tier
-- Ownership: Queries filtered by user_id to prevent cross-user data access
+- Row-level access enforced via joins: `eq('brands.user_id', user.id)`
+- Subscription tier checked for feature access (e.g., Enterprise for webhooks)
+
+**Rate Limiting:** Not implemented; relies on Supabase and Stripe rate limits
 
 ---
 
-*Architecture analysis: 2026-01-23*
+*Architecture analysis: 2026-01-24*

@@ -1,190 +1,161 @@
 # External Integrations
 
-**Analysis Date:** 2026-01-23
+**Analysis Date:** 2026-01-24
 
 ## APIs & External Services
 
 **Payment Processing:**
-- Stripe - Payment gateway for SaaS subscriptions
-  - SDK/Client: `stripe` v17.4.0 (server), `@stripe/stripe-js` v8.6.0 (client)
-  - Auth: Environment variables `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
-  - Location: `src/lib/stripe.ts` (main client)
-  - Used for: Checkout sessions, customer management, subscription handling, billing portal
+- Stripe - Payment processing and subscription management
+  - SDK/Client: `stripe` (v17.4.0 server), `@stripe/stripe-js` (v8.6.0 client)
+  - Auth: `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`
+  - Implementation: `src/lib/stripe.ts` - Checkout sessions, customer management, subscriptions
+  - Webhooks: POST `/api/stripe/webhook` handles subscription events
 
-**Search & Web Scanning:**
-- DuckDuckGo HTML API - Free web search for threat detection
-  - Client: Fetch API (no SDK)
-  - No auth required
-  - Location: `src/lib/web-scanner.ts`
-  - Used for: Generating search results for phishing/brand threat detection
-  - Pattern: `https://html.duckduckgo.com/html/?q={query}`
+**WHOIS & Domain Information:**
+- WHOIS APIs (multiple fallbacks):
+  - WhoisXMLAPI: `https://www.whoisxmlapi.com/whoisserver/WhoisService`
+  - WhoAPI: `https://api.whoapi.com/`
+  - IANA WHOIS: `https://whois.iana.org/`
+  - DNS resolution via Google DNS: `https://dns.google/resolve`
+  - Implementation: `src/lib/evidence-collector.ts` - Domain registration data collection
 
-- Google Custom Search API - Optional enhanced web scanning
-  - SDK/Client: Fetch API
-  - Auth: Environment variables `GOOGLE_API_KEY`, `GOOGLE_CSE_ID`
-  - Note: Currently commented/documented but not implemented
-  - Used for: More targeted brand-related search queries
+**Web Search & Detection:**
+- SerpAPI (primary web/social search)
+  - Auth: `SERPAPI_API_KEY`
+  - Used via: `WEB_SEARCH_PROVIDER=serpapi`, `SOCIAL_SEARCH_PROVIDER=serpapi`
+  - Implementation: `src/lib/web-scanner.ts`, `src/lib/social-scanner.ts`
+  - Fallback search enabled: `WEB_SEARCH_FALLBACK=true`, `SOCIAL_SEARCH_FALLBACK=true`
 
-**Domain/WHOIS Lookups:**
-- WHOIS IANA - Domain registration information
-  - Client: Fetch API
-  - No auth required
-  - Location: `src/lib/evidence-collector.ts`
-  - Used for: Registrar and registrant information for suspicious domains
+**Image & Logo Detection:**
+- Google Vision API (primary logo detection)
+  - Auth: `GOOGLE_VISION_API_KEY`
+  - Endpoint: `https://vision.googleapis.com/v1/images:annotate`
+  - Implementation: `src/lib/logo-scanner.ts`
+  - Provider config: `LOGO_SEARCH_PROVIDER=google_vision`
+  - Fallback: SerpAPI Google Lens (`https://serpapi.com/search`)
 
-- whoisxmlapi.com - Optional WHOIS lookup API
-  - SDK/Client: `whois-json` v2.0.4 wrapper
-  - Auth: API key (demo key in code)
-  - Fallback: Uses Google DNS API for nameserver info
-
-- whoapi.com - Optional alternative WHOIS provider
-  - Client: Fetch API
-  - Auth: API key (demo)
-  - Fallback for basic registration info
-
-**DNS Resolution:**
-- Google DNS API - Domain registration verification
-  - Endpoint: `https://dns.google/resolve?name={domain}&type=A`
-  - No auth required
-  - Used for: Checking if typosquatting domains are registered
-
-- Cloudflare DNS (1.1.1.1) - Fallback DNS resolution
-  - Endpoint: `https://1.1.1.1/dns-query?name={domain}&type=A`
-  - Format: JSON
-  - Used for: Nameserver and A record lookups
+**AI/ML Analysis:**
+- OpenAI - Vision and intent analysis for phishing detection
+  - Auth: `OPENAI_API_KEY`
+  - Models: `OPENAI_VISION_MODEL` (gpt-4o-mini default), `OPENAI_INTENT_MODEL` (gpt-5-mini default)
+  - Endpoint: `https://api.openai.com/v1/responses` (configurable via `OPENAI_BASE_URL`)
+  - Features: Visual similarity detection, phishing intent classification
+  - Implementation: `src/lib/openai-analysis.ts`
+  - Toggle: `OPENAI_VISION_ENABLED=true`, `OPENAI_INTENT_ENABLED=true`
 
 ## Data Storage
 
-**Primary Database:**
-- Supabase PostgreSQL
-  - Connection: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (browser), `SUPABASE_SERVICE_ROLE_KEY` (server)
-  - Client: `@supabase/supabase-js` v2.47.0 (browser), `@supabase/ssr` v0.5.0 (server)
-  - Tables: `users`, `brands`, `threats`, `scans`, `domain_variations`
-  - Auth: Built-in Supabase Auth integration
-  - Locations: `src/lib/supabase/client.ts`, `src/lib/supabase/server.ts`
+**Databases:**
+- Supabase (PostgreSQL)
+  - Connection: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (client), `SUPABASE_SERVICE_ROLE_KEY` (server)
+  - Client: `@supabase/supabase-js` with `@supabase/ssr` for cookie handling
+  - Tables: users, brands, threats, scans, scan_jobs
+  - Schema: `supabase/schema.sql` (PostgreSQL with UUID, JSONB support)
+  - Implementation:
+    - Browser client: `src/lib/supabase/client.ts`
+    - Server client: `src/lib/supabase/server.ts` (with service role)
 
 **File Storage:**
-- Local filesystem only - No cloud storage detected
-- Evidence stored as: Screenshots (via puppeteer-core), PDF reports (via jspdf), HTML snapshots
+- Supabase Storage (implied by schema logo_url, screenshot_url fields)
+- Evidence artifacts: Screenshots, WHOIS snapshots, HTML snapshots stored as JSONB in database
 
 **Caching:**
-- None detected (no Redis, Memcached, or similar)
+- Not detected - no Redis or Memcached integration
 
 ## Authentication & Identity
 
 **Auth Provider:**
-- Supabase Auth - Custom JWT-based authentication
-  - Implementation: OAuth ready, email/password support
-  - Server client with service role for admin operations
-  - Browser client with anon key for user operations
-  - Cookie-based session management
-  - Locations: `src/lib/supabase/server.ts`, `src/lib/supabase/client.ts`
+- Supabase Auth (built-in)
+  - Implementation: Cookie-based with Next.js SSR support
+  - Uses: `@supabase/ssr` for secure cookie handling in Server Components
+  - Pages: `/app/auth/login`, `/app/auth/signup`, `/app/auth/forgot-password`, `/app/auth/reset-password`
+  - Features: Password reset, email verification
 
 ## Monitoring & Observability
 
 **Error Tracking:**
-- None detected - Standard console.error() logging only
+- Not detected - no Sentry, LogRocket, or similar
 
 **Logs:**
-- Console logging only (development/production logs)
-- Locations: Various `console.error()` calls in API routes and scanners
-- No structured logging framework (Winston, Pino, etc.)
+- Console logging in source code (basic error/info logging)
+- No structured logging framework detected
 
 ## CI/CD & Deployment
 
 **Hosting:**
-- Vercel - Serverless deployment platform for Next.js
-  - Config: `vercel.json`
-  - Cron jobs enabled (automated brand scans)
+- Vercel - Primary deployment platform
+  - Configuration: `vercel.json` with cron job scheduling
+  - Cron: `/api/cron/scan` scheduled every 6 hours (`0 */6 * * *`)
+  - Supports: Server Functions, Edge Functions
+
+**Alternative Deployment:**
+- Docker support for containerized deployments
+  - Dockerfile: Node.js 20-slim with Chromium pre-installed
+  - Environment: `PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium`
 
 **CI Pipeline:**
-- Vercel deployment - Automatic on git push
-- Linting via ESLint (manual check via `npm lint`)
-- No separate CI service detected
-
-**Build Process:**
-- `npm run build` - Next.js production build
-- `npm start` - Start production server
+- Not detected (no GitHub Actions, GitLab CI, or similar)
 
 ## Environment Configuration
 
-**Required env vars (from .env.example):**
+**Required env vars:**
 - `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Public JWT key
-- `SUPABASE_SERVICE_ROLE_KEY` - Server-side JWT key
-- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe client key
-- `STRIPE_SECRET_KEY` - Stripe server key
-- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signature secret
-- `STRIPE_STARTER_PRICE_ID` - Stripe product price ID
-- `STRIPE_PRO_PRICE_ID` - Stripe product price ID
-- `STRIPE_ENTERPRISE_PRICE_ID` - Stripe product price ID
-- `NEXT_PUBLIC_APP_URL` - Application base URL
-- `SMTP_HOST` - Email server hostname (optional)
-- `SMTP_PORT` - Email server port (optional)
-- `SMTP_USER` - Email account username (optional)
-- `SMTP_PASS` - Email account password (optional)
-- `EMAIL_FROM` - Sender email address (optional)
-- `CRON_SECRET` - Secure token for cron jobs (optional)
-- `GOOGLE_API_KEY` - Google Custom Search API key (optional)
-- `GOOGLE_CSE_ID` - Google Custom Search Engine ID (optional)
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role (server-only)
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe public key
+- `STRIPE_SECRET_KEY` - Stripe secret key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+- `STRIPE_STARTER_PRICE_ID`, `STRIPE_PRO_PRICE_ID`, `STRIPE_ENTERPRISE_PRICE_ID` - Stripe plan IDs
+
+**Optional env vars (with defaults):**
+- `NEXT_PUBLIC_APP_URL` - Application base URL (default: http://localhost:3000)
+- `SMTP_HOST` - Email SMTP host (default: smtp.gmail.com)
+- `SMTP_PORT` - SMTP port (default: 587)
+- `SMTP_USER` - SMTP username
+- `SMTP_PASS` - SMTP password
+- `EMAIL_FROM` - Sender email address
+- `CRON_SECRET` - Secret for cron job authentication
+- `SCAN_WORKER_POLL_MS` - Worker polling interval (default: 5000ms)
+- `SCAN_JOB_STALE_MINUTES` - Stale job timeout (default: 30 minutes)
+- `WORKER_ID` - Worker identifier (default: scan-worker-1)
+
+**Search & Detection vars:**
+- `WEB_SEARCH_PROVIDER` - Search engine (serpapi, default)
+- `SOCIAL_SEARCH_PROVIDER` - Social platform search (serpapi, default)
+- `SERPAPI_API_KEY` - SerpAPI authentication
+- `GOOGLE_VISION_API_KEY` - Google Vision API key
+- `LOGO_SEARCH_PROVIDER` - Logo detection service (google_vision, default)
+- `LOGO_SEARCH_FALLBACK` - Fallback to SerpAPI (true/false)
+
+**AI Analysis vars:**
+- `OPENAI_API_KEY` - OpenAI API key
+- `OPENAI_VISION_MODEL` - Vision model (default: gpt-4o-mini)
+- `OPENAI_INTENT_MODEL` - Intent model (default: gpt-5-mini)
+- `OPENAI_VISION_ENABLED` - Enable vision analysis (true/false)
+- `OPENAI_INTENT_ENABLED` - Enable intent analysis (true/false)
+- `OPENAI_BASE_URL` - OpenAI endpoint override
+- `OPENAI_TIMEOUT_MS` - API timeout (default: 15000ms)
+- `PHISHING_INTENT_MAX_CHARS` - Character limit for intent analysis (default: 4000)
 
 **Secrets location:**
-- Development: `.env.local` (git-ignored)
-- Production: Vercel environment settings (managed via Vercel dashboard)
-
-## Email Service
-
-**SMTP Configuration:**
-- Nodemailer 6.9.16 - Email library for alerts and notifications
-  - Server: Configurable (defaults to Gmail SMTP)
-  - Port: Default 587 (TLS)
-  - Auth: Username/password
-  - Location: `src/lib/email.ts`
-  - Features:
-    - Threat alerts (critical, high, medium severity)
-    - Daily digest emails
-    - Welcome emails for new users
-  - Templates: HTML email templates with threat data and call-to-action buttons
+- `.env.local` file (development)
+- Vercel Secrets (production) - configured in project settings
+- `.env.example` provided as template
 
 ## Webhooks & Callbacks
 
-**Incoming (Stripe):**
-- `POST /api/stripe/webhook` - Stripe event handling
-  - Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
-  - Signature verification: Stripe webhook signature validation
-  - Used for: Subscription lifecycle management, user tier updates
-  - Location: `src/app/api/stripe/webhook/route.ts`
+**Incoming:**
+- Stripe Webhooks: `POST /api/stripe/webhook`
+  - Events handled: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+  - Webhook secret verification enabled via `STRIPE_WEBHOOK_SECRET`
+  - Updates user subscription status in Supabase on payment events
 
-**Outgoing (Optional):**
-- Custom webhook support (defined in `src/lib/webhooks.ts`)
-  - Events: `threat.detected`, `scan.completed`, `threat.resolved`
-  - Signature: HMAC-SHA256 signing via `X-DoppelDown-Signature` header
-  - Location: `src/lib/webhooks.ts`
-  - Used for: Notifying external systems of brand threats
-  - Not actively wired into current API routes (future enhancement)
-
-## Automated Tasks
-
-**Cron Jobs (Vercel):**
-- Path: `/api/cron/scan`
-- Schedule: `0 */6 * * *` (every 6 hours)
-- Purpose: Automated brand threat scans for monitored brands
-- Auth: Protected via `CRON_SECRET` environment variable
-- Location: `src/app/api/cron/scan/route.ts`
-
-## Third-Party Service Integration Points
-
-**Evidence Collection:**
-- Screenshot capture via puppeteer-core (headless Chrome)
-- PDF generation via jspdf + html2canvas for takedown reports
-- WHOIS data collection via public APIs
-
-**Social Media Scanning:**
-- No SDK integration - Uses public URLs and pattern matching
-- Platforms: Facebook, Instagram, Twitter/X, LinkedIn, TikTok, YouTube, Telegram, Discord
-- Detection method: URL pattern matching for fake accounts
-- Location: `src/lib/social-scanner.ts`
+**Outgoing:**
+- Custom webhooks from threat detection (optional)
+  - Implementation: `src/lib/webhooks.ts` - `sendThreatDetectedWebhook()`
+  - Can notify external systems when threats are detected
+  - Triggered from `src/lib/scan-runner.ts` scan completion
 
 ---
 
-*Integration audit: 2026-01-23*
+*Integration audit: 2026-01-24*
