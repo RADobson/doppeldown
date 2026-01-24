@@ -83,29 +83,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ALRT-01 | TBD | Pending |
-| ALRT-02 | TBD | Pending |
-| ALRT-03 | TBD | Pending |
-| ALRT-04 | TBD | Pending |
-| SCAN-01 | TBD | Pending |
-| SCAN-02 | TBD | Pending |
-| SCAN-03 | TBD | Pending |
-| SCAN-04 | TBD | Pending |
-| HARD-01 | TBD | Pending |
-| HARD-02 | TBD | Pending |
-| HARD-03 | TBD | Pending |
-| HARD-04 | TBD | Pending |
-| TIER-01 | TBD | Pending |
-| TIER-02 | TBD | Pending |
-| TIER-03 | TBD | Pending |
-| ADMN-01 | TBD | Pending |
-| ADMN-02 | TBD | Pending |
+| ALRT-01 | Phase 5 | Pending |
+| ALRT-02 | Phase 5 | Pending |
+| ALRT-03 | Phase 5 | Pending |
+| ALRT-04 | Phase 5 | Pending |
+| SCAN-01 | Phase 4 | Pending |
+| SCAN-02 | Phase 4 | Pending |
+| SCAN-03 | Phase 3 | Pending |
+| SCAN-04 | Phase 3 | Pending |
+| HARD-01 | Phase 2 | Pending |
+| HARD-02 | Phase 2 | Pending |
+| HARD-03 | Phase 2 | Pending |
+| HARD-04 | Phase 2 | Pending |
+| TIER-01 | Phase 1 | Pending |
+| TIER-02 | Phase 1 | Pending |
+| TIER-03 | Phase 3 | Pending |
+| ADMN-01 | Phase 1 | Pending |
+| ADMN-02 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 16 total
-- Mapped to phases: 0
-- Unmapped: 16 (pending roadmap creation)
+- Mapped to phases: 16
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-24 after initial definition*
+*Last updated: 2026-01-24 after roadmap creation*
