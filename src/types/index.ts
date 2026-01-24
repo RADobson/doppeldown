@@ -155,6 +155,14 @@ export interface ThreatAnalysis {
   };
 }
 
+export type ScanError = {
+  type: string;        // 'dns_check', 'screenshot', 'whois', etc.
+  target?: string;     // Domain or URL that failed
+  error: string;       // Error message
+  timestamp: string;   // ISO timestamp
+  retryable: boolean;  // Whether this error could be retried
+};
+
 export interface ScanResult {
   id: string;
   brand_id: string;
@@ -167,6 +175,13 @@ export interface ScanResult {
   pages_scanned: number;
   social_accounts_checked: number;
   error?: string;
+  // Progress tracking fields
+  current_step?: string;
+  step_progress?: number;
+  step_total?: number;
+  overall_progress?: number;
+  partial_errors?: ScanError[];
+  retry_count?: number;
 }
 
 export interface Report {
