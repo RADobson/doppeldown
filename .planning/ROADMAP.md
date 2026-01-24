@@ -29,10 +29,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Admin accounts bypass all tier limits (brand count, scan limits)
   3. Free accounts cannot create brands beyond limit (currently broken)
   4. Each tier respects its brand count limit (Free=1, Starter=3, Pro=10, Enterprise=unlimited)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] TBD during planning
+- [ ] 01-01-PLAN.md — Add admin column, fix brand limits, implement admin bypass
 
 ### Phase 2: Scanning Hardening
 **Goal**: Existing scans run reliably with graceful error handling and recovery
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Admin Foundation | 0/TBD | Not started | - |
+| 1. Admin Foundation | 0/1 | Planned | - |
 | 2. Scanning Hardening | 0/TBD | Not started | - |
 | 3. Manual Scan Limits | 0/TBD | Not started | - |
 | 4. Automated Scanning | 0/TBD | Not started | - |
