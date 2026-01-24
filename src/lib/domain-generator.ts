@@ -1,4 +1,5 @@
 import { DomainVariation, VariationType, ThreatSeverity } from '../types'
+import { dnsQueue } from './scan-queue'
 
 // Homoglyphs - characters that look similar
 const HOMOGLYPHS: Record<string, string[]> = {
@@ -249,22 +250,24 @@ async function dnsQuery(domain: string, type: string, provider: 'google' | 'clou
 }
 
 export async function checkDomainRegistration(domain: string): Promise<boolean> {
-  const recordTypes = ['A', 'AAAA', 'CNAME', 'NS', 'SOA']
+  return dnsQueue.add(async () => {
+    const recordTypes = ['A', 'AAAA', 'CNAME', 'NS', 'SOA']
 
-  for (const type of recordTypes) {
-    try {
-      if (await dnsQuery(domain, type, 'google')) return true
-    } catch {
-      // continue to fallback
+    for (const type of recordTypes) {
+      try {
+        if (await dnsQuery(domain, type, 'google')) return true
+      } catch {
+        // continue to fallback
+      }
+      try {
+        if (await dnsQuery(domain, type, 'cloudflare')) return true
+      } catch {
+        // continue to next type
+      }
     }
-    try {
-      if (await dnsQuery(domain, type, 'cloudflare')) return true
-    } catch {
-      // continue to next type
-    }
-  }
 
-  return false
+    return false
+  }) as Promise<boolean>
 }
 
 export function groupVariationsByRisk(

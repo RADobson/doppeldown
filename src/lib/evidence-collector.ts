@@ -1,6 +1,7 @@
 import { WhoisData, Evidence, HtmlSnapshot, PageAnalysis } from '../types'
 import puppeteer from 'puppeteer-core'
 import crypto from 'crypto'
+import { screenshotQueue, externalQueue } from './scan-queue'
 
 type CollectEvidenceOptions = {
   url: string
@@ -77,31 +78,33 @@ async function uploadEvidenceFile(params: {
 
 // WHOIS lookup using public APIs
 export async function getWhoisData(domain: string): Promise<WhoisData | null> {
-  try {
-    // Try multiple WHOIS APIs
-    const apis = [
-      `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_demo&domainName=${domain}&outputFormat=JSON`,
-      `https://api.whoapi.com/?domain=${domain}&r=whois&apikey=demo`
-    ]
+  return externalQueue.add(async () => {
+    try {
+      // Try multiple WHOIS APIs
+      const apis = [
+        `https://www.whoisxmlapi.com/whoisserver/WhoisService?apiKey=at_demo&domainName=${domain}&outputFormat=JSON`,
+        `https://api.whoapi.com/?domain=${domain}&r=whois&apikey=demo`
+      ]
 
-    // Use a free WHOIS lookup approach via DNS
-    const response = await fetch(`https://whois.iana.org/${domain}`, {
-      headers: {
-        'Accept': 'text/plain'
+      // Use a free WHOIS lookup approach via DNS
+      const response = await fetch(`https://whois.iana.org/${domain}`, {
+        headers: {
+          'Accept': 'text/plain'
+        }
+      })
+
+      if (!response.ok) {
+        // Fallback: construct basic info from DNS
+        return await getBasicWhoisFromDns(domain)
       }
-    })
 
-    if (!response.ok) {
-      // Fallback: construct basic info from DNS
+      const text = await response.text()
+      return parseWhoisText(text, domain)
+    } catch (error) {
+      console.error('WHOIS lookup error:', error)
       return await getBasicWhoisFromDns(domain)
     }
-
-    const text = await response.text()
-    return parseWhoisText(text, domain)
-  } catch (error) {
-    console.error('WHOIS lookup error:', error)
-    return await getBasicWhoisFromDns(domain)
-  }
+  }) as Promise<WhoisData | null>
 }
 
 async function getBasicWhoisFromDns(domain: string): Promise<WhoisData | null> {
@@ -160,45 +163,47 @@ export async function captureScreenshot(url: string): Promise<{
   imageData?: Buffer
   error?: string
 }> {
-  let browser: any
-  try {
-    const executablePath =
-      process.env.PUPPETEER_EXECUTABLE_PATH ||
-      process.env.CHROME_EXECUTABLE_PATH ||
-      undefined
+  return screenshotQueue.add(async () => {
+    let browser: any
+    try {
+      const executablePath =
+        process.env.PUPPETEER_EXECUTABLE_PATH ||
+        process.env.CHROME_EXECUTABLE_PATH ||
+        undefined
 
-    const launchOptions: any = {
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
+      const launchOptions: any = {
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      }
 
-    if (executablePath) {
-      launchOptions.executablePath = executablePath
-    } else if (process.env.PUPPETEER_CHANNEL) {
-      launchOptions.channel = process.env.PUPPETEER_CHANNEL
-    }
+      if (executablePath) {
+        launchOptions.executablePath = executablePath
+      } else if (process.env.PUPPETEER_CHANNEL) {
+        launchOptions.channel = process.env.PUPPETEER_CHANNEL
+      }
 
-    browser = await puppeteer.launch(launchOptions)
-    const page = await browser.newPage()
-    await page.setViewport({ width: 1280, height: 800 })
-    await page.setUserAgent(
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    )
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
+      browser = await puppeteer.launch(launchOptions)
+      const page = await browser.newPage()
+      await page.setViewport({ width: 1280, height: 800 })
+      await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      )
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
 
-    const screenshot = await page.screenshot({ type: 'png', fullPage: false })
-    await browser.close()
-    browser = null
-    return { success: true, imageData: screenshot as Buffer }
-  } catch (error) {
-    if (browser) {
-      try { await browser.close() } catch {}
+      const screenshot = await page.screenshot({ type: 'png', fullPage: false })
+      await browser.close()
+      browser = null
+      return { success: true, imageData: screenshot as Buffer }
+    } catch (error) {
+      if (browser) {
+        try { await browser.close() } catch {}
+      }
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Screenshot capture failed'
+      }
     }
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Screenshot capture failed'
-    }
-  }
+  }) as Promise<{ success: boolean; imageData?: Buffer; error?: string }>
 }
 
 // Capture HTML content for evidence
