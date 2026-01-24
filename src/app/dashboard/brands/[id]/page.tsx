@@ -26,6 +26,7 @@ import { Badge, SeverityBadge, StatusBadge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { formatDateTime, truncateUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { ScanProgress } from '@/components/ScanProgress'
 
 interface Brand {
   id: string
@@ -603,28 +604,20 @@ export default function BrandDetailPage() {
         </div>
       </div>
 
-      {activeScan && (activeScan.status === 'running' || activeScan.status === 'pending') && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-3 justify-between">
-              <div className="flex items-start gap-3">
-                <Loader2 className="h-5 w-5 text-primary-600 animate-spin mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Scan in progress</p>
-                  <p className="text-sm text-gray-500">
-                    Checked {activeScan.domains_checked || 0} domains • Reviewed {activeScan.pages_scanned || 0} URLs • Found {activeScan.threats_found || 0} potential threats so far
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Typical run time: 1–3 minutes. Large brands or slow networks can take longer.
-                  </p>
-                </div>
-              </div>
-              <Button variant="outline" size="sm" onClick={handleCancelScan} disabled={cancelling}>
-                {cancelling ? 'Stopping...' : 'Cancel scan'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      {activeScan && (activeScan.status === 'running' || activeScan.status === 'queued') && (
+        <ScanProgress
+          scanId={activeScan.id}
+          onComplete={() => {
+            fetchData();
+          }}
+          onError={(error) => {
+            console.error('Scan failed:', error);
+            fetchData();
+          }}
+          onCancel={() => {
+            fetchData();
+          }}
+        />
       )}
 
       {/* Stats */}
