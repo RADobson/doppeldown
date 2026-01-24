@@ -12,7 +12,7 @@ Transform DoppelDown from validated prototype to production-ready brand protecti
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Admin Foundation** - Core infrastructure fixes enabling proper tier enforcement
+- [x] **Phase 1: Admin Foundation** - Core infrastructure fixes enabling proper tier enforcement
 - [ ] **Phase 2: Scanning Hardening** - Fix reliability issues in existing scan flows
 - [ ] **Phase 3: Manual Scan Limits** - Enforce tier-based manual scan quotas
 - [ ] **Phase 4: Automated Scanning** - Background scan scheduler with tier schedules
@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Add admin column, fix brand limits, implement admin bypass
+- [x] 01-01-PLAN.md — Add admin column, fix brand limits, implement admin bypass
 
 ### Phase 2: Scanning Hardening
 **Goal**: Existing scans run reliably with graceful error handling and recovery
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Admin Foundation | 0/1 | Planned | - |
+| 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
 | 2. Scanning Hardening | 0/TBD | Not started | - |
 | 3. Manual Scan Limits | 0/TBD | Not started | - |
 | 4. Automated Scanning | 0/TBD | Not started | - |

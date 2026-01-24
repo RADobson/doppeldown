@@ -33,14 +33,14 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Tier Enforcement
 
-- [ ] **TIER-01**: Fix tier enforcement — Free accounts currently bypass all limits
-- [ ] **TIER-02**: Enforce brand count limits per tier
+- [x] **TIER-01**: Fix tier enforcement — Free accounts currently bypass all limits
+- [x] **TIER-02**: Enforce brand count limits per tier
 - [ ] **TIER-03**: Enforce scan limits per tier (manual + automated)
 
 ### Admin
 
-- [ ] **ADMN-01**: Add `is_admin` column to users table
-- [ ] **ADMN-02**: Admin accounts bypass all tier limits
+- [x] **ADMN-01**: Add `is_admin` column to users table
+- [x] **ADMN-02**: Admin accounts bypass all tier limits
 
 ## v2 Requirements
 
@@ -95,11 +95,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HARD-02 | Phase 2 | Pending |
 | HARD-03 | Phase 2 | Pending |
 | HARD-04 | Phase 2 | Pending |
-| TIER-01 | Phase 1 | Pending |
-| TIER-02 | Phase 1 | Pending |
+| TIER-01 | Phase 1 | Complete |
+| TIER-02 | Phase 1 | Complete |
 | TIER-03 | Phase 3 | Pending |
-| ADMN-01 | Phase 1 | Pending |
-| ADMN-02 | Phase 1 | Pending |
+| ADMN-01 | Phase 1 | Complete |
+| ADMN-02 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 16 total
@@ -108,4 +108,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-24 after roadmap creation*
+*Last updated: 2026-01-25 after Phase 1 completion*
