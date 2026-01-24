@@ -4,9 +4,9 @@ import { createClient, createServiceClient } from '@/lib/supabase/server'
 // Brand limits per subscription tier
 const BRAND_LIMITS: Record<string, number> = {
   free: 1,
-  starter: 1,
-  professional: 3,
-  enterprise: 10,
+  starter: 3,
+  professional: 10,
+  enterprise: Number.MAX_SAFE_INTEGER,
 }
 
 const ALLOWED_SOCIAL_PLATFORMS = new Set([
@@ -58,7 +58,7 @@ async function getOrCreateUserRecord(user: { id: string; email?: string; user_me
   const supabase = await createClient()
   const { data } = await supabase
     .from('users')
-    .select('subscription_status, subscription_tier')
+    .select('subscription_status, subscription_tier, is_admin')
     .eq('id', user.id)
     .maybeSingle()
 
@@ -74,7 +74,7 @@ async function getOrCreateUserRecord(user: { id: string; email?: string; user_me
       subscription_status: 'free',
       subscription_tier: 'free',
     })
-    .select('subscription_status, subscription_tier')
+    .select('subscription_status, subscription_tier, is_admin')
     .single()
 
   if (error) throw error
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
 
-    if ((existingBrands || 0) >= brandLimit) {
+    if (!userData?.is_admin && (existingBrands || 0) >= brandLimit) {
       const planLabel = effectiveTier === 'free' ? 'free' : effectiveTier
       return NextResponse.json(
         {
