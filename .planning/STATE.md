@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 1 of 5 (Admin Foundation)
-Plan: Ready to plan
-Status: Ready to plan
-Last activity: 2026-01-24 — Roadmap created with 5 phases covering 16 requirements
+Plan: 1 of 3
+Status: In progress
+Last activity: 2026-01-24 — Completed 01-01-PLAN.md (Admin Infrastructure)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 10%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: TBD
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 111s (1m 51s)
+- Total execution time: 0.03 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01 - Admin Foundation | 1 | 111s | 111s |
 
 **Recent Trend:**
-- Last 5 plans: None yet
-- Trend: Not established
+- Last 5 plans: 01-01 (111s)
+- Trend: Not yet established
 
 *Updated after each plan completion*
 
@@ -45,6 +45,9 @@ Recent decisions affecting current work:
 - Roadmap: 5 focused phases for weekend sprint (balancing "comprehensive" config with practical brownfield scope)
 - Roadmap: Admin Foundation first (unblocks tier enforcement for all other features)
 - Roadmap: Scanning Hardening before automated scans (reliability prerequisite)
+- 01-01: Admin bypass uses `!userData?.is_admin &&` guard pattern (consistent, greppable, null-safe)
+- 01-01: Enterprise tier uses Number.MAX_SAFE_INTEGER for unlimited (semantic clarity)
+- 01-01: Partial index on is_admin=true only (admin users are rare, keeps index tiny)
 
 ### Pending Todos
 
@@ -52,14 +55,19 @@ None yet.
 
 ### Blockers/Concerns
 
-**From Codebase Analysis:**
-- Free tier currently bypasses all limits (TIER-01) - critical blocker for demo
+**Resolved:**
+- ~~Free tier currently bypasses all limits (TIER-01)~~ - FIXED in 01-01 (brand limits corrected, effectiveTier fallback working)
+
+**Remaining:**
+- Migration not auto-applied - need to run `supabase db push` before testing admin functionality
+- Pre-existing TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) - not blocking, but should be addressed
 - OpenAI Vision endpoint uses wrong API path - may need fixing during hardening
 - No rate limiting implemented - could affect production deployment
 - Scan cancellation not fully tested - may surface issues during hardening
 
 ## Session Continuity
 
-Last session: 2026-01-24 (roadmap creation)
-Stopped at: Roadmap and STATE.md created, ready to plan Phase 1
+Last session: 2026-01-24 22:07 UTC
+Stopped at: Completed 01-01-PLAN.md (Admin Infrastructure)
 Resume file: None
+Next: Plan 01-02 (remaining Phase 01 work)
