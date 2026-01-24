@@ -21,12 +21,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 - ✓ Evidence collection (screenshots, WHOIS, HTML snapshots) — existing
 - ✓ PDF report generation for takedowns — existing
 - ✓ Dashboard with brand/threat overview — existing
+- ✓ AI visual similarity analysis (GPT-4o-mini vision comparing screenshots) — existing
+- ✓ AI phishing intent detection (credential harvesting, urgency signals) — existing
+- ✓ Smart threat scoring (weighted composite: domain 35%, visual 40%, phishing 25%) — existing
 
 ### Active
 
-- [ ] AI visual similarity analysis (compare screenshots to brand's official site)
-- [ ] AI phishing intent detection (analyze page content for credential harvesting, urgency)
-- [ ] Smart threat scoring (combine domain type + visual match + content intent)
 - [ ] Email alerts when new threats detected
 - [ ] Fix/harden existing scanning flows (untested, potential bugs)
 - [ ] Automated background scanning with scheduled jobs
@@ -63,4 +63,4 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | Cold outreach go-to-market | Fastest path to revenue, prove value with live scans | — Pending |
 
 ---
-*Last updated: 2026-01-23 after initialization*
+*Last updated: 2026-01-24 after validating AI analysis features*
