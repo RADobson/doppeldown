@@ -6,6 +6,7 @@ export interface User {
   subscription_tier: 'free' | 'starter' | 'professional' | 'enterprise';
   subscription_id?: string;
   customer_id?: string;
+  is_admin?: boolean;
 }
 
 export interface Brand {
