@@ -1,0 +1,21 @@
+services:
+  web:
+    build: .
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+
+  worker:
+    build: .
+    command: npm run worker:scan
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules

@@ -1,0 +1,151 @@
+import Stripe from 'stripe'
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-02-24.acacia',
+  typescript: true,
+})
+
+export const PLANS = {
+  starter: {
+    name: 'Starter',
+    price: 4900, // $49/month
+    priceId: process.env.STRIPE_STARTER_PRICE_ID || '',
+    brandLimit: 1,
+    scanFrequency: 'weekly' as const,
+    features: [
+      '1 brand to monitor',
+      'Weekly automated scans',
+      'Email alerts',
+      'Basic reports',
+      'Domain monitoring',
+    ],
+  },
+  professional: {
+    name: 'Professional',
+    price: 9900, // $99/month
+    priceId: process.env.STRIPE_PRO_PRICE_ID || '',
+    brandLimit: 3,
+    scanFrequency: 'daily' as const,
+    features: [
+      '3 brands to monitor',
+      'Daily automated scans',
+      'Priority email alerts',
+      'Detailed takedown reports',
+      'Domain + web monitoring',
+      'WHOIS tracking',
+      'Evidence collection',
+    ],
+  },
+  enterprise: {
+    name: 'Enterprise',
+    price: 24900, // $249/month
+    priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || '',
+    brandLimit: 10,
+    scanFrequency: 'daily' as const,
+    features: [
+      '10 brands to monitor',
+      'Continuous monitoring',
+      'Instant alerts',
+      'Legal-ready reports',
+      'Full evidence packages',
+      'API access',
+      'Priority support',
+      'Custom integrations',
+    ],
+  },
+}
+
+export type PlanType = keyof typeof PLANS
+
+export async function createCheckoutSession(
+  customerId: string,
+  priceId: string,
+  successUrl: string,
+  cancelUrl: string,
+  plan?: PlanType
+): Promise<Stripe.Checkout.Session> {
+  if (!priceId) {
+    throw new Error('Missing Stripe price ID for plan')
+  }
+
+  return stripe.checkout.sessions.create({
+    customer: customerId,
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    mode: 'subscription',
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    allow_promotion_codes: true,
+    metadata: plan ? { plan } : undefined,
+    subscription_data: plan ? { metadata: { plan } } : undefined,
+  })
+}
+
+export async function createCustomer(
+  email: string,
+  name?: string
+): Promise<Stripe.Customer> {
+  return stripe.customers.create({
+    email,
+    name,
+  })
+}
+
+export async function getOrCreateCustomer(
+  userId: string,
+  email: string,
+  existingCustomerId?: string
+): Promise<Stripe.Customer> {
+  if (existingCustomerId) {
+    try {
+      return await stripe.customers.retrieve(existingCustomerId) as Stripe.Customer
+    } catch {
+      // Customer doesn't exist, create new one
+    }
+  }
+
+  return createCustomer(email)
+}
+
+export async function createPortalSession(
+  customerId: string,
+  returnUrl: string
+): Promise<Stripe.BillingPortal.Session> {
+  return stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: returnUrl,
+  })
+}
+
+export async function cancelSubscription(
+  subscriptionId: string
+): Promise<Stripe.Subscription> {
+  return stripe.subscriptions.cancel(subscriptionId)
+}
+
+export async function getSubscription(
+  subscriptionId: string
+): Promise<Stripe.Subscription> {
+  return stripe.subscriptions.retrieve(subscriptionId)
+}
+
+export function getPlanFromPriceId(priceId: string): PlanType | null {
+  for (const [plan, config] of Object.entries(PLANS)) {
+    if (config.priceId === priceId) {
+      return plan as PlanType
+    }
+  }
+  return null
+}
+
+export function formatPrice(cents: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(cents / 100)
+}

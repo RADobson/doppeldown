@@ -1,0 +1,46 @@
+{
+  "name": "doppeldown",
+  "version": "1.0.0",
+  "description": "DoppelDown - Brand Protection & Phishing Detection SaaS",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "setup": "node scripts/setup.js",
+    "worker:scan": "tsx scripts/scan-worker.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.47.0",
+    "@supabase/ssr": "^0.5.0",
+    "next": "14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^17.4.0",
+    "@stripe/stripe-js": "^8.6.0",
+    "puppeteer-core": "^23.11.0",
+    "whois-json": "^2.0.4",
+    "nodemailer": "^6.9.16",
+    "jspdf": "^2.5.2",
+    "html2canvas": "^1.4.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.469.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0",
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/nodemailer": "^6.4.17",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}
