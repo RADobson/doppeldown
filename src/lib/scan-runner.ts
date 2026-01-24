@@ -6,7 +6,8 @@ import { scanSocialMedia } from './social-scanner'
 import { sendThreatAlert } from './email'
 import { sendThreatDetectedWebhook } from './webhooks'
 import { buildThreatAnalysis } from './threat-analysis'
-import type { Threat, ThreatSeverity, ThreatType, VariationType } from '../types'
+import { dnsQueue, clearAllQueues } from './scan-queue'
+import type { Threat, ThreatSeverity, ThreatType, VariationType, ScanError } from '../types'
 
 const DEFAULT_SOCIAL_PLATFORMS = ['facebook', 'instagram', 'twitter', 'linkedin', 'tiktok', 'youtube', 'telegram', 'discord']
 
@@ -82,6 +83,55 @@ const SCAN_CONFIG: Record<string, ScanMode> = {
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+type ScanStep = 'domains' | 'web' | 'logo' | 'social' | 'finalizing';
+
+const STEP_WEIGHTS: Record<ScanStep, number> = {
+  domains: 40,
+  web: 25,
+  logo: 15,
+  social: 20,
+  finalizing: 0
+};
+
+function calculateOverallProgress(
+  step: ScanStep,
+  stepProgress: number,
+  stepTotal: number,
+  mode: ScanMode
+): number {
+  // Calculate enabled step weights
+  const enabledWeights: Partial<Record<ScanStep, number>> = {};
+  if (mode.domains) enabledWeights.domains = STEP_WEIGHTS.domains;
+  if (mode.web) enabledWeights.web = STEP_WEIGHTS.web;
+  if (mode.logo) enabledWeights.logo = STEP_WEIGHTS.logo;
+  if (mode.social) enabledWeights.social = STEP_WEIGHTS.social;
+
+  const totalWeight = Object.values(enabledWeights).reduce((a, b) => a + b, 0);
+  if (totalWeight === 0) return 100;
+
+  // Calculate cumulative progress from completed steps
+  const stepOrder: ScanStep[] = ['domains', 'web', 'logo', 'social'];
+  let cumulativeProgress = 0;
+  let reachedCurrentStep = false;
+
+  for (const s of stepOrder) {
+    if (s === step) {
+      reachedCurrentStep = true;
+      // Add partial progress for current step
+      const stepWeight = enabledWeights[s] || 0;
+      const stepPercent = stepTotal > 0 ? (stepProgress / stepTotal) : 0;
+      cumulativeProgress += (stepWeight / totalWeight) * stepPercent * 100;
+      break;
+    }
+    if (!reachedCurrentStep && enabledWeights[s]) {
+      // Add full weight for completed steps
+      cumulativeProgress += (enabledWeights[s]! / totalWeight) * 100;
+    }
+  }
+
+  return Math.min(100, Math.round(cumulativeProgress));
+}
 const extractDomainFromUrl = (url?: string) => {
   if (!url) return undefined
   try {
@@ -315,6 +365,7 @@ export async function runScanForBrand(options: {
     .eq('id', scanId)
 
   const threats: Partial<Threat>[] = []
+  const partialErrors: ScanError[] = []
   let threatsFound = 0
   let domainsChecked = 0
   let pagesScanned = 0
@@ -337,25 +388,38 @@ export async function runScanForBrand(options: {
       }
     }
   }
-  const updateProgress = async (force: boolean = false) => {
+  const updateProgress = async (
+    step: ScanStep,
+    stepProg: number,
+    stepTot: number,
+    force: boolean = false
+  ) => {
     const nowMs = Date.now()
     if (!force && nowMs - lastProgressUpdate < PROGRESS_UPDATE_INTERVAL_MS) return
     lastProgressUpdate = nowMs
+
+    const overallProgress = calculateOverallProgress(step, stepProg, stepTot, mode)
+
     try {
       await supabase
         .from('scans')
         .update({
           status: 'running',
+          current_step: step,
+          step_progress: stepProg,
+          step_total: stepTot,
+          overall_progress: overallProgress,
           domains_checked: domainsChecked,
           pages_scanned: pagesScanned,
-          threats_found: threatsFound
+          threats_found: threatsFound,
+          partial_errors: partialErrors
         })
         .eq('id', scanId)
     } catch (err) {
       console.warn('Failed to update scan progress:', err)
     }
   }
-  await updateProgress(true)
+  await updateProgress('domains', 0, 0, true)
   const getOfficialScreenshot = async () => {
     if (!canRunOpenAIVision) return null
     if (officialScreenshot !== undefined) return officialScreenshot
@@ -426,7 +490,10 @@ export async function runScanForBrand(options: {
               type: variation.type
             })
           }
-          const isRegistered = await checkDomainRegistration(variation.domain)
+          // Use rate-limited queue for DNS check
+          const isRegistered = await dnsQueue.add(async () => {
+            return await checkDomainRegistration(variation.domain)
+          })
           if (isDebugBrand && DEBUG_DOMAINS.includes(variation.domain.toLowerCase())) {
             console.log('[scan-debug] target domain result', {
               brandId: brand.id,
@@ -438,9 +505,9 @@ export async function runScanForBrand(options: {
           if (CANCEL_CHECK_EVERY > 0 && domainsChecked % CANCEL_CHECK_EVERY === 0) {
             await ensureNotCancelled()
           }
-          if (domainsChecked % 10 === 0) {
-            void updateProgress()
-          }
+
+          // Update progress with step info
+          await updateProgress('domains', domainsChecked, variationsToCheck.length)
 
           if (isRegistered) {
             const severity = assessThreatLevel(variation.type, true)
@@ -489,223 +556,266 @@ export async function runScanForBrand(options: {
                   detected_at: new Date().toISOString()
                 })
                 threatsFound++
-                void updateProgress()
+                await updateProgress('domains', domainsChecked, variationsToCheck.length)
               }
             }
           }
 
           await sleep(100)
         } catch (err) {
+          // Capture error but continue - don't crash scan
+          partialErrors.push({
+            type: 'dns_check',
+            target: variation.domain,
+            error: err instanceof Error ? err.message : 'Unknown error',
+            timestamp: new Date().toISOString(),
+            retryable: true
+          })
+          domainsChecked++ // Count even failures
           console.error(`Error checking domain ${variation.domain}:`, err)
         }
       }
     }
-    await updateProgress(true)
+    await updateProgress('domains', domainsChecked, domainsChecked, true)
 
     // 2. Web scanning for lookalike pages
     if (mode.web) {
       await ensureNotCancelled()
-      const webThreats = await scanForThreats(
-        brand.name,
-        brand.domain,
-        keywords || [],
-        {
-          onProgress: (delta) => {
-            pagesScanned += delta
-            void updateProgress()
-          }
-        }
-      )
+      await updateProgress('web', 0, 1, true)
 
-      for (const webThreat of webThreats) {
-        const { data: existing } = await supabase
-          .from('threats')
-          .select('id')
-          .eq('brand_id', brand.id)
-          .eq('url', webThreat.url)
-          .limit(1)
-          .maybeSingle()
-
-        if (!existing) {
-          const url = webThreat.url
-          const evidence = url ? await collectEvidence({
-            url,
-            brandId: brand.id,
-            brandName: brand.name,
-            scanId,
-            supabase
-          }) : webThreat.evidence
-
-          let threatScreenshot: Buffer | null = null
-          let officialSiteScreenshot: Buffer | null = null
-
-          if (canRunOpenAIVision) {
-            threatScreenshot = await fetchImageBuffer(evidence?.screenshots?.[0]?.public_url)
-            if (!threatScreenshot) {
-              threatScreenshot = await captureScreenshotBuffer(url)
-            }
-            if (threatScreenshot) {
-              officialSiteScreenshot = await getOfficialScreenshot()
+      try {
+        const webThreats = await scanForThreats(
+          brand.name,
+          brand.domain,
+          keywords || [],
+          {
+            onProgress: (delta) => {
+              pagesScanned += delta
+              void updateProgress('web', 0, 1)
             }
           }
+        )
 
-          const analysis = await buildThreatAnalysis({
-            threatType: (webThreat.type || 'brand_impersonation') as ThreatType,
-            severity: (webThreat.severity || 'low') as ThreatSeverity,
-            evidence,
-            brandName: brand.name,
-            brandDomain: brand.domain,
-            threatUrl: url,
-            officialScreenshot: officialSiteScreenshot || undefined,
-            threatScreenshot: threatScreenshot || undefined
-          })
+        for (const webThreat of webThreats) {
+          const { data: existing } = await supabase
+            .from('threats')
+            .select('id')
+            .eq('brand_id', brand.id)
+            .eq('url', webThreat.url)
+            .limit(1)
+            .maybeSingle()
 
-          threats.push({
-            ...webThreat,
-            brand_id: brand.id,
-            scan_id: scanId,
-            domain: webThreat.domain || extractDomainFromUrl(url),
-            evidence: evidence || webThreat.evidence,
-            whois_data: evidence?.whois_snapshots?.[0]?.data,
-            screenshot_url: evidence?.screenshots?.[0]?.public_url,
-            threat_score: analysis.compositeScore,
-            analysis_version: analysis.version,
-            analysis,
-            severity: analysis.compositeSeverity
-          })
-          threatsFound++
-          void updateProgress()
+          if (!existing) {
+            const url = webThreat.url
+            const evidence = url ? await collectEvidence({
+              url,
+              brandId: brand.id,
+              brandName: brand.name,
+              scanId,
+              supabase
+            }) : webThreat.evidence
+
+            let threatScreenshot: Buffer | null = null
+            let officialSiteScreenshot: Buffer | null = null
+
+            if (canRunOpenAIVision) {
+              threatScreenshot = await fetchImageBuffer(evidence?.screenshots?.[0]?.public_url)
+              if (!threatScreenshot) {
+                threatScreenshot = await captureScreenshotBuffer(url)
+              }
+              if (threatScreenshot) {
+                officialSiteScreenshot = await getOfficialScreenshot()
+              }
+            }
+
+            const analysis = await buildThreatAnalysis({
+              threatType: (webThreat.type || 'brand_impersonation') as ThreatType,
+              severity: (webThreat.severity || 'low') as ThreatSeverity,
+              evidence,
+              brandName: brand.name,
+              brandDomain: brand.domain,
+              threatUrl: url,
+              officialScreenshot: officialSiteScreenshot || undefined,
+              threatScreenshot: threatScreenshot || undefined
+            })
+
+            threats.push({
+              ...webThreat,
+              brand_id: brand.id,
+              scan_id: scanId,
+              domain: webThreat.domain || extractDomainFromUrl(url),
+              evidence: evidence || webThreat.evidence,
+              whois_data: evidence?.whois_snapshots?.[0]?.data,
+              screenshot_url: evidence?.screenshots?.[0]?.public_url,
+              threat_score: analysis.compositeScore,
+              analysis_version: analysis.version,
+              analysis,
+              severity: analysis.compositeSeverity
+            })
+            threatsFound++
+            void updateProgress('web', 1, 1)
+          }
         }
+      } catch (err) {
+        partialErrors.push({
+          type: 'web_scan',
+          error: err instanceof Error ? err.message : 'Unknown error',
+          timestamp: new Date().toISOString(),
+          retryable: true
+        })
+        // Continue to logo/social scanning
       }
-      await updateProgress(true)
+      await updateProgress('web', 1, 1, true)
     }
 
     // 2b. Logo search for brand usage
     if (mode.logo && brand.logo_url) {
       await ensureNotCancelled()
-      if (isDebugBrand) {
-        console.log('[scan-debug] logo search start', {
-          brandId: brand.id,
-          logoUrl: brand.logo_url
-        })
-      }
-      const logoResults = await searchLogoUsage(brand.logo_url)
-      if (isDebugBrand) {
-        console.log('[scan-debug] logo search results', {
-          brandId: brand.id,
-          count: logoResults.length,
-          sample: logoResults.slice(0, 5)
-        })
-      }
-      pagesScanned += logoResults.length
-      void updateProgress()
+      await updateProgress('logo', 0, 1, true)
 
-      for (const result of logoResults) {
-        const url = result.url
-        const resultDomain = extractDomainFromUrl(url)
-        if (!url || (resultDomain && (resultDomain === brand.domain || resultDomain.endsWith(`.${brand.domain}`)))) {
-          continue
-        }
-
-        const { data: existing } = await supabase
-          .from('threats')
-          .select('id')
-          .eq('brand_id', brand.id)
-          .eq('url', url)
-          .limit(1)
-          .maybeSingle()
-
-        if (!existing) {
-          const evidence = await collectEvidence({
-            url,
+      try {
+        if (isDebugBrand) {
+          console.log('[scan-debug] logo search start', {
             brandId: brand.id,
-            brandName: brand.name,
-            scanId,
-            supabase
+            logoUrl: brand.logo_url
           })
-
-          const analysis = await buildThreatAnalysis({
-            threatType: 'trademark_abuse',
-            severity: 'medium',
-            evidence,
-            brandName: brand.name,
-            brandDomain: brand.domain,
-            threatUrl: url
-          })
-
-          threats.push({
-            brand_id: brand.id,
-            scan_id: scanId,
-            type: 'trademark_abuse',
-            severity: analysis.compositeSeverity,
-            status: 'new',
-            url,
-            domain: extractDomainFromUrl(url),
-            title: result.title,
-            description: `Logo match found via image search${result.source ? ` (${result.source})` : ''}.`,
-            evidence,
-            whois_data: evidence?.whois_snapshots?.[0]?.data,
-            screenshot_url: evidence?.screenshots?.[0]?.public_url,
-            threat_score: analysis.compositeScore,
-            analysis_version: analysis.version,
-            analysis,
-            detected_at: new Date().toISOString()
-          })
-          threatsFound++
-          void updateProgress()
         }
+        const logoResults = await searchLogoUsage(brand.logo_url)
+        if (isDebugBrand) {
+          console.log('[scan-debug] logo search results', {
+            brandId: brand.id,
+            count: logoResults.length,
+            sample: logoResults.slice(0, 5)
+          })
+        }
+        pagesScanned += logoResults.length
+        void updateProgress('logo', 0, 1)
+
+        for (const result of logoResults) {
+          const url = result.url
+          const resultDomain = extractDomainFromUrl(url)
+          if (!url || (resultDomain && (resultDomain === brand.domain || resultDomain.endsWith(`.${brand.domain}`)))) {
+            continue
+          }
+
+          const { data: existing } = await supabase
+            .from('threats')
+            .select('id')
+            .eq('brand_id', brand.id)
+            .eq('url', url)
+            .limit(1)
+            .maybeSingle()
+
+          if (!existing) {
+            const evidence = await collectEvidence({
+              url,
+              brandId: brand.id,
+              brandName: brand.name,
+              scanId,
+              supabase
+            })
+
+            const analysis = await buildThreatAnalysis({
+              threatType: 'trademark_abuse',
+              severity: 'medium',
+              evidence,
+              brandName: brand.name,
+              brandDomain: brand.domain,
+              threatUrl: url
+            })
+
+            threats.push({
+              brand_id: brand.id,
+              scan_id: scanId,
+              type: 'trademark_abuse',
+              severity: analysis.compositeSeverity,
+              status: 'new',
+              url,
+              domain: extractDomainFromUrl(url),
+              title: result.title,
+              description: `Logo match found via image search${result.source ? ` (${result.source})` : ''}.`,
+              evidence,
+              whois_data: evidence?.whois_snapshots?.[0]?.data,
+              screenshot_url: evidence?.screenshots?.[0]?.public_url,
+              threat_score: analysis.compositeScore,
+              analysis_version: analysis.version,
+              analysis,
+              detected_at: new Date().toISOString()
+            })
+            threatsFound++
+            void updateProgress('logo', 1, 1)
+          }
+        }
+      } catch (err) {
+        partialErrors.push({
+          type: 'logo_scan',
+          error: err instanceof Error ? err.message : 'Unknown error',
+          timestamp: new Date().toISOString(),
+          retryable: true
+        })
       }
-      await updateProgress(true)
+      await updateProgress('logo', 1, 1, true)
     }
 
     // 3. Social media scanning for fake accounts
     if (mode.social) {
       await ensureNotCancelled()
-      const socialThreats = await scanSocialMedia(
-        brand.name,
-        brand.social_handles || {},
-        mode.socialPlatforms,
-        {
-          onProgress: (delta) => {
-            pagesScanned += delta
-            void updateProgress()
+      await updateProgress('social', 0, 1, true)
+
+      try {
+        const socialThreats = await scanSocialMedia(
+          brand.name,
+          brand.social_handles || {},
+          mode.socialPlatforms,
+          {
+            onProgress: (delta) => {
+              pagesScanned += delta
+              void updateProgress('social', 0, 1)
+            }
+          }
+        )
+
+        for (const socialThreat of socialThreats) {
+          const { data: existing } = await supabase
+            .from('threats')
+            .select('id')
+            .eq('brand_id', brand.id)
+            .eq('url', socialThreat.url)
+            .limit(1)
+            .maybeSingle()
+
+          if (!existing) {
+            const analysis = await buildThreatAnalysis({
+              threatType: (socialThreat.type || 'fake_social_account') as ThreatType,
+              severity: (socialThreat.severity || 'low') as ThreatSeverity,
+              evidence: socialThreat.evidence,
+              brandName: brand.name,
+              brandDomain: brand.domain,
+              threatUrl: socialThreat.url
+            })
+
+            threats.push({
+              ...socialThreat,
+              brand_id: brand.id,
+              scan_id: scanId,
+              threat_score: analysis.compositeScore,
+              analysis_version: analysis.version,
+              analysis,
+              severity: analysis.compositeSeverity
+            })
+            threatsFound++
+            void updateProgress('social', 1, 1)
           }
         }
-      )
-
-      for (const socialThreat of socialThreats) {
-        const { data: existing } = await supabase
-          .from('threats')
-          .select('id')
-          .eq('brand_id', brand.id)
-          .eq('url', socialThreat.url)
-          .limit(1)
-          .maybeSingle()
-
-        if (!existing) {
-          const analysis = await buildThreatAnalysis({
-            threatType: (socialThreat.type || 'fake_social_account') as ThreatType,
-            severity: (socialThreat.severity || 'low') as ThreatSeverity,
-            evidence: socialThreat.evidence,
-            brandName: brand.name,
-            brandDomain: brand.domain,
-            threatUrl: socialThreat.url
-          })
-
-          threats.push({
-            ...socialThreat,
-            brand_id: brand.id,
-            scan_id: scanId,
-            threat_score: analysis.compositeScore,
-            analysis_version: analysis.version,
-            analysis,
-            severity: analysis.compositeSeverity
-          })
-          threatsFound++
-          void updateProgress()
-        }
+      } catch (err) {
+        partialErrors.push({
+          type: 'social_scan',
+          error: err instanceof Error ? err.message : 'Unknown error',
+          timestamp: new Date().toISOString(),
+          retryable: true
+        })
       }
-      await updateProgress(true)
+      await updateProgress('social', 1, 1, true)
     }
 
     // 4. Save threats to database
@@ -727,7 +837,12 @@ export async function runScanForBrand(options: {
         completed_at: new Date().toISOString(),
         threats_found: threatsFound,
         domains_checked: domainsChecked,
-        pages_scanned: pagesScanned
+        pages_scanned: pagesScanned,
+        overall_progress: 100,
+        current_step: 'finalizing',
+        step_progress: 1,
+        step_total: 1,
+        partial_errors: partialErrors
       })
       .eq('id', scanId)
 
@@ -791,12 +906,16 @@ export async function runScanForBrand(options: {
       }
     }
   } catch (error) {
+    // Clear queues on error/cancellation
+    clearAllQueues()
+
     await supabase
       .from('scans')
       .update({
         status: 'failed',
         completed_at: new Date().toISOString(),
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
+        partial_errors: partialErrors
       })
       .eq('id', scanId)
 

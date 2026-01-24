@@ -126,6 +126,14 @@ async function failOrRetryJob(job: any, error: Error) {
     })
     .eq('id', job.id)
 
+  // Sync retry count to scans table for UI visibility (HARD-03)
+  if (shouldRetry && job.scan_id) {
+    await supabase
+      .from('scans')
+      .update({ retry_count: attempts + 1 })
+      .eq('id', job.scan_id)
+  }
+
   if (!shouldRetry && job.scan_id) {
     await supabase
       .from('scans')
@@ -154,6 +162,14 @@ async function processJob(job: any) {
       })
     }
     throw new Error(brandError?.message ? `Brand not found for job: ${brandError.message}` : 'Brand not found for job')
+  }
+
+  // Sync current attempt count to scans table for UI visibility
+  if (job.scan_id) {
+    await supabase
+      .from('scans')
+      .update({ retry_count: job.attempts || 0 })
+      .eq('id', job.scan_id)
   }
 
   let user: any = null
