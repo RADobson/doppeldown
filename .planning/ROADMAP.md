@@ -43,10 +43,12 @@ Plans:
   2. System respects external API rate limits with queuing (no 429 errors causing cascading failures)
   3. Failed scans retry automatically with exponential backoff (no manual intervention needed)
   4. User can see real-time scan progress percentage and cancel in-progress scans
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 02-01-PLAN.md — Install p-queue, create scan-queue.ts and api-client.ts
+- [ ] 02-02-PLAN.md — Add progress schema, refactor scan-runner with queues
+- [ ] 02-03-PLAN.md — Integrate queues into scanners, create ScanProgress UI
 
 ### Phase 3: Manual Scan Limits
 **Goal**: Tier-based manual scan quotas enforced to drive upgrades
@@ -100,7 +102,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
-| 2. Scanning Hardening | 0/TBD | Not started | - |
+| 2. Scanning Hardening | 0/3 | Not started | - |
 | 3. Manual Scan Limits | 0/TBD | Not started | - |
 | 4. Automated Scanning | 0/TBD | Not started | - |
 | 5. Alert Settings | 0/TBD | Not started | - |
