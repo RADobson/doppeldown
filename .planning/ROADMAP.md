@@ -75,10 +75,11 @@ Plans:
   3. Enterprise tier brands scanned hourly
   4. Free tier brands never auto-scanned (manual only)
   5. Background jobs respect brand-level scan preferences (pause, schedule override)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 04-01-PLAN.md — Add auto_scan_enabled column, update tier-limits with hours-based frequency
+- [ ] 04-02-PLAN.md — Update cron endpoint with hours-based scheduling, jitter, and pause filtering
 
 ### Phase 5: Alert Settings
 **Goal**: Users control email notification preferences per threat severity
@@ -105,5 +106,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
 | 3. Manual Scan Limits | 2/2 | Complete | 2026-01-27 |
-| 4. Automated Scanning | 0/TBD | Not started | - |
+| 4. Automated Scanning | 0/2 | Not started | - |
 | 5. Alert Settings | 0/TBD | Not started | - |
