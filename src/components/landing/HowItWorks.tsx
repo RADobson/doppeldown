@@ -1,8 +1,8 @@
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-16 bg-gray-800">
+    <section id="how-it-works" className="py-16 bg-landing-elevated">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-white text-center mb-12">
+        <h2 className="text-2xl font-bold text-landing-foreground text-center mb-12">
           How It Works
         </h2>
 
@@ -14,7 +14,7 @@ export default function HowItWorks() {
           ].map((item, i) => (
             <div key={i}>
               <div className="text-4xl font-bold text-primary-500 mb-2">{item.step}</div>
-              <p className="text-gray-300 font-medium">{item.title}</p>
+              <p className="text-landing-foreground font-medium">{item.title}</p>
             </div>
           ))}
         </div>

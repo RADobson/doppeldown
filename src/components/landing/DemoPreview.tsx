@@ -33,10 +33,10 @@ export default function DemoPreview() {
   }
 
   return (
-    <section className="py-16 bg-gray-900 text-white">
+    <section className="py-16 bg-landing text-landing-foreground">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-2xl font-bold mb-4">See It In Action</h2>
-        <p className="text-gray-400 mb-8">
+        <p className="text-landing-muted mb-8">
           Enter your domain to preview potential threats
         </p>
 
@@ -51,13 +51,13 @@ export default function DemoPreview() {
             onChange={(e) => setDomain(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="yourbrand.com"
-            className="flex-1 px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+            className="flex-1 px-4 py-3 rounded-lg bg-landing-elevated border border-landing-border text-landing-foreground placeholder-landing-muted focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
             disabled={scanning}
           />
           <button
             onClick={simulateScan}
             disabled={scanning || !domain.trim()}
-            className="px-6 py-3 bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+            className="px-6 py-3 bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-white"
           >
             {scanning ? 'Scanning...' : 'Scan'}
           </button>
@@ -65,7 +65,7 @@ export default function DemoPreview() {
 
         {threats.length > 0 && (
           <div
-            className="bg-gray-800 rounded-lg p-6 max-w-2xl mx-auto text-left"
+            className="bg-landing-elevated rounded-lg p-6 max-w-2xl mx-auto text-left"
             aria-live="polite"
           >
             <h3 className="text-lg font-semibold mb-4">
@@ -75,7 +75,7 @@ export default function DemoPreview() {
               {threats.map((threat, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-3 bg-gray-900 rounded-lg"
+                  className="flex items-center gap-3 p-3 bg-landing rounded-lg"
                 >
                   <div className="w-2 h-2 bg-red-500 rounded-full flex-shrink-0" />
                   <span className="font-mono text-sm flex-1">{threat}</span>
@@ -91,7 +91,7 @@ export default function DemoPreview() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-gray-400 mt-4">
+            <p className="text-sm text-landing-muted mt-4">
               This is a simulated preview. Sign up for real-time monitoring.
             </p>
           </div>

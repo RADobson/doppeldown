@@ -32,6 +32,13 @@ const config: Config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        landing: {
+          DEFAULT: 'hsl(var(--landing-bg))',
+          elevated: 'hsl(var(--landing-bg-elevated))',
+          foreground: 'hsl(var(--landing-foreground))',
+          muted: 'hsl(var(--landing-muted))',
+          border: 'hsl(var(--landing-border))',
+        },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

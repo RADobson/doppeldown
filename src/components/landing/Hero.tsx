@@ -5,16 +5,16 @@ export default function Hero() {
   return (
     <>
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-gray-900/90 backdrop-blur-md z-50 border-b border-gray-800">
+      <nav className="fixed top-0 w-full bg-landing/90 backdrop-blur-md z-50 border-b border-landing-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Logo mode="light" size="md" />
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-400 hover:text-white">Features</a>
-              <a href="#pricing" className="text-gray-400 hover:text-white">Pricing</a>
+              <a href="#features" className="text-landing-muted hover:text-landing-foreground">Features</a>
+              <a href="#pricing" className="text-landing-muted hover:text-landing-foreground">Pricing</a>
             </div>
             <div className="flex items-center space-x-4">
-              <Link href="/auth/login" className="text-gray-400 hover:text-white">
+              <Link href="/auth/login" className="text-landing-muted hover:text-landing-foreground">
                 Log In
               </Link>
               <Link
@@ -31,10 +31,10 @@ export default function Hero() {
       {/* Hero Section */}
       <section className="pt-28 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-landing-foreground mb-4">
             Find Brand Impostors
           </h1>
-          <p className="text-lg text-gray-400 mb-8">
+          <p className="text-lg text-landing-muted mb-8">
             Detect fake domains and phishing sites targeting your brand.
           </p>
           <Link
@@ -43,7 +43,7 @@ export default function Hero() {
           >
             Start Free
           </Link>
-          <p className="text-sm text-gray-500 mt-3">No credit card required</p>
+          <p className="text-sm text-landing-muted mt-3">No credit card required</p>
         </div>
       </section>
     </>
