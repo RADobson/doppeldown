@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 6 of 10 (Branding & Landing Page)
-Plan: 2 of ~4 complete (06-01, 06-03)
+Plan: 2 of ~4 complete (06-01, 06-02)
 Status: In progress
-Last activity: 2026-01-27 — Completed 06-03-PLAN.md
+Last activity: 2026-01-27 — Completed 06-02-PLAN.md
 
 Progress: [███░░░░░░░░░░░░░░░] 20% v1.2 (2/10 plans estimated)
 
@@ -52,10 +52,9 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - BRAND-LOGO-01: Text-based logo with underscore accent (vs graphic logo design)
 - BRAND-COLOR-01: Primary-600 (#2563eb blue) as brand accent color
 
-**v1.2 decisions (Phase 6 Plan 3):**
-- DEMO-POS-01: Position demo after Pricing, before CTA for "try before final push" flow
-- DEMO-SIM-01: 1.5s simulated delay for scanning animation (mimics real experience)
-- DEMO-DATA-01: Generate 4 threat variations (homoglyphs, TLD swaps, login variations) for realistic preview
+**v1.2 decisions (Phase 6 Plan 2):**
+- LAND-COMP-01: Extract landing sections into separate Server Components for maintainability and code splitting
+- LAND-TRUST-01: Position TrustSignals between Features and HowItWorks for natural flow
 
 ### Pending Todos
 
@@ -83,7 +82,7 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 
 ## Session Continuity
 
-Last session: 2026-01-27 10:18 UTC
-Stopped at: Completed Phase 6 Plan 3 (Interactive Demo Preview)
+Last session: 2026-01-27 10:21 UTC
+Stopped at: Completed Phase 6 Plan 2 (Landing Page Component Architecture)
 Resume file: None
-Next: Continue Phase 6 (Plans 2 and 4 remaining)
+Next: Continue Phase 6 (Plans 3 and 4 remaining)
