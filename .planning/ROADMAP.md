@@ -59,10 +59,11 @@ Plans:
   2. Paid tier users get unlimited manual scans
   3. Manual scan button shows quota status ("X scans remaining" for Free tier)
   4. System tracks manual scan count per user per tier period
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 03-01-PLAN.md — Add quota schema, API enforcement, quota status endpoint
+- [ ] 03-02-PLAN.md — Update scan button UI with quota display and upgrade CTA
 
 ### Phase 4: Automated Scanning
 **Goal**: Background job scheduler running tier-appropriate scan frequencies
@@ -103,6 +104,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
-| 3. Manual Scan Limits | 0/TBD | Not started | - |
+| 3. Manual Scan Limits | 0/2 | Not started | - |
 | 4. Automated Scanning | 0/TBD | Not started | - |
 | 5. Alert Settings | 0/TBD | Not started | - |
