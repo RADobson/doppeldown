@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   Play,
   AlertTriangle,
+  AlertCircle,
   Globe,
   Clock,
   FileText,
@@ -24,9 +25,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge, SeverityBadge, StatusBadge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
+import { PlatformSelector } from '@/components/PlatformSelector'
 import { formatDateTime, truncateUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 import { ScanProgress } from '@/components/ScanProgress'
+import { getEffectiveTier, getSocialPlatformLimit, type SocialPlatform } from '@/lib/tier-limits'
+import { useQuotaStatus } from '@/hooks/useQuotaStatus'
 
 interface Brand {
   id: string
@@ -36,6 +40,7 @@ interface Brand {
   status: string
   keywords: string[]
   social_handles: Record<string, string[] | string | null>
+  enabled_social_platforms?: string[]
   threat_count: number
   last_scan_at: string | null
   created_at: string
@@ -128,16 +133,19 @@ export default function BrandDetailPage() {
   const [logoRemoving, setLogoRemoving] = useState(false)
   const [detailsEditing, setDetailsEditing] = useState(false)
   const [detailsSaving, setDetailsSaving] = useState(false)
+  const [maxPlatforms, setMaxPlatforms] = useState(1)
   const [detailsForm, setDetailsForm] = useState({
     name: '',
     domain: '',
     keywords: [] as string[],
     newKeyword: '',
-    socialHandles: {} as Record<string, string[]>
+    socialHandles: {} as Record<string, string[]>,
+    enabledSocialPlatforms: [] as SocialPlatform[]
   })
   const [selectedScanId, setSelectedScanId] = useState<string | null>(null)
   const [aiStatus, setAiStatus] = useState<AiStatusSummary | null>(null)
   const [aiStatusLoading, setAiStatusLoading] = useState(false)
+  const { quota, loading: quotaLoading, refetch: refetchQuota } = useQuotaStatus()
   const getThreatScore = (threat: Threat) => {
     if (typeof threat.threat_score === 'number') return Math.round(threat.threat_score)
     if (typeof threat.analysis?.compositeScore === 'number') return Math.round(threat.analysis.compositeScore)
@@ -175,7 +183,8 @@ export default function BrandDetailPage() {
       domain: brand.domain || '',
       keywords: brand.keywords || [],
       newKeyword: '',
-      socialHandles: buildSocialHandlesForm(brand.social_handles || {})
+      socialHandles: buildSocialHandlesForm(brand.social_handles || {}),
+      enabledSocialPlatforms: (brand.enabled_social_platforms || []) as SocialPlatform[]
     })
     setDetailsEditing(true)
   }
@@ -325,6 +334,7 @@ export default function BrandDetailPage() {
         if (scan.status === 'completed' || scan.status === 'failed') {
           stopPolling()
           fetchData()
+          refetchQuota()
           if (scan.status === 'completed') {
             setSelectedScanId(scan.id)
             void fetchAiStatus(scan.id)
@@ -392,6 +402,19 @@ export default function BrandDetailPage() {
         return
       }
       setBrand(brandData)
+
+      // Fetch user tier for platform limit
+      const { data: userData } = await supabase
+        .from('users')
+        .select('subscription_status, subscription_tier')
+        .eq('id', user.id)
+        .single()
+
+      const effectiveTier = getEffectiveTier(
+        userData?.subscription_status,
+        userData?.subscription_tier
+      )
+      setMaxPlatforms(getSocialPlatformLimit(effectiveTier))
 
       // Fetch threats for this brand
       const { data: threatsData } = await supabase
@@ -527,6 +550,7 @@ export default function BrandDetailPage() {
           domain: detailsForm.domain,
           keywords: detailsForm.keywords,
           social_handles,
+          enabled_social_platforms: detailsForm.enabledSocialPlatforms,
           mode: 'replace'
         })
       })
@@ -588,11 +612,22 @@ export default function BrandDetailPage() {
           <p className="text-gray-500">{brand.domain}</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={handleScan} disabled={scanning}>
+          <Button
+            variant="outline"
+            onClick={handleScan}
+            disabled={scanning || (quota && !quota.isUnlimited && quota.remaining === 0)}
+          >
             {scanning ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                 Scanning...
+              </>
+            ) : quota && !quota.isUnlimited && quota.remaining === 0 ? (
+              <>Upgrade to scan</>
+            ) : quota && !quota.isUnlimited ? (
+              <>
+                <Play className="h-4 w-4 mr-2" />
+                Scan Now &middot; {quota.remaining} left this week
               </>
             ) : (
               <>
@@ -603,6 +638,27 @@ export default function BrandDetailPage() {
           </Button>
         </div>
       </div>
+
+      {quota && !quota.isUnlimited && quota.remaining === 0 && (
+        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <AlertCircle className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-blue-900 mb-1">
+                You&apos;ve used your free scan this week
+              </h3>
+              <p className="text-sm text-blue-800 mb-3">
+                Upgrade for unlimited manual scans, automated monitoring, and more.
+              </p>
+              <Link href="/pricing">
+                <Button size="sm">View plans</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {activeScan && (activeScan.status === 'running' || activeScan.status === 'queued') && (
         <ScanProgress
@@ -933,6 +989,18 @@ export default function BrandDetailPage() {
                   </div>
 
                   <div>
+                    <p className="text-sm text-gray-500 mb-2">Platforms to Scan</p>
+                    <PlatformSelector
+                      value={detailsForm.enabledSocialPlatforms}
+                      onChange={(platforms) => setDetailsForm(prev => ({
+                        ...prev,
+                        enabledSocialPlatforms: platforms
+                      }))}
+                      maxPlatforms={maxPlatforms}
+                    />
+                  </div>
+
+                  <div>
                     <p className="text-sm text-gray-500 mb-2">Social Accounts</p>
                     <div className="space-y-4">
                       {SOCIAL_PLATFORMS.map((platform) => {
@@ -1001,6 +1069,19 @@ export default function BrandDetailPage() {
                       <div className="flex flex-wrap gap-1">
                         {brand.keywords.map((keyword, i) => (
                           <Badge key={i} variant="default" size="sm">{keyword}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {brand.enabled_social_platforms && brand.enabled_social_platforms.length > 0 && (
+                    <div>
+                      <p className="text-sm text-gray-500 mb-2">Platforms to Scan</p>
+                      <div className="flex flex-wrap gap-1">
+                        {brand.enabled_social_platforms.map((platform, i) => (
+                          <Badge key={i} variant="default" size="sm">
+                            {SOCIAL_PLATFORMS.find(p => p.key === platform)?.label || platform}
+                          </Badge>
                         ))}
                       </div>
                     </div>
@@ -1134,9 +1215,25 @@ export default function BrandDetailPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start" onClick={handleScan} disabled={scanning}>
-                <Play className="h-4 w-4 mr-2" />
-                Run Full Scan
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={handleScan}
+                disabled={scanning || (quota && !quota.isUnlimited && quota.remaining === 0)}
+              >
+                {quota && !quota.isUnlimited && quota.remaining === 0 ? (
+                  <>Upgrade to scan</>
+                ) : quota && !quota.isUnlimited ? (
+                  <>
+                    <Play className="h-4 w-4 mr-2" />
+                    Scan Now &middot; {quota.remaining} left
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-4 w-4 mr-2" />
+                    Run Full Scan
+                  </>
+                )}
               </Button>
               <Link href={`/dashboard/reports/new?brand=${brand.id}`}>
                 <Button variant="outline" className="w-full justify-start">
