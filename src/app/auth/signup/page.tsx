@@ -44,19 +44,19 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-background flex">
       {/* Left side - Form */}
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm">
           <Link href="/" className="flex items-center mb-8">
             <Shield className="h-10 w-10 text-primary-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">DoppelDown</span>
+            <span className="ml-2 text-xl font-bold text-foreground">DoppelDown</span>
           </Link>
 
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-3xl font-bold text-foreground">
             Start your free trial
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             14 days free. No credit card required.
           </p>
 
@@ -99,7 +99,7 @@ export default function SignUpPage() {
               Create account
             </Button>
 
-            <p className="text-sm text-gray-500 text-center">
+            <p className="text-sm text-muted-foreground text-center">
               By signing up, you agree to our{' '}
               <a href="#" className="text-primary-600 hover:underline">Terms</a>
               {' '}and{' '}
@@ -107,7 +107,7 @@ export default function SignUpPage() {
             </p>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link href="/auth/login" className="text-primary-600 hover:text-primary-500 font-medium">
               Sign in

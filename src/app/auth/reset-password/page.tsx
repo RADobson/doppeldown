@@ -114,21 +114,21 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center items-center">
           <Shield className="h-12 w-12 text-primary-600" />
         </Link>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-bold text-foreground">
           Set a new password
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-muted-foreground">
           Choose a strong password to secure your account.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm sm:rounded-xl sm:px-10 border border-gray-200">
+        <div className="bg-card py-8 px-4 shadow-sm sm:rounded-xl sm:px-10 border border-border">
           {error && (
             <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
               {error}
@@ -136,11 +136,11 @@ export default function ResetPasswordPage() {
           )}
 
           {status === 'loading' && (
-            <div className="text-sm text-gray-600">Validating reset link...</div>
+            <div className="text-sm text-muted-foreground">Validating reset link...</div>
           )}
 
           {status === 'error' && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               <Link href="/auth/forgot-password" className="text-primary-600 hover:text-primary-500 font-medium">
                 Request a new reset link
               </Link>
@@ -148,7 +148,7 @@ export default function ResetPasswordPage() {
           )}
 
           {status === 'success' && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               Password updated.{' '}
               <Link href="/auth/login" className="text-primary-600 hover:text-primary-500 font-medium">
                 Sign in
