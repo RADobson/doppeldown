@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 8 of 10 (Semantic Colors Refactor) - IN PROGRESS
-Plan: 1 of 5 complete
+Plan: 2 of 5 complete
 Status: In progress
-Last activity: 2026-01-27 — Completed 08-01-PLAN.md (Semantic Color Foundation)
+Last activity: 2026-01-27 — Completed 08-02-PLAN.md (UI Components Migration)
 
-Progress: [████████░░░░░░░░░░] 40% v1.2 (8/~12 plans estimated)
+Progress: [████████░░░░░░░░░░] 42% v1.2 (9/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -66,6 +66,9 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - THEME-TOKEN-01: Use HSL space-separated format for CSS variables (enables Tailwind opacity modifiers like bg-background/50)
 - THEME-LEGACY-01: Keep legacy --foreground-rgb tokens during transition, remove after full migration
 - THEME-SCROLL-01: Scrollbar colors use semantic tokens for consistent theming
+- THEME-PRESERVE-01: Intentional semantic colors (red/green/yellow/blue for status) preserved - only generic gray usage replaced
+- THEME-BUTTON-01: Primary and danger button variants keep brand-specific colors (not generic gray)
+- THEME-PLACEHOLDER-01: Use placeholder: modifier for input placeholders (placeholder:text-muted-foreground)
 
 ### Pending Todos
 
@@ -94,7 +97,7 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 
 ## Session Continuity
 
-Last session: 2026-01-27
-Stopped at: Completed 08-01-PLAN.md (Semantic Color Foundation)
+Last session: 2026-01-27T21:57:19Z
+Stopped at: Completed 08-02-PLAN.md (UI Components Migration)
 Resume file: None
-Next: Continue Phase 8 with plan 08-02 (Dashboard migrations)
+Next: Continue Phase 8 with plan 08-03 (Dashboard page migrations)
