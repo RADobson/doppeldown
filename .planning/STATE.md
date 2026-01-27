@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** Phase 3 - Manual Scan Limits (COMPLETE)
+**Current focus:** Phase 4 - Automated Scanning (IN PROGRESS)
 
 ## Current Position
 
-Phase: 3 of 5 (Manual Scan Limits) - COMPLETE
-Plan: 2 of 2 complete
-Status: Phase complete
-Last activity: 2026-01-27 — Completed 03-02-PLAN.md
+Phase: 4 of 5 (Automated Scanning)
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 04-01-PLAN.md
 
-Progress: [██████████████░░] 70%
+Progress: [███████████████░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 156s (2m 36s)
-- Total execution time: 0.26 hours
+- Total plans completed: 7
+- Average duration: 147s (2m 27s)
+- Total execution time: 0.28 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [██████████████░░] 70%
 | 01 - Admin Foundation | 1 | 111s | 111s |
 | 02 - Scanning Hardening | 3 | 616s | 205s |
 | 03 - Manual Scan Limits | 2 | 228s | 114s |
+| 04 - Automated Scanning | 1 | 90s | 90s |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (152s), 02-02 (274s), 02-03 (190s), 03-01 (118s), 03-02 (110s)
+- Last 5 plans: 02-02 (274s), 02-03 (190s), 03-01 (118s), 03-02 (110s), 04-01 (90s)
 - Trend: Fast execution on focused plans
 
 *Updated after each plan completion*
@@ -63,6 +64,8 @@ Recent decisions affecting current work:
 - 03-01: 429 with QUOTA_EXCEEDED code and quota object for frontend
 - 03-02: useQuotaStatus hook with refetch for post-scan refresh
 - 03-02: Blue upgrade banner for helpful upsell tone
+- 04-01: Partial index on (last_scan_at DESC) for cron scheduling optimization
+- 04-01: scanFrequencyHours field (null/24/6/1) with deprecated scanFrequencyDays kept for backward compat
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 03-02-PLAN.md (quota UI)
+Stopped at: Completed 04-01-PLAN.md (scan foundation)
 Resume file: None
-Next: Phase 4 (Automated Scanning)
+Next: 04-02-PLAN.md (cron scheduling)
