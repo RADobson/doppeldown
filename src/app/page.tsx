@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Shield, Search, FileText, Bell, CheckCircle, AlertTriangle, Globe, Lock } from 'lucide-react'
+import DemoPreview from '@/components/landing/DemoPreview'
 
 export default function HomePage() {
   return (
@@ -349,6 +350,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Demo Preview Section */}
+      <DemoPreview />
 
       {/* CTA Section */}
       <section className="py-20 bg-primary-600">
