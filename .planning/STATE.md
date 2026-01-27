@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 8 of 10 (Semantic Colors Refactor) - IN PROGRESS
-Plan: 2 of 5 complete
+Plan: 3 of 5 complete
 Status: In progress
-Last activity: 2026-01-27 — Completed 08-02-PLAN.md (UI Components Migration)
+Last activity: 2026-01-27 — Completed 08-03-PLAN.md (Dashboard Pages Migration)
 
-Progress: [████████░░░░░░░░░░] 42% v1.2 (9/~12 plans estimated)
+Progress: [████████░░░░░░░░░░] 45% v1.2 (10/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -69,6 +69,9 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - THEME-PRESERVE-01: Intentional semantic colors (red/green/yellow/blue for status) preserved - only generic gray usage replaced
 - THEME-BUTTON-01: Primary and danger button variants keep brand-specific colors (not generic gray)
 - THEME-PLACEHOLDER-01: Use placeholder: modifier for input placeholders (placeholder:text-muted-foreground)
+- THEME-DASH-01: Preserve brand colors for navigation (active states keep primary-50/primary-700)
+- THEME-STATUS-01: Preserve status colors for meaning (red/yellow/green/blue carry semantic information)
+- THEME-TOGGLE-01: Use semantic tokens for toggle switches (bg-muted inactive, bg-card for knobs)
 
 ### Pending Todos
 
@@ -97,7 +100,7 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 
 ## Session Continuity
 
-Last session: 2026-01-27T21:57:19Z
-Stopped at: Completed 08-02-PLAN.md (UI Components Migration)
+Last session: 2026-01-27T11:58:57Z
+Stopped at: Completed 08-03-PLAN.md (Dashboard Pages Migration)
 Resume file: None
-Next: Continue Phase 8 with plan 08-03 (Dashboard page migrations)
+Next: Continue Phase 8 with plan 08-04 (Landing page migrations) or 08-05 (Auth page migrations)
