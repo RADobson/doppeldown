@@ -615,7 +615,7 @@ export default function BrandDetailPage() {
           <Button
             variant="outline"
             onClick={handleScan}
-            disabled={scanning || (quota && !quota.isUnlimited && quota.remaining === 0)}
+            disabled={scanning || (!!quota && !quota.isUnlimited && quota.remaining === 0)}
           >
             {scanning ? (
               <>
@@ -1219,7 +1219,7 @@ export default function BrandDetailPage() {
                 variant="outline"
                 className="w-full justify-start"
                 onClick={handleScan}
-                disabled={scanning || (quota && !quota.isUnlimited && quota.remaining === 0)}
+                disabled={scanning || (!!quota && !quota.isUnlimited && quota.remaining === 0)}
               >
                 {quota && !quota.isUnlimited && quota.remaining === 0 ? (
                   <>Upgrade to scan</>

@@ -172,7 +172,7 @@ export default function ThreatDetailPage() {
       if (!threat) return
       setScreenshotError(null)
 
-      const directUrl = threat.screenshot_url || threat.evidence?.screenshots?.[0]?.public_url
+      const directUrl = (threat as any).screenshot_url || threat.evidence?.screenshots?.[0]?.public_url
       if (directUrl) {
         setScreenshotUrl(directUrl)
         return
