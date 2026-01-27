@@ -21,8 +21,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Manual Scanning
 
-- [ ] **SCAN-03**: Free tier limited to 1 manual scan per week
-- [ ] **SCAN-04**: Paid tiers get unlimited manual scans
+- [x] **SCAN-03**: Free tier limited to 1 manual scan per week
+- [x] **SCAN-04**: Paid tiers get unlimited manual scans
 
 ### Scanning Hardening
 
@@ -35,7 +35,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 - [x] **TIER-01**: Fix tier enforcement — Free accounts currently bypass all limits
 - [x] **TIER-02**: Enforce brand count limits per tier
-- [ ] **TIER-03**: Enforce scan limits per tier (manual + automated)
+- [x] **TIER-03**: Enforce scan limits per tier (manual + automated)
 
 ### Admin
 
@@ -89,15 +89,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ALRT-04 | Phase 5 | Pending |
 | SCAN-01 | Phase 4 | Pending |
 | SCAN-02 | Phase 4 | Pending |
-| SCAN-03 | Phase 3 | Pending |
-| SCAN-04 | Phase 3 | Pending |
+| SCAN-03 | Phase 3 | Complete |
+| SCAN-04 | Phase 3 | Complete |
 | HARD-01 | Phase 2 | Complete |
 | HARD-02 | Phase 2 | Complete |
 | HARD-03 | Phase 2 | Complete |
 | HARD-04 | Phase 2 | Complete |
 | TIER-01 | Phase 1 | Complete |
 | TIER-02 | Phase 1 | Complete |
-| TIER-03 | Phase 3 | Pending |
+| TIER-03 | Phase 3 | Complete |
 | ADMN-01 | Phase 1 | Complete |
 | ADMN-02 | Phase 1 | Complete |
 
@@ -108,4 +108,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-27 after Phase 2 completion*
+*Last updated: 2026-01-27 after Phase 3 completion*

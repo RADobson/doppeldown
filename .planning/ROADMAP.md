@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Admin Foundation** - Core infrastructure fixes enabling proper tier enforcement
 - [x] **Phase 2: Scanning Hardening** - Fix reliability issues in existing scan flows
-- [ ] **Phase 3: Manual Scan Limits** - Enforce tier-based manual scan quotas
+- [x] **Phase 3: Manual Scan Limits** - Enforce tier-based manual scan quotas
 - [ ] **Phase 4: Automated Scanning** - Background scan scheduler with tier schedules
 - [ ] **Phase 5: Alert Settings** - User-configurable email notification preferences
 
@@ -62,8 +62,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Add quota schema, API enforcement, quota status endpoint
-- [ ] 03-02-PLAN.md — Update scan button UI with quota display and upgrade CTA
+- [x] 03-01-PLAN.md — Add quota schema, API enforcement, quota status endpoint
+- [x] 03-02-PLAN.md — Update scan button UI with quota display and upgrade CTA
 
 ### Phase 4: Automated Scanning
 **Goal**: Background job scheduler running tier-appropriate scan frequencies
@@ -104,6 +104,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
-| 3. Manual Scan Limits | 0/2 | Not started | - |
+| 3. Manual Scan Limits | 2/2 | Complete | 2026-01-27 |
 | 4. Automated Scanning | 0/TBD | Not started | - |
 | 5. Alert Settings | 0/TBD | Not started | - |
