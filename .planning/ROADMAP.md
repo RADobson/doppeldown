@@ -100,11 +100,12 @@ Plans:
   3. User sees loading indicators during async operations (no unclear waiting states)
   4. User sees helpful empty states when lists have no data
   5. User can navigate via keyboard with visible focus states
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: TBD
-- [ ] 07-02: TBD
+- [ ] 07-01-PLAN.md — Foundation components (EmptyState, Skeleton, focus-visible)
+- [ ] 07-02-PLAN.md — Dashboard loading states + empty state integration
+- [ ] 07-03-PLAN.md — Visual verification checkpoint
 
 #### Phase 8: Semantic Colors Refactor
 **Goal**: Color system refactored to semantic tokens enabling theme support
@@ -165,7 +166,7 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 4. AI Analysis | v1.0 | 2/2 | Complete | 2026-01-27 |
 | 5. Alert System | v1.0 | 3/3 | Complete | 2026-01-27 |
 | 6. Branding & Landing Page | v1.2 | 4/4 | Complete | 2026-01-27 |
-| 7. UI Polish | v1.2 | 0/2 | Not started | - |
+| 7. UI Polish | v1.2 | 0/3 | Not started | - |
 | 8. Semantic Colors Refactor | v1.2 | 0/2 | Not started | - |
 | 9. Dark Mode | v1.2 | 0/2 | Not started | - |
 | 10. Dashboard Cleanup | v1.2 | 0/2 | Not started | - |
