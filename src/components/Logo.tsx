@@ -13,8 +13,8 @@ const sizeMap = {
 } as const
 
 const modeMap = {
-  dark: 'text-gray-900',
-  light: 'text-white',
+  dark: 'text-foreground',
+  light: 'text-landing-foreground',
 } as const
 
 export function Logo({ mode = 'dark', size = 'md', className }: LogoProps) {

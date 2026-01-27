@@ -61,13 +61,13 @@ export function PlatformSelector({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-700">
+        <p className="text-sm font-medium text-foreground">
           {isRadioMode
             ? 'Select 1 social platform to monitor'
             : `Select up to ${maxPlatforms} platforms to monitor`}
         </p>
         {!isRadioMode && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-muted-foreground">
             {selectedCount}/{maxPlatforms} selected
           </span>
         )}
@@ -91,8 +91,8 @@ export function PlatformSelector({
                   selected
                     ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-500'
                     : platformDisabled
-                    ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 cursor-pointer'
+                    ? 'border-border bg-muted cursor-not-allowed opacity-50'
+                    : 'border-border hover:border-accent-foreground hover:bg-accent cursor-pointer'
                 }
               `}
             >
@@ -101,15 +101,15 @@ export function PlatformSelector({
                   <Check className="h-4 w-4 text-primary-600" />
                 </div>
               )}
-              <span className="text-sm font-medium text-gray-900">{info.label}</span>
-              <span className="text-xs text-gray-500 line-clamp-1">{info.description}</span>
+              <span className="text-sm font-medium text-foreground">{info.label}</span>
+              <span className="text-xs text-muted-foreground line-clamp-1">{info.description}</span>
             </button>
           )
         })}
       </div>
 
       {maxPlatforms < 8 && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground">
           Upgrade your plan to monitor more social platforms.
         </p>
       )}

@@ -134,7 +134,7 @@ export function NotificationDropdown() {
       {/* Bell button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100"
+        className="relative p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-accent"
         aria-label="Notifications"
       >
         <Bell className="h-5 w-5" />
@@ -145,10 +145,10 @@ export function NotificationDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-80 bg-card rounded-lg shadow-lg border border-border z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+            <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
@@ -163,11 +163,11 @@ export function NotificationDropdown() {
           {/* Notification list */}
           <div className="max-h-96 overflow-y-auto">
             {loading ? (
-              <div className="p-4 text-center text-sm text-gray-500">
+              <div className="p-4 text-center text-sm text-muted-foreground">
                 Loading...
               </div>
             ) : notifications.length === 0 ? (
-              <div className="p-8 text-center text-sm text-gray-500">
+              <div className="p-8 text-center text-sm text-muted-foreground">
                 No notifications yet
               </div>
             ) : (
@@ -180,7 +180,7 @@ export function NotificationDropdown() {
                     key={notification.id}
                     onClick={() => handleNotificationClick(notification)}
                     className={cn(
-                      'w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors',
+                      'w-full text-left px-4 py-3 border-b border-border hover:bg-accent transition-colors',
                       !notification.read && 'bg-primary-50/50'
                     )}
                   >
@@ -190,7 +190,7 @@ export function NotificationDropdown() {
                         <div className="flex items-center gap-2">
                           <span className={cn(
                             'text-sm font-medium truncate',
-                            notification.read ? 'text-gray-700' : 'text-gray-900'
+                            notification.read ? 'text-muted-foreground' : 'text-foreground'
                           )}>
                             {notification.title}
                           </span>
@@ -204,11 +204,11 @@ export function NotificationDropdown() {
                           )}
                         </div>
                         {notification.body && (
-                          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
+                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                             {notification.body}
                           </p>
                         )}
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {formatTimeAgo(notification.created_at)}
                         </p>
                       </div>

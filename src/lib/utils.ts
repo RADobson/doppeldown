@@ -47,7 +47,7 @@ export function severityColor(severity: string): string {
     case 'low':
       return 'bg-blue-100 text-blue-800 border-blue-300'
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-300'
+      return 'bg-muted text-muted-foreground border-border'
   }
 }
 
@@ -64,9 +64,9 @@ export function statusColor(status: string): string {
     case 'resolved':
       return 'bg-green-100 text-green-800'
     case 'false_positive':
-      return 'bg-gray-100 text-gray-800'
+      return 'bg-muted text-muted-foreground'
     default:
-      return 'bg-gray-100 text-gray-800'
+      return 'bg-muted text-muted-foreground'
   }
 }
 

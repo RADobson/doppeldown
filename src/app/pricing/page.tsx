@@ -141,29 +141,29 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
                 <Shield className="h-8 w-8 text-primary-600" />
-                <span className="ml-2 text-xl font-bold text-gray-900">DoppelDown</span>
+                <span className="ml-2 text-xl font-bold text-foreground">DoppelDown</span>
               </Link>
             </div>
             <div className="flex items-center space-x-4">
               {isLoggedIn ? (
                 <Link
                   href="/dashboard"
-                  className="flex items-center text-gray-600 hover:text-gray-900"
+                  className="flex items-center text-muted-foreground hover:text-foreground"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Dashboard
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth/login" className="text-gray-600 hover:text-gray-900">
+                  <Link href="/auth/login" className="text-muted-foreground hover:text-foreground">
                     Log In
                   </Link>
                   <Link
@@ -183,10 +183,10 @@ export default function PricingPage() {
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               {isLoggedIn ? 'Upgrade Your Plan' : 'Simple, Transparent Pricing'}
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {isLoggedIn
                 ? 'Choose a plan to unlock more features and protect more brands'
                 : 'Choose the plan that fits your needs. All plans include a 14-day free trial.'}
@@ -201,8 +201,8 @@ export default function PricingPage() {
               return (
                 <div
                   key={plan.id}
-                  className={`relative bg-white rounded-2xl shadow-sm ${
-                    plan.popular ? 'ring-2 ring-primary-600 scale-105' : 'border border-gray-200'
+                  className={`relative bg-card rounded-2xl shadow-sm ${
+                    plan.popular ? 'ring-2 ring-primary-600 scale-105' : 'border border-border'
                   }`}
                 >
                   {plan.popular && (
@@ -213,11 +213,11 @@ export default function PricingPage() {
                     </div>
                   )}
                   <div className="p-8">
-                    <h3 className="text-xl font-semibold text-gray-900">{plan.name}</h3>
-                    <p className="text-gray-500 mt-1">{plan.description}</p>
+                    <h3 className="text-xl font-semibold text-foreground">{plan.name}</h3>
+                    <p className="text-muted-foreground mt-1">{plan.description}</p>
                     <div className="mt-6">
-                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-500">/month</span>
+                      <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                      <span className="text-muted-foreground">/month</span>
                     </div>
 
                     {isCurrentPlan ? (
@@ -231,7 +231,7 @@ export default function PricingPage() {
                         className={`mt-6 block w-full text-center py-3 rounded-lg font-semibold transition ${
                           plan.popular
                             ? 'bg-primary-600 text-white hover:bg-primary-700'
-                            : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                            : 'bg-muted text-foreground hover:bg-accent'
                         } disabled:opacity-50`}
                       >
                         {isSubscribing ? (
@@ -251,7 +251,7 @@ export default function PricingPage() {
                       {plan.features.map((feature, j) => (
                         <li key={j} className="flex items-start">
                           <CheckCircle className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                          <span className="text-gray-600">{feature}</span>
+                          <span className="text-muted-foreground">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -263,7 +263,7 @@ export default function PricingPage() {
 
           {/* FAQ */}
           <div className="mt-20 max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-8 text-center">
               Frequently Asked Questions
             </h2>
             <div className="space-y-6">
@@ -285,9 +285,9 @@ export default function PricingPage() {
                   a: 'We accept all major credit cards including Visa, Mastercard, American Express, and Discover.'
                 }
               ].map((faq, i) => (
-                <div key={i} className="bg-white rounded-lg p-6 shadow-sm">
-                  <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
-                  <p className="text-gray-600">{faq.a}</p>
+                <div key={i} className="bg-card rounded-lg p-6 shadow-sm">
+                  <h3 className="font-semibold text-foreground mb-2">{faq.q}</h3>
+                  <p className="text-muted-foreground">{faq.a}</p>
                 </div>
               ))}
             </div>
@@ -296,8 +296,8 @@ export default function PricingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+      <footer className="bg-card border-t border-border py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} DoppelDown. All rights reserved.</p>
         </div>
       </footer>

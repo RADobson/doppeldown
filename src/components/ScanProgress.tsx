@@ -105,9 +105,9 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
 
   if (!scan) {
     return (
-      <div className="animate-pulse bg-gray-100 rounded-lg p-4">
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-        <div className="h-2 bg-gray-200 rounded"></div>
+      <div className="animate-pulse bg-muted rounded-lg p-4">
+        <div className="h-4 bg-muted rounded w-1/4 mb-2"></div>
+        <div className="h-2 bg-muted rounded"></div>
       </div>
     );
   }
@@ -119,11 +119,11 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
   const retryCount = scan.retry_count || 0;
 
   return (
-    <div className="bg-white border rounded-lg p-4 shadow-sm">
+    <div className="bg-card border rounded-lg p-4 shadow-sm">
       {/* Header with cancel button */}
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-foreground">
             {scan.status === 'running' ? stepLabel : scan.status === 'completed' ? 'Scan Complete' : scan.status === 'queued' ? 'Queued...' : 'Scan Failed'}
           </span>
           {/* Retry indicator (HARD-03 visibility) */}
@@ -152,7 +152,7 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2.5 mb-3">
+      <div className="w-full bg-muted rounded-full h-2.5 mb-3">
         <div
           className={`h-2.5 rounded-full transition-all duration-500 ${
             scan.status === 'failed' ? 'bg-red-500' :
@@ -164,13 +164,13 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
 
       {/* Step progress detail */}
       {scan.status === 'running' && scan.step_total && scan.step_total > 0 && (
-        <div className="text-xs text-gray-500 mb-2">
+        <div className="text-xs text-muted-foreground mb-2">
           Step progress: {scan.step_progress || 0} / {scan.step_total}
         </div>
       )}
 
       {/* Stats */}
-      <div className="flex gap-4 text-xs text-gray-600">
+      <div className="flex gap-4 text-xs text-muted-foreground">
         {scan.domains_checked !== undefined && scan.domains_checked > 0 && (
           <span>Domains: {scan.domains_checked}</span>
         )}
