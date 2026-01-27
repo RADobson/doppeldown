@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 
 ## Current Position
 
-Phase: v1.0 complete (5 phases shipped)
-Plan: N/A — milestone archived
+Phase: v1.1 features shipped
+Plan: N/A
 Status: Ready to plan next milestone
-Last activity: 2026-01-27 — v1.0 milestone completed and archived
+Last activity: 2026-01-28 — v1.1 features committed
 
-Progress: [██████████████████] 100% v1.0
+Progress: [██████████████████] 100% v1.1
 
 ## Milestone Summary
 
@@ -46,13 +46,12 @@ None yet.
 - ~~Alert settings not wired~~ — Gap closure complete
 
 **Remaining:**
-- Migration not auto-applied — need to run `supabase db push` before testing
 - Pre-existing TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) — not blocking
 - OpenAI Vision endpoint uses wrong API path — may need fixing
 
 ## Session Continuity
 
-Last session: 2026-01-27
-Stopped at: v1.0 milestone completed
+Last session: 2026-01-28
+Stopped at: v1.1 features committed
 Resume file: None
-Next: `/gsd:new-milestone` to define v1.1 scope
+Next: `/gsd:new-milestone` to define v1.2 scope

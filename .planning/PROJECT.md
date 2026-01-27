@@ -34,6 +34,9 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 - ✓ Email alerts with severity threshold configuration — v1.0
 - ✓ Scan completion summary emails — v1.0
 - ✓ Weekly digest emails — v1.0
+- ✓ In-app notifications (threat detected, scan completed, scan failed) — v1.1
+- ✓ Social platform selection per brand (tier-based limits) — v1.1
+- ✓ NRD (Newly Registered Domains) monitoring for Enterprise tier — v1.1
 
 ### Active
 
@@ -74,6 +77,8 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | Rolling 7-day quota window | Simpler than calendar week, fairer to users | ✓ Good |
 | Hours-based scan frequency | More granular than days, supports Enterprise hourly | ✓ Good |
 | Severity threshold with fallback chain | Backward compatible with existing alert_on_severity | ✓ Good |
+| OpenNRD as default NRD provider | Free, no API key required, daily updates | ✓ Good |
+| Levenshtein for typosquat detection | Simple, effective, no external dependencies | ✓ Good |
 
 ---
-*Last updated: 2026-01-27 after v1.0 milestone*
+*Last updated: 2026-01-28 after v1.1 features*
