@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AlertTriangle, Search, Download, ExternalLink, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { SeverityBadge, StatusBadge } from '@/components/ui/badge'
@@ -204,14 +205,21 @@ export default function ThreatsPage() {
       {/* Threats List */}
       {filteredThreats.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center">
-            <AlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No threats found</h3>
-            <p className="text-gray-500">
-              {searchQuery || severityFilter !== 'all' || statusFilter !== 'all'
-                ? 'Try adjusting your filters'
-                : 'No threats have been detected yet. Run a scan to check for potential threats.'}
-            </p>
+          <CardContent className="py-0">
+            <EmptyState
+              icon={AlertTriangle}
+              title="No threats found"
+              description={
+                searchQuery || severityFilter !== 'all' || statusFilter !== 'all' || typeFilter !== 'all'
+                  ? 'Try adjusting your filters'
+                  : 'No threats have been detected yet'
+              }
+              action={
+                !(searchQuery || severityFilter !== 'all' || statusFilter !== 'all' || typeFilter !== 'all')
+                  ? { label: 'Run a scan', href: '/dashboard/brands' }
+                  : undefined
+              }
+            />
           </CardContent>
         </Card>
       ) : (

@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Plus, Search, MoreVertical, Play, Pause, Trash2, Settings, Loader2 } from 'lucide-react'
+import { Plus, Search, Shield, MoreVertical, Play, Pause, Trash2, Settings, Loader2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge, StatusBadge } from '@/components/ui/badge'
@@ -173,21 +174,20 @@ export default function BrandsPage() {
       {/* Brands Grid */}
       {filteredBrands.length === 0 ? (
         <Card>
-          <CardContent className="py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No brands found</h3>
-            <p className="text-gray-500 mb-6">
-              {searchQuery ? 'Try a different search term' : 'Get started by adding your first brand to monitor'}
-            </p>
-            {!searchQuery && (
-              <Link href="/dashboard/brands/new">
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Your First Brand
-                </Button>
-              </Link>
+          <CardContent className="py-0">
+            {searchQuery ? (
+              <EmptyState
+                icon={Search}
+                title="No brands found"
+                description="Try a different search term"
+              />
+            ) : (
+              <EmptyState
+                icon={Shield}
+                title="No brands yet"
+                description="Add your first brand to start monitoring"
+                action={{ label: 'Add Brand', href: '/dashboard/brands/new' }}
+              />
             )}
           </CardContent>
         </Card>

@@ -16,6 +16,7 @@ import {
   Play
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Button } from '@/components/ui/button'
 import { SeverityBadge, StatusBadge } from '@/components/ui/badge'
 import { formatDateTime, truncateUrl } from '@/lib/utils'
@@ -257,11 +258,12 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               {threats.length === 0 ? (
-                <div className="text-center py-8">
-                  <Shield className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No threats detected yet</p>
-                  <p className="text-sm text-gray-400">Run a scan to check for potential threats</p>
-                </div>
+                <EmptyState
+                  icon={Shield}
+                  title="No threats detected"
+                  description="Run a scan to check for potential threats"
+                  variant="success"
+                />
               ) : (
                 <div className="divide-y divide-gray-100">
                   {threats.map((threat) => {
