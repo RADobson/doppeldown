@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 
 ## Current Position
 
-Phase: 7 of 10 (UI Polish) - COMPLETE
-Plan: 3 of 3 complete
-Status: Phase complete
-Last activity: 2026-01-27 — Completed 07-03-PLAN.md (Visual Verification)
+Phase: 8 of 10 (Semantic Colors Refactor) - IN PROGRESS
+Plan: 1 of 5 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 08-01-PLAN.md (Semantic Color Foundation)
 
-Progress: [███████░░░░░░░░░░░] 35% v1.2 (7/~12 plans estimated)
+Progress: [████████░░░░░░░░░░] 40% v1.2 (8/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -62,6 +62,11 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - UIPOL-LOAD-01: Loading.tsx files match actual page layout for seamless skeleton-to-content transition
 - UIPOL-EMPTY-01: EmptyState with contextual actions (add brand, run scan) for zero-data states
 
+**v1.2 decisions (Phase 8):**
+- THEME-TOKEN-01: Use HSL space-separated format for CSS variables (enables Tailwind opacity modifiers like bg-background/50)
+- THEME-LEGACY-01: Keep legacy --foreground-rgb tokens during transition, remove after full migration
+- THEME-SCROLL-01: Scrollbar colors use semantic tokens for consistent theming
+
 ### Pending Todos
 
 **Future milestones:**
@@ -78,8 +83,9 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ### Blockers/Concerns
 
 **Pre-existing (not blocking v1.2):**
-- TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) — technical debt
+- TypeScript errors resolved in 08-01 (quota null type, screenshot_url missing property, downlevelIteration flag)
 - OpenAI Vision endpoint uses wrong API path — may need fixing
+- /auth/reset-password prerendering warning (useSearchParams without Suspense)
 
 **v1.2 scope risks (from research):**
 - Scope creep during polish work (prevention: hard boundaries, anti-scope list)
@@ -89,6 +95,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 7 (UI Polish) - all 3 plans done
+Stopped at: Completed 08-01-PLAN.md (Semantic Color Foundation)
 Resume file: None
-Next: `/gsd:execute-phase 08` or research Phase 8
+Next: Continue Phase 8 with plan 08-02 (Dashboard migrations)
