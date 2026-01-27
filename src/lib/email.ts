@@ -285,3 +285,268 @@ function formatThreatType(type: string): string {
   }
   return types[type] || type
 }
+
+/**
+ * Send scan completion summary email.
+ * Includes stats and top 5 threats found during the scan.
+ */
+export async function sendScanSummary(
+  to: string,
+  brand: Brand,
+  scanResult: { domainsChecked: number; threatsFound: number; threats: Threat[] }
+): Promise<void> {
+  const { domainsChecked, threatsFound, threats } = scanResult
+  const topThreats = threats.slice(0, 5)
+
+  const subject = `Scan Complete: ${brand.name} - ${threatsFound} threat${threatsFound !== 1 ? 's' : ''} found`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 30px; text-align: center;">
+    <tr>
+      <td>
+        <h1 style="margin: 0; font-size: 24px;">Scan Complete</h1>
+        <p style="margin: 10px 0 0;">DoppelDown Brand Protection</p>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding: 30px;">
+    <tr>
+      <td>
+        <p style="margin: 0 0 20px;">Your scan for <strong>${brand.name}</strong> (${brand.domain}) has completed.</p>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+          <tr>
+            <td width="50%" style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 8px 0 0 8px;">
+              <div style="font-size: 32px; font-weight: bold; color: #1e40af;">${domainsChecked}</div>
+              <div style="color: #6b7280; font-size: 14px;">Domains Checked</div>
+            </td>
+            <td width="50%" style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 32px; font-weight: bold; color: ${threatsFound > 0 ? '#dc2626' : '#22c55e'};">${threatsFound}</div>
+              <div style="color: #6b7280; font-size: 14px;">Threats Found</div>
+            </td>
+          </tr>
+        </table>
+
+        ${topThreats.length > 0 ? `
+        <h3 style="margin: 0 0 15px; font-size: 16px;">Top Threats:</h3>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${topThreats.map(threat => `
+          <tr>
+            <td style="border: 1px solid #e5e7eb; border-left: 4px solid ${getSeverityColor(threat.severity)}; border-radius: 8px; padding: 15px; margin-bottom: 10px; background: ${getSeverityBackground(threat.severity)};">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; background: ${getSeverityColor(threat.severity)};">${threat.severity.toUpperCase()}</span>
+                    <span style="margin-left: 10px; color: #6b7280; font-size: 13px;">${formatThreatType(threat.type)}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top: 10px;">
+                    <div style="font-family: monospace; word-break: break-all; background: #f3f4f6; padding: 8px; border-radius: 4px; font-size: 13px;">${threat.url}</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="height: 10px;"></td></tr>
+          `).join('')}
+        </table>
+        ` : `
+        <table width="100%" cellpadding="0" cellspacing="0" style="background: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; text-align: center;">
+          <tr>
+            <td style="color: #22c55e; font-weight: bold;">
+              No threats detected - your brand is secure!
+            </td>
+          </tr>
+        </table>
+        `}
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-top: 30px;">
+          <tr>
+            <td>
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/brands/${brand.id}" style="display: inline-block; background: #1e40af; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px;">
+                View Full Results
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8fafc; padding: 20px; text-align: center; font-size: 12px; color: #6b7280;">
+    <tr>
+      <td>
+        <p style="margin: 0;">This scan summary was sent by DoppelDown</p>
+        <p style="margin: 10px 0 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings" style="color: #6b7280;">Manage notification settings</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || 'scans@doppeldown.app',
+    to,
+    subject,
+    html,
+  })
+}
+
+/**
+ * Send weekly digest email with summary of all monitored brands.
+ * Includes per-brand threat counts and top threats (limited to 10 per brand).
+ */
+export async function sendWeeklyDigest(
+  to: string,
+  brandSummaries: { brand: Brand; newThreats: number; threats: Threat[] }[]
+): Promise<void> {
+  const totalNewThreats = brandSummaries.reduce((sum, b) => sum + b.newThreats, 0)
+  const brandsMonitored = brandSummaries.length
+
+  const subject = `Weekly Security Digest - ${totalNewThreats} new threat${totalNewThreats !== 1 ? 's' : ''}`
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white; padding: 30px; text-align: center;">
+    <tr>
+      <td>
+        <h1 style="margin: 0; font-size: 24px;">Weekly Security Digest</h1>
+        <p style="margin: 10px 0 0;">${format(new Date(), 'PPPP')}</p>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding: 30px;">
+    <tr>
+      <td>
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+          <tr>
+            <td width="50%" style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 8px 0 0 8px;">
+              <div style="font-size: 32px; font-weight: bold; color: #1e40af;">${brandsMonitored}</div>
+              <div style="color: #6b7280; font-size: 14px;">Brands Monitored</div>
+            </td>
+            <td width="50%" style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 0 8px 8px 0;">
+              <div style="font-size: 32px; font-weight: bold; color: ${totalNewThreats > 0 ? '#dc2626' : '#22c55e'};">${totalNewThreats}</div>
+              <div style="color: #6b7280; font-size: 14px;">New Threats This Week</div>
+            </td>
+          </tr>
+        </table>
+
+        <h3 style="margin: 0 0 15px; font-size: 16px;">Brand Summary:</h3>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${brandSummaries.map(({ brand, newThreats, threats }) => `
+          <tr>
+            <td style="border-bottom: 1px solid #e5e7eb; padding: 15px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <strong style="font-size: 16px;">${brand.name}</strong>
+                    <div style="font-size: 13px; color: #6b7280;">${brand.domain}</div>
+                  </td>
+                  <td style="text-align: right; vertical-align: top;">
+                    ${newThreats > 0
+                      ? `<span style="color: #dc2626; font-weight: bold;">+${newThreats} new</span>`
+                      : `<span style="color: #22c55e;">No new threats</span>`}
+                  </td>
+                </tr>
+                ${threats.length > 0 ? `
+                <tr>
+                  <td colspan="2" style="padding-top: 10px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      ${threats.slice(0, 10).map(threat => `
+                      <tr>
+                        <td style="padding: 5px 0;">
+                          <span style="display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold; color: white; background: ${getSeverityColor(threat.severity)};">${threat.severity.toUpperCase()}</span>
+                          <span style="margin-left: 8px; font-size: 13px; color: #4b5563;">${threat.domain || threat.url}</span>
+                        </td>
+                      </tr>
+                      `).join('')}
+                      ${threats.length > 10 ? `
+                      <tr>
+                        <td style="padding: 5px 0; color: #6b7280; font-size: 12px;">
+                          And ${threats.length - 10} more...
+                        </td>
+                      </tr>
+                      ` : ''}
+                    </table>
+                  </td>
+                </tr>
+                ` : ''}
+              </table>
+            </td>
+          </tr>
+          `).join('')}
+        </table>
+
+        <table width="100%" cellpadding="0" cellspacing="0" style="text-align: center; margin-top: 30px;">
+          <tr>
+            <td>
+              <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard" style="display: inline-block; background: #1e40af; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px;">
+                View Dashboard
+              </a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8fafc; padding: 20px; text-align: center; font-size: 12px; color: #6b7280;">
+    <tr>
+      <td>
+        <p style="margin: 0;">DoppelDown - Protecting your brand 24/7</p>
+        <p style="margin: 10px 0 0;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings" style="color: #6b7280;">Manage notification settings</a>
+        </p>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || 'digest@doppeldown.app',
+    to,
+    subject,
+    html,
+  })
+}
+
+function getSeverityColor(severity: ThreatSeverity): string {
+  const colors: Record<ThreatSeverity, string> = {
+    critical: '#dc2626',
+    high: '#ea580c',
+    medium: '#d97706',
+    low: '#3b82f6',
+  }
+  return colors[severity] || '#6b7280'
+}
+
+function getSeverityBackground(severity: ThreatSeverity): string {
+  const backgrounds: Record<ThreatSeverity, string> = {
+    critical: '#fef2f2',
+    high: '#fff7ed',
+    medium: '#fffbeb',
+    low: '#eff6ff',
+  }
+  return backgrounds[severity] || '#f8fafc'
+}
