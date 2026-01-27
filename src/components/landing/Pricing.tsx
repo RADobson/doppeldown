@@ -13,28 +13,28 @@ export default function Pricing() {
             {
               name: 'Free',
               price: '$0',
-              features: ['1 brand', '25 domains checked', '1 social account', '1 scan per week'],
+              features: ['1 brand', '25 domains', '1 social account', '1 manual scan/week'],
               cta: 'Get Started',
               popular: false
             },
             {
               name: 'Starter',
               price: '$49',
-              features: ['1 brand', 'Unlimited domains', '3 social accounts', 'Weekly scans'],
+              features: ['3 brands', '100 domains', '3 social accounts', 'Daily scans'],
               cta: 'Start Trial',
               popular: false
             },
             {
               name: 'Pro',
               price: '$99',
-              features: ['3 brands', 'Unlimited domains', '10 social accounts', 'Daily scans'],
+              features: ['10 brands', '500 domains', '6 social accounts', 'Scans every 6 hours'],
               cta: 'Start Trial',
               popular: true
             },
             {
               name: 'Enterprise',
               price: '$249',
-              features: ['10 brands', 'Unlimited everything', 'NRD monitoring', 'Priority support'],
+              features: ['Unlimited brands', '2500 domains', '8 social accounts', 'Hourly scans', 'NRD monitoring'],
               cta: 'Start Trial',
               popular: false
             }
