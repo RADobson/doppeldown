@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 4 of 5 (Automated Scanning)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-27 — Completed 04-01-PLAN.md
+Last activity: 2026-01-27 — Completed 04-02-PLAN.md
 
-Progress: [███████████████░] 75%
+Progress: [████████████████░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 147s (2m 27s)
-- Total execution time: 0.28 hours
+- Total plans completed: 8
+- Average duration: 135s (2m 15s)
+- Total execution time: 0.30 hours
 
 **By Phase:**
 
@@ -30,10 +30,10 @@ Progress: [███████████████░] 75%
 | 01 - Admin Foundation | 1 | 111s | 111s |
 | 02 - Scanning Hardening | 3 | 616s | 205s |
 | 03 - Manual Scan Limits | 2 | 228s | 114s |
-| 04 - Automated Scanning | 1 | 90s | 90s |
+| 04 - Automated Scanning | 2 | 135s | 68s |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (274s), 02-03 (190s), 03-01 (118s), 03-02 (110s), 04-01 (90s)
+- Last 5 plans: 02-03 (190s), 03-01 (118s), 03-02 (110s), 04-01 (90s), 04-02 (45s)
 - Trend: Fast execution on focused plans
 
 *Updated after each plan completion*
@@ -66,6 +66,8 @@ Recent decisions affecting current work:
 - 03-02: Blue upgrade banner for helpful upsell tone
 - 04-01: Partial index on (last_scan_at DESC) for cron scheduling optimization
 - 04-01: scanFrequencyHours field (null/24/6/1) with deprecated scanFrequencyDays kept for backward compat
+- 04-02: crypto.randomInt for jitter (secure, built-in)
+- 04-02: 0-5 minute jitter range (spreads load without delaying scans)
 
 ### Pending Todos
 
@@ -90,6 +92,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 04-01-PLAN.md (scan foundation)
+Stopped at: Completed 04-02-PLAN.md (cron scheduling)
 Resume file: None
-Next: 04-02-PLAN.md (cron scheduling)
+Next: 04-03-PLAN.md (pause/resume UI)
