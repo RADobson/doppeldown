@@ -10,7 +10,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        "animate-pulse bg-gray-200 rounded",
+        "animate-pulse bg-muted rounded",
         className
       )}
     />
@@ -19,7 +19,7 @@ export function Skeleton({ className }: SkeletonProps) {
 
 export function CardSkeleton() {
   return (
-    <div className="rounded-lg border border-gray-200 p-6 space-y-4">
+    <div className="rounded-lg border border-border p-6 space-y-4">
       {/* Header */}
       <Skeleton className="h-6 w-1/4" />
 
@@ -39,7 +39,7 @@ export interface ListSkeletonProps {
 
 export function ListSkeleton({ rows = 5 }: ListSkeletonProps) {
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="divide-y divide-border">
       {[...Array(rows)].map((_, i) => (
         <div key={i} className="flex items-center gap-4 py-4">
           {/* Icon placeholder */}
