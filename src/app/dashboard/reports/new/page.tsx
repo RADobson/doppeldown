@@ -298,7 +298,7 @@ function NewReportContent() {
               {brandThreats.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground mb-2">No active threats found for this brand</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted-foreground">
                     Run a scan to detect potential threats, or select a different brand.
                   </p>
                 </div>
@@ -376,7 +376,7 @@ function NewReportContent() {
                     </>
                   )}
                 </Button>
-                <p className="text-xs text-gray-400 text-center mt-2">
+                <p className="text-xs text-muted-foreground text-center mt-2">
                   Report will be downloaded automatically
                 </p>
               </div>

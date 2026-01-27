@@ -755,7 +755,7 @@ export default function BrandDetailPage() {
                   <p className="text-sm text-muted-foreground">Run a scan to check for potential threats</p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-border">
                   {threats.map((threat) => {
                     const score = getThreatScore(threat)
                     return (
@@ -1151,11 +1151,11 @@ export default function BrandDetailPage() {
                   ) : aiStatus && aiStatus.total > 0 ? (
                     <>
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="rounded-lg border border-gray-100 p-3">
+                        <div className="rounded-lg border border-border p-3">
                           <p className="text-xs text-muted-foreground">Threats</p>
                           <p className="text-lg font-semibold text-foreground">{aiStatus.total}</p>
                         </div>
-                        <div className="rounded-lg border border-gray-100 p-3">
+                        <div className="rounded-lg border border-border p-3">
                           <p className="text-xs text-muted-foreground">Vision computed</p>
                           <p className="text-lg font-semibold text-foreground">{aiStatus.vision.computed}</p>
                         </div>
