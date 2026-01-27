@@ -91,10 +91,11 @@ Plans:
   3. User can toggle scan completion summary emails (sent after each scan)
   4. User can toggle weekly digest emails (summarizing week's threats)
   5. Alert preferences persist and apply to all future scans
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD during planning
+- [ ] 05-01-PLAN.md — Add alert preference columns, update types, add email template functions
+- [ ] 05-02-PLAN.md — Update settings UI, create weekly digest cron endpoint
 
 ## Progress
 
@@ -107,4 +108,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
 | 3. Manual Scan Limits | 2/2 | Complete | 2026-01-27 |
 | 4. Automated Scanning | 2/2 | Complete | 2026-01-27 |
-| 5. Alert Settings | 0/TBD | Not started | - |
+| 5. Alert Settings | 0/2 | Not started | - |
