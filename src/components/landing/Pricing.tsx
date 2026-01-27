@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-16">
+    <section id="pricing" className="py-16 bg-gray-900">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+        <h2 className="text-2xl font-bold text-white text-center mb-12">
           Pricing
         </h2>
 
@@ -43,20 +43,20 @@ export default function Pricing() {
               key={i}
               className={`rounded-xl p-6 ${
                 plan.popular
-                  ? 'bg-primary-600 text-white ring-2 ring-primary-600'
-                  : 'bg-white border border-gray-200'
+                  ? 'bg-primary-600 text-white ring-2 ring-primary-500'
+                  : 'bg-gray-800 border border-gray-700'
               }`}
             >
-              <h3 className={`font-semibold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
+              <h3 className={`font-semibold ${plan.popular ? 'text-white' : 'text-white'}`}>
                 {plan.name}
               </h3>
               <div className="mt-2 mb-4">
-                <span className={`text-3xl font-bold ${plan.popular ? 'text-white' : 'text-gray-900'}`}>
+                <span className="text-3xl font-bold text-white">
                   {plan.price}
                 </span>
-                <span className={plan.popular ? 'text-primary-100' : 'text-gray-500'}>/mo</span>
+                <span className={plan.popular ? 'text-primary-100' : 'text-gray-400'}>/mo</span>
               </div>
-              <ul className={`space-y-2 text-sm mb-6 ${plan.popular ? 'text-primary-100' : 'text-gray-600'}`}>
+              <ul className={`space-y-2 text-sm mb-6 ${plan.popular ? 'text-primary-100' : 'text-gray-400'}`}>
                 {plan.features.map((feature, j) => (
                   <li key={j}>{feature}</li>
                 ))}
@@ -66,7 +66,7 @@ export default function Pricing() {
                 className={`block text-center py-2 rounded-lg font-medium transition ${
                   plan.popular
                     ? 'bg-white text-primary-600 hover:bg-primary-50'
-                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                    : 'bg-gray-700 text-white hover:bg-gray-600'
                 }`}
               >
                 {plan.cta}

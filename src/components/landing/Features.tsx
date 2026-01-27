@@ -2,9 +2,9 @@ import { Search, FileText, Bell, Shield } from 'lucide-react'
 
 export default function Features() {
   return (
-    <section id="features" className="py-16">
+    <section id="features" className="py-16 bg-gray-800">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+        <h2 className="text-2xl font-bold text-white text-center mb-12">
           What You Get
         </h2>
 
@@ -32,12 +32,12 @@ export default function Features() {
             }
           ].map((feature, i) => (
             <div key={i} className="flex items-start gap-4 p-4">
-              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <feature.icon className="h-5 w-5 text-primary-600" />
+              <div className="w-10 h-10 bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0">
+                <feature.icon className="h-5 w-5 text-primary-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.description}</p>
+                <h3 className="font-semibold text-white">{feature.title}</h3>
+                <p className="text-gray-400 text-sm">{feature.description}</p>
               </div>
             </div>
           ))}
