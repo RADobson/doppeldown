@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Shield, CheckCircle } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
+import { Logo } from '@/components/Logo'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -49,8 +50,7 @@ export default function SignUpPage() {
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm">
           <Link href="/" className="flex items-center mb-8">
-            <Shield className="h-10 w-10 text-primary-600" />
-            <span className="ml-2 text-xl font-bold text-foreground">DoppelDown</span>
+            <Logo mode="dark" size="lg" />
           </Link>
 
           <h2 className="text-3xl font-bold text-foreground">

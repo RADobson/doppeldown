@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Shield } from 'lucide-react'
+import { Logo } from '@/components/Logo'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -117,7 +117,7 @@ export default function ResetPasswordPage() {
     <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Link href="/" className="flex justify-center items-center">
-          <Shield className="h-12 w-12 text-primary-600" />
+          <Logo mode="dark" size="lg" />
         </Link>
         <h2 className="mt-6 text-center text-3xl font-bold text-foreground">
           Set a new password
