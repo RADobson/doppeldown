@@ -28,9 +28,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           className={cn(
             'block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400',
-            'focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500',
+            'focus-visible:border-primary-500 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500',
+            'transition-colors duration-200 motion-reduce:transition-none',
             'disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+            error && 'border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500',
             className
           )}
           {...props}
@@ -72,9 +73,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={textareaId}
           className={cn(
             'block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 placeholder-gray-400',
-            'focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500',
+            'focus-visible:border-primary-500 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500',
+            'transition-colors duration-200 motion-reduce:transition-none',
             'disabled:bg-gray-50 disabled:text-gray-500',
-            error && 'border-red-500 focus:border-red-500 focus:ring-red-500',
+            error && 'border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500',
             className
           )}
           {...props}
