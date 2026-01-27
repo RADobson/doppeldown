@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** v1.0 shipped — planning next milestone
+**Current focus:** v1.2 Polish for Launch
 
 ## Current Position
 
-Phase: v1.1 features shipped
-Plan: N/A
-Status: Ready to plan next milestone
-Last activity: 2026-01-28 — v1.1 features committed
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-01-27 — Milestone v1.2 started
 
-Progress: [██████████████████] 100% v1.1
+Progress: [░░░░░░░░░░░░░░░░░░] 0% v1.2
 
 ## Milestone Summary
 
@@ -23,6 +23,9 @@ Progress: [██████████████████] 100% v1.1
 - 16/16 requirements satisfied
 - 63 files modified, 8,659 lines added
 - Tagged: v1.0
+
+**v1.1 Features** shipped 2026-01-28
+- In-app notifications, social platform selection, NRD monitoring
 
 See: .planning/MILESTONES.md for full details
 
@@ -35,7 +38,16 @@ v1.0 decisions archived to milestones/v1.0-ROADMAP.md.
 
 ### Pending Todos
 
-None yet.
+**Future milestones:**
+- Slack/Teams notification integrations
+- SIEM integrations (export, webhooks)
+- API access for power users
+- Team accounts / multi-user
+- White-labeling
+- Referral programs
+- Alert resolution workflow (resolve, dismiss, archive threats)
+- Mobile responsiveness
+- Onboarding flow improvements
 
 ### Blockers/Concerns
 
@@ -51,7 +63,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-28
-Stopped at: v1.1 features committed
+Last session: 2026-01-27
+Stopped at: Milestone v1.2 initialized
 Resume file: None
-Next: `/gsd:new-milestone` to define v1.2 scope
+Next: Define requirements, create roadmap

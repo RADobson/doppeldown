@@ -40,7 +40,24 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 
 ### Active
 
-(None yet — define in next milestone)
+**v1.2 — Polish for Launch**
+
+- [ ] Landing page rewrite with clearer value proposition
+- [ ] Landing page visual redesign (distinctive, not template-y)
+- [ ] App-wide professional design pass (consistent styling)
+- [ ] Dark mode support
+- [ ] Dashboard cleanup (better hierarchy, less clutter)
+
+**Future milestones (captured):**
+- Slack/Teams notification integrations
+- SIEM integrations (export, webhooks)
+- API access for power users
+- Team accounts / multi-user
+- White-labeling
+- Referral programs
+- Alert resolution workflow (resolve, dismiss, archive threats)
+- Mobile responsiveness
+- Onboarding flow improvements
 
 ### Out of Scope
 
@@ -81,4 +98,4 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | Levenshtein for typosquat detection | Simple, effective, no external dependencies | ✓ Good |
 
 ---
-*Last updated: 2026-01-28 after v1.1 features*
+*Last updated: 2026-01-27 after v1.2 milestone started*
