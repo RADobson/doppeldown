@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 
 ## Current Position
 
-Phase: 2 of 5 (Scanning Hardening) — COMPLETE
-Plan: 3 of 3 complete
-Status: Phase complete, ready for Phase 3
-Last activity: 2026-01-27 — Completed Phase 2 (Scanning Hardening)
+Phase: 3 of 5 (Manual Scan Limits)
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 03-01-PLAN.md
 
-Progress: [████████░░] 40%
+Progress: [██████████░░] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 182s (3m 2s)
-- Total execution time: 0.20 hours
+- Total plans completed: 5
+- Average duration: 169s (2m 49s)
+- Total execution time: 0.24 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [████████░░] 40%
 |-------|-------|-------|----------|
 | 01 - Admin Foundation | 1 | 111s | 111s |
 | 02 - Scanning Hardening | 3 | 616s | 205s |
+| 03 - Manual Scan Limits | 1 | 118s | 118s |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (111s), 02-01 (152s), 02-02 (274s), 02-03 (190s)
-- Trend: Stable
+- Last 5 plans: 01-01 (111s), 02-01 (152s), 02-02 (274s), 02-03 (190s), 03-01 (118s)
+- Trend: Fast execution on focused plan
 
 *Updated after each plan completion*
 
@@ -57,6 +58,9 @@ Recent decisions affecting current work:
 - 02-02: retry_count synced from scan_jobs.attempts to scans table for UI visibility
 - 02-03: ScanProgress polling at 4s interval (matches existing pattern)
 - 02-03: Cancel button red color scheme for clear affordance
+- 03-01: Rolling 7-day window from first scan (not calendar week)
+- 03-01: Cached quota count in users table for performance
+- 03-01: 429 with QUOTA_EXCEEDED code and quota object for frontend
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 2 (Scanning Hardening)
+Stopped at: Completed 03-01-PLAN.md (quota backend)
 Resume file: None
-Next: Phase 3 (Manual Scan Limits)
+Next: 03-02-PLAN.md (quota UI)
