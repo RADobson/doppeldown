@@ -9,7 +9,7 @@ export default function Cta() {
         </h2>
         <Link
           href="/auth/signup"
-          className="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-accent transition"
+          className="inline-block bg-card text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-accent transition"
         >
           Start Free
         </Link>

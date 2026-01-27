@@ -65,7 +65,7 @@ export default function Pricing() {
                 href="/auth/signup"
                 className={`block text-center py-2 rounded-lg font-medium transition ${
                   plan.popular
-                    ? 'bg-white text-primary-600 hover:bg-primary-50'
+                    ? 'bg-card text-primary-600 hover:bg-primary-50'
                     : 'bg-landing-border text-landing-foreground hover:bg-landing'
                 }`}
               >
