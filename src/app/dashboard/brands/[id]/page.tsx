@@ -581,7 +581,7 @@ export default function BrandDetailPage() {
   if (!brand) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Brand not found</p>
+        <p className="text-muted-foreground">Brand not found</p>
         <Link href="/dashboard/brands">
           <Button variant="outline" className="mt-4">Back to Brands</Button>
         </Link>
@@ -606,10 +606,10 @@ export default function BrandDetailPage() {
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-2xl font-bold text-gray-900">{brand.name}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{brand.name}</h1>
             <StatusBadge status={brand.status} />
           </div>
-          <p className="text-gray-500">{brand.domain}</p>
+          <p className="text-muted-foreground">{brand.domain}</p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -685,8 +685,8 @@ export default function BrandDetailPage() {
                 <AlertTriangle className="h-6 w-6 text-red-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Total Threats</p>
-                <p className="text-2xl font-bold text-gray-900">{brand.threat_count}</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Threats</p>
+                <p className="text-2xl font-bold text-foreground">{brand.threat_count}</p>
               </div>
             </div>
           </CardContent>
@@ -699,8 +699,8 @@ export default function BrandDetailPage() {
                 <AlertTriangle className="h-6 w-6 text-orange-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Critical</p>
-                <p className="text-2xl font-bold text-gray-900">{criticalCount}</p>
+                <p className="text-sm font-medium text-muted-foreground">Critical</p>
+                <p className="text-2xl font-bold text-foreground">{criticalCount}</p>
               </div>
             </div>
           </CardContent>
@@ -713,8 +713,8 @@ export default function BrandDetailPage() {
                 <Globe className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Scans Run</p>
-                <p className="text-2xl font-bold text-gray-900">{scans.length}</p>
+                <p className="text-sm font-medium text-muted-foreground">Scans Run</p>
+                <p className="text-2xl font-bold text-foreground">{scans.length}</p>
               </div>
             </div>
           </CardContent>
@@ -727,8 +727,8 @@ export default function BrandDetailPage() {
                 <Clock className="h-6 w-6 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Last Scan</p>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-sm font-medium text-muted-foreground">Last Scan</p>
+                <p className="text-sm font-bold text-foreground">
                   {brand.last_scan_at ? formatDateTime(brand.last_scan_at) : 'Never'}
                 </p>
               </div>
@@ -750,9 +750,9 @@ export default function BrandDetailPage() {
             <CardContent>
               {threats.length === 0 ? (
                 <div className="text-center py-8">
-                  <AlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No threats detected yet</p>
-                  <p className="text-sm text-gray-400">Run a scan to check for potential threats</p>
+                  <AlertTriangle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground">No threats detected yet</p>
+                  <p className="text-sm text-muted-foreground">Run a scan to check for potential threats</p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-100">
@@ -762,21 +762,21 @@ export default function BrandDetailPage() {
                       <Link
                         key={threat.id}
                         href={`/dashboard/threats/${threat.id}`}
-                        className="flex items-center justify-between py-3 hover:bg-gray-50 -mx-4 px-4 transition-colors"
+                        className="flex items-center justify-between py-3 hover:bg-muted -mx-4 px-4 transition-colors"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <SeverityBadge severity={threat.severity} />
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               {threatTypeLabels[threat.type] || threat.type}
                             </span>
                             {score !== null && (
-                              <span className="text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5">
+                              <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
                                 Score {score}
                               </span>
                             )}
                           </div>
-                          <p className="text-sm font-mono text-gray-900 truncate">
+                          <p className="text-sm font-mono text-foreground truncate">
                             {truncateUrl(threat.url, 45)}
                           </p>
                         </div>
@@ -799,8 +799,8 @@ export default function BrandDetailPage() {
             <CardContent>
               {scans.length === 0 ? (
                 <div className="text-center py-8">
-                  <Clock className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No scans yet</p>
+                  <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-muted-foreground">No scans yet</p>
                   <Button onClick={handleScan} disabled={scanning} className="mt-4">
                     Run First Scan
                   </Button>
@@ -808,20 +808,20 @@ export default function BrandDetailPage() {
               ) : (
                 <div className="space-y-3">
                   {scans.map((scan) => (
-                    <div key={scan.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={scan.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-900 capitalize">{scan.scan_type} Scan</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="font-medium text-foreground capitalize">{scan.scan_type} Scan</p>
+                        <p className="text-sm text-muted-foreground">
                           {formatDateTime(scan.started_at)} • {scan.domains_checked} domains checked
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium text-gray-900">{scan.threats_found} threats found</p>
+                        <p className="font-medium text-foreground">{scan.threats_found} threats found</p>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                           scan.status === 'completed' ? 'bg-green-100 text-green-700' :
                           scan.status === 'running' ? 'bg-blue-100 text-blue-700' :
                           scan.status === 'failed' ? 'bg-red-100 text-red-700' :
-                          'bg-gray-100 text-gray-700'
+                          'bg-accent text-foreground'
                         }`}>
                           {scan.status === 'running' && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
                           {scan.status.charAt(0).toUpperCase() + scan.status.slice(1)}
@@ -874,9 +874,9 @@ export default function BrandDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500 mb-2">Logo</p>
+                <p className="text-sm text-muted-foreground mb-2">Logo</p>
                 <div className="flex items-start gap-3">
-                  <div className="h-14 w-14 rounded-lg border border-gray-200 bg-white flex items-center justify-center overflow-hidden">
+                  <div className="h-14 w-14 rounded-lg border border-border bg-card flex items-center justify-center overflow-hidden">
                     {logoPreview || brand.logo_url ? (
                       <img
                         src={logoPreview || brand.logo_url || ''}
@@ -884,7 +884,7 @@ export default function BrandDetailPage() {
                         className="h-full w-full object-contain"
                       />
                     ) : (
-                      <span className="text-[10px] text-gray-400">No logo</span>
+                      <span className="text-[10px] text-muted-foreground">No logo</span>
                     )}
                   </div>
                   <div className="flex-1 space-y-2">
@@ -955,7 +955,7 @@ export default function BrandDetailPage() {
                   />
 
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Keywords</p>
+                    <p className="text-sm text-muted-foreground mb-2">Keywords</p>
                     <div className="flex items-center gap-2">
                       <Input
                         placeholder="Add a keyword"
@@ -972,13 +972,13 @@ export default function BrandDetailPage() {
                         {detailsForm.keywords.map((keyword) => (
                           <span
                             key={keyword}
-                            className="inline-flex items-center bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                            className="inline-flex items-center bg-accent text-foreground px-3 py-1 rounded-full text-sm"
                           >
                             {keyword}
                             <button
                               type="button"
                               onClick={() => removeKeyword(keyword)}
-                              className="ml-2 text-gray-400 hover:text-gray-600"
+                              className="ml-2 text-muted-foreground hover:text-muted-foreground"
                             >
                               <X className="h-3 w-3" />
                             </button>
@@ -989,7 +989,7 @@ export default function BrandDetailPage() {
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Platforms to Scan</p>
+                    <p className="text-sm text-muted-foreground mb-2">Platforms to Scan</p>
                     <PlatformSelector
                       value={detailsForm.enabledSocialPlatforms}
                       onChange={(platforms) => setDetailsForm(prev => ({
@@ -1001,13 +1001,13 @@ export default function BrandDetailPage() {
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Social Accounts</p>
+                    <p className="text-sm text-muted-foreground mb-2">Social Accounts</p>
                     <div className="space-y-4">
                       {SOCIAL_PLATFORMS.map((platform) => {
                         const handles = detailsForm.socialHandles[platform.key] || ['']
                         return (
                           <div key={platform.key} className="space-y-2">
-                            <p className="text-sm font-medium text-gray-700">{platform.label}</p>
+                            <p className="text-sm font-medium text-foreground">{platform.label}</p>
                             {handles.map((handle, index) => (
                               <div key={`${platform.key}-${index}`} className="flex items-center gap-2">
                                 <Input
@@ -1046,12 +1046,12 @@ export default function BrandDetailPage() {
               ) : (
                 <>
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Brand Name</p>
-                    <p className="text-gray-900">{brand.name}</p>
+                    <p className="text-sm text-muted-foreground mb-1">Brand Name</p>
+                    <p className="text-foreground">{brand.name}</p>
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Domain</p>
+                    <p className="text-sm text-muted-foreground mb-1">Domain</p>
                     <a
                       href={`https://${brand.domain}`}
                       target="_blank"
@@ -1065,7 +1065,7 @@ export default function BrandDetailPage() {
 
                   {brand.keywords && brand.keywords.length > 0 && (
                     <div>
-                      <p className="text-sm text-gray-500 mb-2">Keywords</p>
+                      <p className="text-sm text-muted-foreground mb-2">Keywords</p>
                       <div className="flex flex-wrap gap-1">
                         {brand.keywords.map((keyword, i) => (
                           <Badge key={i} variant="default" size="sm">{keyword}</Badge>
@@ -1076,7 +1076,7 @@ export default function BrandDetailPage() {
 
                   {brand.enabled_social_platforms && brand.enabled_social_platforms.length > 0 && (
                     <div>
-                      <p className="text-sm text-gray-500 mb-2">Platforms to Scan</p>
+                      <p className="text-sm text-muted-foreground mb-2">Platforms to Scan</p>
                       <div className="flex flex-wrap gap-1">
                         {brand.enabled_social_platforms.map((platform, i) => (
                           <Badge key={i} variant="default" size="sm">
@@ -1089,7 +1089,7 @@ export default function BrandDetailPage() {
 
                   {Object.keys(displaySocialHandles).length > 0 && (
                     <div>
-                      <p className="text-sm text-gray-500 mb-2">Social Accounts</p>
+                      <p className="text-sm text-muted-foreground mb-2">Social Accounts</p>
                       <div className="space-y-3">
                         {SOCIAL_PLATFORMS.map((platform) => {
                           const handles = displaySocialHandles[platform.key]
@@ -1097,10 +1097,10 @@ export default function BrandDetailPage() {
                           const Icon = socialIcons[platform.key] || Globe
                           return (
                             <div key={platform.key} className="flex items-start gap-2 text-sm">
-                              <Icon className="h-4 w-4 text-gray-400 mt-0.5" />
+                              <Icon className="h-4 w-4 text-muted-foreground mt-0.5" />
                               <div>
-                                <p className="text-sm font-medium text-gray-700">{platform.label}</p>
-                                <div className="text-sm text-gray-600 space-y-1">
+                                <p className="text-sm font-medium text-foreground">{platform.label}</p>
+                                <div className="text-sm text-muted-foreground space-y-1">
                                   {handles.map((handle, index) => (
                                     <div key={`${platform.key}-${index}`}>{handle}</div>
                                   ))}
@@ -1116,8 +1116,8 @@ export default function BrandDetailPage() {
               )}
 
               <div>
-                <p className="text-sm text-gray-500 mb-1">Created</p>
-                <p className="text-gray-900">{formatDateTime(brand.created_at)}</p>
+                <p className="text-sm text-muted-foreground mb-1">Created</p>
+                <p className="text-foreground">{formatDateTime(brand.created_at)}</p>
               </div>
             </CardContent>
           </Card>
@@ -1128,13 +1128,13 @@ export default function BrandDetailPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {scans.length === 0 ? (
-                <p className="text-sm text-gray-500">No scans yet.</p>
+                <p className="text-sm text-muted-foreground">No scans yet.</p>
               ) : (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Scan</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Scan</label>
                     <select
-                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+                      className="w-full rounded-lg border border-border px-3 py-2 text-sm text-foreground focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                       value={selectedScanId || ''}
                       onChange={(e) => setSelectedScanId(e.target.value)}
                     >
@@ -1147,36 +1147,36 @@ export default function BrandDetailPage() {
                   </div>
 
                   {aiStatusLoading ? (
-                    <p className="text-sm text-gray-500">Loading AI analysis...</p>
+                    <p className="text-sm text-muted-foreground">Loading AI analysis...</p>
                   ) : aiStatus && aiStatus.total > 0 ? (
                     <>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="rounded-lg border border-gray-100 p-3">
-                          <p className="text-xs text-gray-500">Threats</p>
-                          <p className="text-lg font-semibold text-gray-900">{aiStatus.total}</p>
+                          <p className="text-xs text-muted-foreground">Threats</p>
+                          <p className="text-lg font-semibold text-foreground">{aiStatus.total}</p>
                         </div>
                         <div className="rounded-lg border border-gray-100 p-3">
-                          <p className="text-xs text-gray-500">Vision computed</p>
-                          <p className="text-lg font-semibold text-gray-900">{aiStatus.vision.computed}</p>
+                          <p className="text-xs text-muted-foreground">Vision computed</p>
+                          <p className="text-lg font-semibold text-foreground">{aiStatus.vision.computed}</p>
                         </div>
                       </div>
 
                       <div className="space-y-1 text-sm">
-                        <p className="font-medium text-gray-700">Visual similarity</p>
-                        <div className="flex justify-between text-gray-600">
+                        <p className="font-medium text-foreground">Visual similarity</p>
+                        <div className="flex justify-between text-muted-foreground">
                           <span>Computed</span>
                           <span>{aiStatus.vision.computed}</span>
                         </div>
-                        <div className="flex justify-between text-gray-600">
+                        <div className="flex justify-between text-muted-foreground">
                           <span>Pending</span>
                           <span>{aiStatus.vision.pending}</span>
                         </div>
-                        <div className="flex justify-between text-gray-600">
+                        <div className="flex justify-between text-muted-foreground">
                           <span>Unavailable</span>
                           <span>{aiStatus.vision.unavailable}</span>
                         </div>
                         {aiStatus.vision.unknown > 0 && (
-                          <div className="flex justify-between text-gray-600">
+                          <div className="flex justify-between text-muted-foreground">
                             <span>Unknown</span>
                             <span>{aiStatus.vision.unknown}</span>
                           </div>
@@ -1184,17 +1184,17 @@ export default function BrandDetailPage() {
                       </div>
 
                       <div className="space-y-1 text-sm">
-                        <p className="font-medium text-gray-700">Phishing intent</p>
-                        <div className="flex justify-between text-gray-600">
+                        <p className="font-medium text-foreground">Phishing intent</p>
+                        <div className="flex justify-between text-muted-foreground">
                           <span>OpenAI</span>
                           <span>{aiStatus.intent.openai}</span>
                         </div>
-                        <div className="flex justify-between text-gray-600">
+                        <div className="flex justify-between text-muted-foreground">
                           <span>Heuristic</span>
                           <span>{aiStatus.intent.heuristic}</span>
                         </div>
                         {aiStatus.intent.unknown > 0 && (
-                          <div className="flex justify-between text-gray-600">
+                          <div className="flex justify-between text-muted-foreground">
                             <span>Unknown</span>
                             <span>{aiStatus.intent.unknown}</span>
                           </div>
@@ -1202,7 +1202,7 @@ export default function BrandDetailPage() {
                       </div>
                     </>
                   ) : (
-                    <p className="text-sm text-gray-500">No AI data for this scan yet.</p>
+                    <p className="text-sm text-muted-foreground">No AI data for this scan yet.</p>
                   )}
                 </>
               )}

@@ -149,8 +149,8 @@ export default function BrandsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Brands</h1>
-          <p className="text-gray-500 mt-1">Manage the brands you're monitoring</p>
+          <h1 className="text-2xl font-bold text-foreground">Brands</h1>
+          <p className="text-muted-foreground mt-1">Manage the brands you're monitoring</p>
         </div>
         <Link href="/dashboard/brands/new">
           <Button>
@@ -162,7 +162,7 @@ export default function BrandsPage() {
 
       {/* Search */}
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search brands..."
           value={searchQuery}
@@ -200,23 +200,23 @@ export default function BrandsPage() {
                 <div className="absolute top-4 right-4">
                   <button
                     onClick={() => setShowMenu(showMenu === brand.id ? null : brand.id)}
-                    className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                    className="p-1 text-muted-foreground hover:text-muted-foreground rounded"
                   >
                     <MoreVertical className="h-5 w-5" />
                   </button>
                   {showMenu === brand.id && (
-                    <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
+                    <div className="absolute right-0 mt-1 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-10">
                       <button
                         onClick={() => handleRunScan(brand.id)}
                         disabled={actionLoading === brand.id}
-                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="w-full flex items-center px-4 py-2 text-sm text-foreground hover:bg-muted"
                       >
                         <Play className="h-4 w-4 mr-2" />
                         Run Scan Now
                       </button>
                       <Link
                         href={`/dashboard/brands/${brand.id}`}
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-muted"
                       >
                         <Settings className="h-4 w-4 mr-2" />
                         View Details
@@ -224,7 +224,7 @@ export default function BrandsPage() {
                       <button
                         onClick={() => handleToggleStatus(brand)}
                         disabled={actionLoading === brand.id}
-                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="w-full flex items-center px-4 py-2 text-sm text-foreground hover:bg-muted"
                       >
                         {brand.status === 'active' ? (
                           <>
@@ -254,30 +254,30 @@ export default function BrandsPage() {
                 <Link href={`/dashboard/brands/${brand.id}`}>
                   <div className="mb-4">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-semibold text-gray-900">{brand.name}</h3>
+                      <h3 className="text-lg font-semibold text-foreground">{brand.name}</h3>
                       <StatusBadge status={brand.status} />
                     </div>
-                    <p className="text-sm text-gray-500">{brand.domain}</p>
+                    <p className="text-sm text-muted-foreground">{brand.domain}</p>
                   </div>
 
                   {/* Stats */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">{brand.threat_count}</p>
-                      <p className="text-sm text-gray-500">Total Threats</p>
+                      <p className="text-2xl font-bold text-foreground">{brand.threat_count}</p>
+                      <p className="text-sm text-muted-foreground">Total Threats</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {brand.last_scan_at ? formatDateTime(brand.last_scan_at) : 'Never'}
                       </p>
-                      <p className="text-sm text-gray-500">Last Scan</p>
+                      <p className="text-sm text-muted-foreground">Last Scan</p>
                     </div>
                   </div>
 
                   {/* Keywords */}
                   {brand.keywords && brand.keywords.length > 0 && (
                     <div className="mb-4">
-                      <p className="text-xs text-gray-400 mb-2">Keywords</p>
+                      <p className="text-xs text-muted-foreground mb-2">Keywords</p>
                       <div className="flex flex-wrap gap-1">
                         {brand.keywords.slice(0, 3).map((keyword, i) => (
                           <Badge key={i} variant="default" size="sm">{keyword}</Badge>
@@ -290,10 +290,10 @@ export default function BrandsPage() {
                   )}
 
                   {/* Created */}
-                  <div className="pt-4 border-t border-gray-100">
+                  <div className="pt-4 border-t border-border">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Created</span>
-                      <span className="text-xs text-gray-600">{formatDateTime(brand.created_at)}</span>
+                      <span className="text-xs text-muted-foreground">Created</span>
+                      <span className="text-xs text-muted-foreground">{formatDateTime(brand.created_at)}</span>
                     </div>
                   </div>
                 </Link>

@@ -167,8 +167,8 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Overview of your brand protection status</p>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Overview of your brand protection status</p>
         </div>
         <div className="flex gap-3">
           <Link href="/dashboard/brands/new">
@@ -189,8 +189,8 @@ export default function DashboardPage() {
                 <Shield className="h-6 w-6 text-primary-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Brands Monitored</p>
-                <p className="text-2xl font-bold text-gray-900">{brands.length}</p>
+                <p className="text-sm font-medium text-muted-foreground">Brands Monitored</p>
+                <p className="text-2xl font-bold text-foreground">{brands.length}</p>
               </div>
             </div>
           </CardContent>
@@ -203,8 +203,8 @@ export default function DashboardPage() {
                 <AlertTriangle className="h-6 w-6 text-red-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Active Threats</p>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-sm font-medium text-muted-foreground">Active Threats</p>
+                <p className="text-2xl font-bold text-foreground">
                   {stats.totalThreats}
                   {stats.criticalThreats > 0 && (
                     <span className="text-sm font-medium text-red-600 ml-2">
@@ -224,8 +224,8 @@ export default function DashboardPage() {
                 <Globe className="h-6 w-6 text-green-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Domains Scanned</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.domainsScanned.toLocaleString()}</p>
+                <p className="text-sm font-medium text-muted-foreground">Domains Scanned</p>
+                <p className="text-2xl font-bold text-foreground">{stats.domainsScanned.toLocaleString()}</p>
               </div>
             </div>
           </CardContent>
@@ -238,8 +238,8 @@ export default function DashboardPage() {
                 <FileText className="h-6 w-6 text-purple-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-500">Threats Resolved</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.resolvedThreats}</p>
+                <p className="text-sm font-medium text-muted-foreground">Threats Resolved</p>
+                <p className="text-2xl font-bold text-foreground">{stats.resolvedThreats}</p>
               </div>
             </div>
           </CardContent>
@@ -265,31 +265,31 @@ export default function DashboardPage() {
                   variant="success"
                 />
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-border">
                   {threats.map((threat) => {
                     const score = getThreatScore(threat)
                     return (
                       <Link
                         key={threat.id}
                         href={`/dashboard/threats/${threat.id}`}
-                        className="flex items-center justify-between py-4 hover:bg-gray-50 -mx-4 px-4 transition-colors"
+                        className="flex items-center justify-between py-4 hover:bg-muted -mx-4 px-4 transition-colors"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <SeverityBadge severity={threat.severity} />
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               {threatTypeLabels[threat.type] || threat.type}
                             </span>
                             {score !== null && (
-                              <span className="text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5">
+                              <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
                                 Score {score}
                               </span>
                             )}
                           </div>
-                          <p className="text-sm font-mono text-gray-900 truncate">
+                          <p className="text-sm font-mono text-foreground truncate">
                             {truncateUrl(threat.url, 50)}
                           </p>
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {formatDateTime(threat.detected_at)} • {threat.brands?.name}
                           </p>
                         </div>
@@ -320,18 +320,18 @@ export default function DashboardPage() {
                   <Link
                     key={brand.id}
                     href={`/dashboard/brands/${brand.id}`}
-                    className="block p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50/50 transition-colors"
+                    className="block p-3 border border-border rounded-lg hover:border-primary-300 hover:bg-primary-50/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-gray-900">{brand.name}</p>
-                        <p className="text-sm text-gray-500">{brand.domain}</p>
+                        <p className="font-medium text-foreground">{brand.name}</p>
+                        <p className="text-sm text-muted-foreground">{brand.domain}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-foreground">
                           {brand.threat_count} threats
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-muted-foreground">
                           {brand.last_scan_at ? `Last scan: ${formatDateTime(brand.last_scan_at)}` : 'Never scanned'}
                         </p>
                       </div>
@@ -380,8 +380,8 @@ export default function DashboardPage() {
                     protectionScore >= 80 ? 'text-green-600' : protectionScore >= 50 ? 'text-yellow-600' : 'text-red-600'
                   }`}>{protectionScore}%</span>
                 </div>
-                <p className="font-medium text-gray-900">Protection Score</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="font-medium text-foreground">Protection Score</p>
+                <p className="text-sm text-muted-foreground mt-1">
                   {stats.resolvedThreats} of {stats.totalThreats + stats.resolvedThreats} threats resolved
                 </p>
               </div>
@@ -527,8 +527,8 @@ function OnboardingFlow() {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
           <Rocket className="h-8 w-8 text-primary-600" />
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome to DoppelDown</h1>
-        <p className="text-gray-500 mt-2">Let's set up protection for your first brand</p>
+        <h1 className="text-3xl font-bold text-foreground">Welcome to DoppelDown</h1>
+        <p className="text-muted-foreground mt-2">Let's set up protection for your first brand</p>
       </div>
 
       {/* Progress Steps */}
@@ -536,7 +536,7 @@ function OnboardingFlow() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-medium ${
-              step >= s ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-500'
+              step >= s ? 'bg-primary-600 text-white' : 'bg-gray-200 text-muted-foreground'
             }`}>
               {step > s ? <CheckCircle className="h-5 w-5" /> : s}
             </div>
@@ -554,65 +554,65 @@ function OnboardingFlow() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Brand Name *</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Brand Name *</label>
               <input
                 type="text"
                 value={brandData.name}
                 onChange={(e) => setBrandData({ ...brandData, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="e.g., Acme Corp"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Domain *</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Domain *</label>
               <input
                 type="text"
                 value={brandData.domain}
                 onChange={(e) => setBrandData({ ...brandData, domain: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="e.g., acme.com"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Keywords (comma-separated)</label>
+              <label className="block text-sm font-medium text-foreground mb-1">Keywords (comma-separated)</label>
               <input
                 type="text"
                 value={brandData.keywords}
                 onChange={(e) => setBrandData({ ...brandData, keywords: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="e.g., acme, acme corp, official"
               />
             </div>
 
             <div className="pt-4 border-t">
-              <p className="text-sm font-medium text-gray-700 mb-3">Social Media Handles (optional)</p>
+              <p className="text-sm font-medium text-foreground mb-3">Social Media Handles (optional)</p>
               <div className="grid grid-cols-2 gap-3">
                 <input
                   type="text"
                   value={brandData.twitter}
                   onChange={(e) => setBrandData({ ...brandData, twitter: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Twitter @handle"
                 />
                 <input
                   type="text"
                   value={brandData.facebook}
                   onChange={(e) => setBrandData({ ...brandData, facebook: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Facebook page"
                 />
                 <input
                   type="text"
                   value={brandData.instagram}
                   onChange={(e) => setBrandData({ ...brandData, instagram: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="Instagram @handle"
                 />
                 <input
                   type="text"
                   value={brandData.linkedin}
                   onChange={(e) => setBrandData({ ...brandData, linkedin: e.target.value })}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                   placeholder="LinkedIn company"
                 />
               </div>
@@ -647,10 +647,10 @@ function OnboardingFlow() {
                 <div className="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-10 w-10 text-primary-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   Ready to scan {createdBrand?.name}
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   We'll check for typosquatting domains, fake social accounts, and lookalike websites.
                   This may take a few minutes.
                 </p>
@@ -664,12 +664,12 @@ function OnboardingFlow() {
             {scanning && (
               <>
                 <Loader2 className="h-16 w-16 text-primary-600 animate-spin mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Scanning...</h3>
-                <p className="text-gray-500">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Scanning...</h3>
+                <p className="text-muted-foreground">
                   Checked {scanResults?.domains_checked || 0} domains and reviewed {scanResults?.pages_scanned || 0} URLs.
                   Found {scanResults?.threats_found || 0} potential threats so far.
                 </p>
-                <p className="text-sm text-gray-400 mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   This can take a few minutes depending on network speed.
                 </p>
                 <Button variant="outline" className="mt-4" onClick={handleCancelScan} disabled={cancelling}>
@@ -682,11 +682,11 @@ function OnboardingFlow() {
               <>
                 {scanResults?.status === 'failed' && scanResults?.error?.toLowerCase?.().includes('cancelled') ? (
                   <>
-                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="h-10 w-10 text-gray-500" />
+                    <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Scan cancelled</h3>
-                    <p className="text-gray-500 mb-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Scan cancelled</h3>
+                    <p className="text-muted-foreground mb-6">
                       You can start a new scan anytime.
                     </p>
                     <Button onClick={() => setStep(3)}>
@@ -698,11 +698,11 @@ function OnboardingFlow() {
                     <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircle className="h-10 w-10 text-green-600" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Scan Complete!</h3>
-                    <p className="text-gray-500 mb-2">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Scan Complete!</h3>
+                    <p className="text-muted-foreground mb-2">
                       Found {scanResults?.threats_found || 0} potential threats
                     </p>
-                    <p className="text-sm text-gray-400 mb-6">
+                    <p className="text-sm text-muted-foreground mb-6">
                       Checked {scanResults?.domains_checked || 0} domains • Reviewed {scanResults?.pages_scanned || 0} URLs
                     </p>
                     <Button onClick={() => setStep(3)}>
@@ -725,16 +725,16 @@ function OnboardingFlow() {
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-10 w-10 text-green-600" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               {createdBrand?.name} is now protected
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-muted-foreground mb-6">
               We'll continuously monitor for threats and alert you when we find something.
             </p>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-              <h4 className="font-medium text-gray-900 mb-2">What happens next:</h4>
-              <ul className="text-sm text-gray-600 space-y-2">
+            <div className="bg-muted rounded-lg p-4 mb-6 text-left">
+              <h4 className="font-medium text-foreground mb-2">What happens next:</h4>
+              <ul className="text-sm text-muted-foreground space-y-2">
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
                   Daily automated scans for new threats

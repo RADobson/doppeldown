@@ -205,13 +205,13 @@ export default function NewBrandPage() {
       <div className="mb-6">
         <Link
           href="/dashboard/brands"
-          className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-4"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to brands
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900">Add New Brand</h1>
-        <p className="text-gray-500 mt-1">Set up monitoring for a new brand</p>
+        <h1 className="text-2xl font-bold text-foreground">Add New Brand</h1>
+        <p className="text-muted-foreground mt-1">Set up monitoring for a new brand</p>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -273,10 +273,10 @@ export default function NewBrandPage() {
               />
               {logoPreview && (
                 <div className="mt-3 flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-lg border border-gray-200 bg-white flex items-center justify-center overflow-hidden">
+                  <div className="h-12 w-12 rounded-lg border border-border bg-card flex items-center justify-center overflow-hidden">
                     <img src={logoPreview} alt="Logo preview" className="h-full w-full object-contain" />
                   </div>
-                  <p className="text-sm text-gray-600">{logoFile?.name}</p>
+                  <p className="text-sm text-muted-foreground">{logoFile?.name}</p>
                 </div>
               )}
             </div>
@@ -312,13 +312,13 @@ export default function NewBrandPage() {
                 {formData.keywords.map((keyword) => (
                   <span
                     key={keyword}
-                    className="inline-flex items-center bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                    className="inline-flex items-center bg-accent text-foreground px-3 py-1 rounded-full text-sm"
                   >
                     {keyword}
                     <button
                       type="button"
                       onClick={() => removeKeyword(keyword)}
-                      className="ml-2 text-gray-400 hover:text-gray-600"
+                      className="ml-2 text-muted-foreground hover:text-muted-foreground"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -338,7 +338,7 @@ export default function NewBrandPage() {
           <CardContent>
             {tierLoading ? (
               <div className="flex items-center justify-center py-4">
-                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               </div>
             ) : (
               <PlatformSelector
@@ -361,7 +361,7 @@ export default function NewBrandPage() {
               const handles = formData.socialHandles[platform.key] || ['']
               return (
                 <div key={platform.key} className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700">{platform.label}</p>
+                  <p className="text-sm font-medium text-foreground">{platform.label}</p>
                   {handles.map((handle, index) => (
                     <div key={`${platform.key}-${index}`} className="flex items-center gap-2">
                       <Input
