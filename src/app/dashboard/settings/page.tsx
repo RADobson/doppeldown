@@ -22,7 +22,10 @@ interface AlertSettings {
   email_alerts: boolean
   alert_email: string | null
   alert_on_severity: string[]
+  severity_threshold: 'all' | 'high_critical' | 'critical'
+  scan_summary_emails: boolean
   daily_digest: boolean
+  weekly_digest: boolean
   instant_critical: boolean
   webhook_url: string | null
   webhook_secret: string | null
@@ -50,7 +53,10 @@ export default function SettingsPage() {
     email_alerts: true,
     alert_email: '',
     alert_on_severity: ['critical', 'high'],
+    severity_threshold: 'high_critical',
+    scan_summary_emails: true,
     daily_digest: true,
+    weekly_digest: true,
     instant_critical: true,
     webhook_url: '',
     webhook_secret: ''
@@ -105,11 +111,30 @@ export default function SettingsPage() {
         .single()
 
       if (alertData) {
+        // Derive severity_threshold from alert_on_severity if not set
+        let derivedThreshold: 'all' | 'high_critical' | 'critical' = 'high_critical'
+        if (alertData.severity_threshold) {
+          derivedThreshold = alertData.severity_threshold
+        } else if (alertData.alert_on_severity) {
+          // Backward compat: derive from old array
+          const severities = alertData.alert_on_severity as string[]
+          if (severities.includes('low') || severities.includes('medium')) {
+            derivedThreshold = 'all'
+          } else if (severities.includes('high')) {
+            derivedThreshold = 'high_critical'
+          } else {
+            derivedThreshold = 'critical'
+          }
+        }
+
         setAlertSettings({
           email_alerts: alertData.email_alerts,
           alert_email: alertData.alert_email || user.email || '',
           alert_on_severity: alertData.alert_on_severity || ['critical', 'high'],
+          severity_threshold: derivedThreshold,
+          scan_summary_emails: alertData.scan_summary_emails ?? true,
           daily_digest: alertData.daily_digest,
+          weekly_digest: alertData.weekly_digest ?? alertData.daily_digest ?? true,
           instant_critical: alertData.instant_critical,
           webhook_url: alertData.webhook_url || '',
           webhook_secret: alertData.webhook_secret || ''
@@ -164,7 +189,10 @@ export default function SettingsPage() {
           email_alerts: alertSettings.email_alerts,
           alert_email: alertSettings.alert_email,
           alert_on_severity: alertSettings.alert_on_severity,
-          daily_digest: alertSettings.daily_digest,
+          severity_threshold: alertSettings.severity_threshold,
+          scan_summary_emails: alertSettings.scan_summary_emails,
+          daily_digest: alertSettings.weekly_digest, // Sync daily_digest for backward compat
+          weekly_digest: alertSettings.weekly_digest,
           instant_critical: alertSettings.instant_critical,
           webhook_url: alertSettings.webhook_url || null,
           webhook_secret: alertSettings.webhook_secret || null
@@ -387,18 +415,18 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Daily Digest</p>
-                  <p className="text-sm text-gray-500">Receive a daily summary of all activity</p>
+                  <p className="font-medium text-gray-900">Weekly Digest</p>
+                  <p className="text-sm text-gray-500">Receive a weekly summary every Monday</p>
                 </div>
                 <button
-                  onClick={() => setAlertSettings({ ...alertSettings, daily_digest: !alertSettings.daily_digest })}
+                  onClick={() => setAlertSettings({ ...alertSettings, weekly_digest: !alertSettings.weekly_digest })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    alertSettings.daily_digest ? 'bg-primary-600' : 'bg-gray-200'
+                    alertSettings.weekly_digest ? 'bg-primary-600' : 'bg-gray-200'
                   }`}
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      alertSettings.daily_digest ? 'translate-x-6' : 'translate-x-1'
+                      alertSettings.weekly_digest ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
                 </button>
@@ -414,26 +442,51 @@ export default function SettingsPage() {
                 />
               </div>
 
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Scan Summary Emails</p>
+                  <p className="text-sm text-gray-500">Receive summary after each scan completes</p>
+                </div>
+                <button
+                  onClick={() => setAlertSettings({ ...alertSettings, scan_summary_emails: !alertSettings.scan_summary_emails })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    alertSettings.scan_summary_emails ? 'bg-primary-600' : 'bg-gray-200'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      alertSettings.scan_summary_emails ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
               <div>
-                <p className="font-medium text-gray-900 mb-2">Alert on Severity</p>
-                <div className="flex flex-wrap gap-2">
-                  {['critical', 'high', 'medium', 'low'].map((severity) => (
-                    <button
-                      key={severity}
-                      onClick={() => {
-                        const severities = alertSettings.alert_on_severity.includes(severity)
-                          ? alertSettings.alert_on_severity.filter(s => s !== severity)
-                          : [...alertSettings.alert_on_severity, severity]
-                        setAlertSettings({ ...alertSettings, alert_on_severity: severities })
-                      }}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${
-                        alertSettings.alert_on_severity.includes(severity)
-                          ? 'bg-primary-600 text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {severity}
-                    </button>
+                <p className="font-medium text-gray-900 mb-2">Alert Severity Threshold</p>
+                <p className="text-sm text-gray-500 mb-3">Which threats should trigger email alerts?</p>
+                <div className="space-y-2">
+                  {[
+                    { value: 'all' as const, label: 'All Threats', desc: 'Low, Medium, High, and Critical' },
+                    { value: 'high_critical' as const, label: 'High + Critical Only', desc: 'Skip low and medium severity' },
+                    { value: 'critical' as const, label: 'Critical Only', desc: 'Only the most severe threats' },
+                  ].map((option) => (
+                    <label key={option.value} className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="severity_threshold"
+                        value={option.value}
+                        checked={alertSettings.severity_threshold === option.value}
+                        onChange={(e) => setAlertSettings({
+                          ...alertSettings,
+                          severity_threshold: e.target.value as 'all' | 'high_critical' | 'critical'
+                        })}
+                        className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500"
+                      />
+                      <div>
+                        <span className="font-medium text-gray-900">{option.label}</span>
+                        <p className="text-sm text-gray-500">{option.desc}</p>
+                      </div>
+                    </label>
                   ))}
                 </div>
               </div>
