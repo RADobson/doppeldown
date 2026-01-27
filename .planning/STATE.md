@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** Phase 4 - Automated Scanning (COMPLETE)
+**Current focus:** Phase 5 - Alert Settings (In progress)
 
 ## Current Position
 
-Phase: 4 of 5 (Automated Scanning) - COMPLETE
-Plan: 2 of 2 complete
-Status: Phase complete
-Last activity: 2026-01-27 — Completed 04-02-PLAN.md
+Phase: 5 of 5 (Alert Settings)
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 05-01-PLAN.md
 
-Progress: [████████████████░] 80%
+Progress: [█████████████████░] 90%
 
 ## Performance Metrics
 
@@ -68,6 +68,9 @@ Recent decisions affecting current work:
 - 04-01: scanFrequencyHours field (null/24/6/1) with deprecated scanFrequencyDays kept for backward compat
 - 04-02: crypto.randomInt for jitter (secure, built-in)
 - 04-02: 0-5 minute jitter range (spreads load without delaying scans)
+- 05-01: severity_threshold 'high_critical' as default (matches existing alert_on_severity behavior)
+- 05-01: Additive columns only in migration (safe rollback, backward compat)
+- 05-01: Keep alert_on_severity with @deprecated (existing code may reference it)
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 4 (Automated Scanning)
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
-Next: Phase 5 (Alert Settings)
+Next: 05-02-PLAN.md (Settings UI)
