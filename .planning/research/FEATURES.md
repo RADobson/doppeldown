@@ -1,187 +1,263 @@
-# Feature Landscape: AI-Powered Brand Protection
+# Features Research: v1.2 Polish
 
-**Domain:** Brand Protection SaaS with AI Threat Analysis
-**Researched:** 2026-01-23
-**Confidence:** MEDIUM (based on industry surveys, competitor analysis, and recent research papers)
+**Domain:** B2B SaaS Landing Pages + App UI (Security/Monitoring Tools)
+**Researched:** 2026-01-27
+**Confidence:** MEDIUM (WebSearch verified with official sources)
 
-## Table Stakes
+## Landing Page
 
-Features users expect from AI-powered brand protection tools. Missing = product feels incomplete.
+### Table Stakes
+
+Features users expect. Missing = product feels incomplete or untrustworthy.
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Visual Similarity Detection | Industry standard for impersonation detection; logo-based detection shows 84-88% accuracy rates | Medium | Screenshot comparison using perceptual hashing or vision models. Research shows simpler perceptual hash methods can outperform complex deep learning for stability. |
-| Automated Threat Scoring | Required to prioritize responses; security teams can't manually review every detection | Medium | 0-10 risk score combining domain characteristics, visual match, content analysis. Modern platforms use ML to reduce false positives. |
-| Real-time Domain Monitoring | Users expect immediate alerts; counterfeiters act fast | Low | Already have domain scanning; need to add AI analysis layer on captured evidence. |
-| Screenshot Evidence Collection | Required for takedown reports and visual analysis | Low | Already implemented in existing codebase. |
-| False Positive Filtering | Critical for usability; "human + AI" model is industry standard to prevent wrong takedowns | High | AI scoring + human review workflow. Automated systems risk flagging legitimate sellers without this. |
-| Basic Content Analysis | Detect credential harvesting forms, urgency language, brand name misuse | Medium | NLP analysis of page text/HTML for phishing indicators. Expected in modern platforms. |
+| Clear value prop in 5 seconds | 91% of users leave if they can't understand what you do immediately | Low | Pass the "5-second test" - visitor should know what product does, who it's for, why it matters |
+| Above-the-fold CTA | Users expect to see primary action without scrolling | Low | Median B2B SaaS conversion: 3.0%, top performers: 9.5%+ |
+| Trust signals | 91% of B2B buyers trust customer reviews over sales pitches | Medium | G2/Capterra badges, customer logos, testimonials, SOC 2/GDPR compliance badges |
+| Mobile optimization | B2B buyers discover on mobile, convert on desktop - broken mobile = lost lead | Medium | Even a 1-second delay in load time drastically lowers conversions |
+| Short forms (≤3 fields) | Forms with 5 or fewer fields convert 120% better than longer forms | Low | Forms with >3 fields have 25% lower conversion rate |
+| Fast page load (<2s) | Page speed signals product quality - slow page = slow product assumption | Medium | Core Web Vitals directly impact conversion |
+| Social proof placement | Testimonials must be near forms to reduce hesitation at conversion moment | Low | Place customer quotes/logos adjacent to CTA |
+| Message match with ads | Ad promise must match landing page or users bounce immediately | Low | Confusion = immediate abandonment |
+| Security badges | Security SaaS must demonstrate own security credibility | Low | SOC 2, ISO 27001, GDPR - table stakes for category |
 
-## Differentiators
+### Differentiators
 
-Features that set products apart. Not expected, but create competitive advantage.
+Features that set product apart. Not expected, but valued.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Multimodal Threat Analysis | Combine visual + content + behavioral signals for higher accuracy than competitors doing pattern matching only | High | "Multimodal late fusion" approach combining URL features, HTML code, and screenshots outperforms single-signal detection. |
-| AI-Powered Phishing Intent Detection | Distinguish actually-dangerous sites from benign registrations; reduce noise | Medium-High | Analyze for credential forms, payment capture, urgency tactics. NLP + behavioral analysis. GPT-4 Vision/Claude Vision can assess intent from screenshots. |
-| Confidence-Based Alerting | Different alert thresholds (critical/high/medium) reduce alert fatigue | Low | Tier alerts by confidence score. High-confidence threats auto-escalate; medium-confidence flags for review. |
-| Visual Brand Asset Library | Train AI on customer's specific brand assets for personalized detection | Medium | Store logos, screenshots, color schemes. Compare threats against customer's actual brand, not generic patterns. |
-| Explanation Generation | AI explains WHY a threat scored high (e.g., "login form + brand logo + urgent language") | Medium | LLM-powered threat summaries. Increases trust and speeds human review. Makes cold outreach demos more compelling. |
-| Zero-Day Phishing Detection | Detect brand-new threats before they're cataloged | Medium | Visual similarity works on novel sites. Research shows this is viable with screenshot comparison. |
-| Semantic URL Analysis | Detect obfuscated/encoded phishing URLs that bypass pattern matching | Medium | Use transformers (BERT-style) for semantic understanding vs simple regex. |
+| Interactive product demo | Screenshots → interactive components: +34% engagement | High | Embedded product previews, video demos, guided tours in hero section |
+| Minimal motion design | Motion that adds meaning, not noise - signals polish | Medium | Subtle animations on scroll, not gratuitous effects |
+| Personalized CTAs | Dynamic text based on user segment/traffic source | Medium | Can increase conversions 120%+ |
+| Story-driven design | Personality + storytelling vs generic feature lists | Medium | 2026 trend: conversion-focused narratives |
+| AI-powered personalization | Revenue lift 5-15%, CAC reduction up to 50% | High | Dynamic content based on visitor behavior/firmographics |
+| Real-time threat examples | For brand protection: show actual phishing/counterfeit examples | Medium | Builds urgency and demonstrates monitoring capability |
+| Live scan demo | Let prospects input their brand name for instant risk preview | High | High engagement but requires real-time scanning capability |
 
-## Anti-Features
+### Anti-Features
 
-Features to explicitly NOT build for v1. Common mistakes or premature optimization.
+Features to explicitly NOT build. Common mistakes in this domain.
 
 | Anti-Feature | Why Avoid | What to Do Instead |
 |--------------|-----------|-------------------|
-| Real-time Browser Extension | Significant engineering effort; not core value prop for B2B SaaS | Focus on backend detection and alerting. Enterprise customers want monitoring, not end-user tools. |
-| Automated Takedown Execution | Legal liability; false positives could harm legitimate businesses | Provide evidence reports for customer to initiate takedowns. "Human + AI" model prevents errors. |
-| Social Media Content Moderation | Out of scope; different problem domain from impersonation detection | Detect fake accounts, not moderate content. Leave content policy to platforms. |
-| Custom ML Model Training | Overkill for v1; vision APIs (GPT-4/Claude Vision) sufficient for MVP | Use existing vision APIs. Custom models only if accuracy insufficient after launch. |
-| Multi-language Phishing Detection | Complexity explosion; English-only is viable for launch market | Defer to post-MVP. Target English-speaking markets initially. |
-| Dark Web Monitoring | Different infrastructure; not needed for cold outreach demo value | Focus on surface web threats. Enterprise customers may request later. |
-| Historical Threat Database | Storage/cost overhead; not needed for live scanning value prop | Store recent scans only. Archive after takedown. Historical analytics defer to v2. |
+| Wall of text | Security SaaS landing pages often over-explain features | Use clear headline + 1-2 sentence value prop + visuals |
+| Long forms upfront | Asking for company size, budget, role before showing value kills conversion | Max 3 fields (name, email, company). Get more info later |
+| Homepage as landing page | Driving paid traffic to homepage instead of dedicated landing page wastes ad spend | Build conversion-focused pages per campaign |
+| Features before benefits | Listing "AI-powered monitoring" without explaining pain it solves | Lead with pain ("Brand impersonation costs $X/year"), then solution |
+| Auto-playing videos | Annoys users, hurts accessibility | Play on click only |
+| Form above value explanation | Asking for email before user understands if product solves their problem | Show value first, then form |
+| Multiple competing CTAs | "Start Free Trial" + "Book Demo" + "Download Whitepaper" = decision paralysis | One primary CTA per page section |
+| Missing mobile experience | 64% of features in SaaS are never used - don't showcase them all | Focus on 3-5 core capabilities |
+| Generic stock photos | Reduces credibility, signals lack of authenticity | Use product screenshots, real customer photos, or no images |
+
+## App UI
+
+### Table Stakes
+
+Features users expect. Missing = product feels amateur.
+
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Consistent spacing system | Random spacing = amateur. 8pt grid = professional | Low | Use 8pt spacing system (8, 16, 24, 32, 40px) consistently |
+| Limited typography (1-2 fonts) | Multiple fonts = design chaos | Low | Inter is most popular UI font in 2026 for excellent screen legibility |
+| Responsive grid layouts | Cards/components must adapt to screen size gracefully | Medium | Grid-based layouts with clear boundaries |
+| Clear visual hierarchy | Users need to know what's most important at a glance | Medium | Layouts optimized for F-pattern scanning = 34% faster task completion |
+| Loading states | Users need feedback when actions are processing | Low | Skeleton screens, spinners, progress indicators |
+| Empty states | Blank screens feel broken - need guidance | Low | Illustrate what will appear + CTA to populate |
+| Accessible contrast (4.5:1) | WCAG requirement: 4.5:1 for normal text, 3:1 for large text | Low | Test all text against backgrounds |
+| Notification system | Users expect to be informed of important events | Medium | Toast notifications, in-app alerts |
+| Search functionality | Users expect to find things quickly | Medium | Especially critical for dashboards with lots of data |
+| Keyboard navigation | Professional apps are keyboard-accessible | Medium | Tab order, focus states, keyboard shortcuts |
+| Visible focus states | Users need to see where they are when tabbing | Low | High-contrast outline on focused elements |
+
+### Differentiators
+
+Features that set product apart from competitors.
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Customizable dashboards | Users want to prioritize their own metrics | High | Drag-drop widgets, saved layouts per user |
+| Progressive disclosure | Show basics → reveal advanced options when ready | Medium | Prevents cognitive overload. 64% of features are never used - hide advanced options initially |
+| AI-personalized interface | Dashboard adapts to user role and common tasks | High | 2026 trend: AI learns usage patterns |
+| 3D data visualization | For complex security data, depth helps understanding | High | Emerging trend for high-complexity dashboards |
+| Guided workflows | Step-by-step wizards for complex tasks | Medium | Reduces support burden, increases feature adoption |
+| Design system consistency | All components follow same visual language | Medium | Signals professionalism and attention to detail |
+| Micro-interactions | Subtle feedback on hover, click, drag | Medium | Buttons that respond, cards that lift on hover |
+| Context-aware help | Tooltips and help text appear based on user action | Medium | Reduces need to leave app for docs |
+| Pre-built dashboard templates | Industry-specific or role-specific starting points | Medium | Common in Datadog, New Relic - speeds onboarding |
+
+### Anti-Features
+
+Common UI mistakes that signal amateur development.
+
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Feature overload | 64% of features are rarely/never used. More features ≠ more value | Progressive disclosure: hide advanced features until needed |
+| Inconsistent spacing | Random margins/padding screams "no design system" | Define spacing tokens (8, 16, 24px) and use consistently |
+| Multiple font families | >2 fonts = visual chaos | Stick to 1-2 typefaces max |
+| Designing for internal opinions | Building for sales/leadership instead of actual users = 70% of SaaS churn | User research, behavioral analytics, not stakeholder opinions |
+| Poor onboarding | Throwing users into complex interface without guidance | Guided tours, empty states with CTAs, progressive feature introduction |
+| Treating UX as one-time project | "Set and forget" leads to feature creep and inconsistency | Continuous UX iteration, design system maintenance |
+| Ignoring cognitive load | Showing all options/data at once overwhelms users | Break workflows into clear steps, use tabs/accordions |
+| Generic error messages | "Error 500" tells users nothing | Explain what went wrong + how to fix it |
+| No feedback on actions | Silent buttons make users click multiple times | Immediate visual feedback (spinner, color change, confirmation) |
+| Over-complicated pricing | Confusing tiers/features reduce conversion | Clear differentiation, visual comparison tables |
+
+## Dark Mode
+
+### Table Stakes
+
+Features users expect. Missing = dark mode feels broken or lazy.
+
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Manual toggle | 82.7% of users have dark mode preference - must allow override | Low | Don't force system preference only |
+| Respect system preference | Users expect prefers-color-scheme detection | Low | CSS: @media (prefers-color-scheme: dark) |
+| Persist user choice | Theme choice should survive page reload | Low | localStorage to save preference |
+| Avoid pure black backgrounds | Pure black (#000) causes eye strain | Low | Use #121212, #1A1A1A instead |
+| Avoid pure white text | Pure white (#FFF) on dark = harsh contrast | Low | Use #E0E0E0, #C9D1D9 for text |
+| Desaturated accent colors | Bright colors (red, green, blue) too intense on dark backgrounds | Low | Reduce saturation to 70-80% in dark mode |
+| Proper contrast ratios | WCAG: 4.5:1 for normal text, 3:1 for large text | Low | Test all text/background combinations |
+| Images don't invert | Photos/logos should render correctly, not color-inverted | Low | Handle images separately from UI colors |
+| No flicker on load | Theme should apply before first paint | Medium | CSS variables + inline script or SSR |
+
+### Differentiators
+
+Features that make dark mode feel polished and professional.
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Elevation via lightness | Higher surfaces = lighter shades (simulate depth without shadows) | Medium | Material Design approach: elevated = lighter gray |
+| Subtle glows instead of shadows | Traditional drop shadows don't work on dark backgrounds | Medium | Use gentle glows, slight brightness differentials |
+| Tonal layering | Multiple shades of dark gray to create depth | Medium | 5-7 shades from #0A0A0A to #2A2A2A |
+| Context-aware opacity | Overlays use subtle transparency to distinguish layers | Medium | Modal backdrops, dropdown backgrounds |
+| Semantic color tokens | Variables like --color-bg-surface, not hard-coded hex | Low | Enables theme switching without component changes |
+| Smooth transitions | Theme switches animate smoothly | Low | CSS transitions on color properties (200-300ms) |
+| Component-specific adjustments | Charts, graphs, code blocks get specialized dark themes | High | Not just inverting colors - redesigning for legibility |
+| Reduced motion respect | Respect prefers-reduced-motion for theme transitions | Low | Accessibility requirement |
+
+### Anti-Features
+
+Dark mode mistakes that ruin the experience.
+
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Auto-inverting everything | CSS filter: invert() breaks images, logos, charts | Design dark surfaces intentionally, handle media separately |
+| Pure black backgrounds | Harsh contrast, eye strain, accessibility issues | Use dark gray (#121212+) |
+| No manual override | Forcing system preference only frustrates users | Always provide toggle |
+| Standard shadows on dark backgrounds | Drop shadows blend into dark background or look wrong | Use glows, lightness elevation, subtle borders |
+| Same colors as light mode | Saturated colors too intense on dark backgrounds | Desaturate, adjust lightness specifically for dark mode |
+| Forgetting form inputs | White input backgrounds in dark mode = jarring | Dark input backgrounds with lighter borders |
+| Inconsistent application | Some components dark, some light = broken experience | Apply theme systematically across all components |
+| No contrast testing | Assuming inversions work without testing | Test every text/background combination against WCAG |
+| Layout shifts on switch | Elements moving/resizing when theme changes | Use consistent spacing regardless of theme |
+| Ignoring third-party components | Embedded maps, widgets, ads stay light mode | Coordinate with or replace third-party components |
 
 ## Feature Dependencies
 
 ```
-Evidence Collection (existing)
-    |
-    v
-AI Visual Similarity Analysis
-    |
-    +-- Screenshot Comparison
-    |   |
-    |   v
-    |   Brand Asset Library (optional enhancement)
-    |
-    v
-AI Content Analysis
-    |
-    +-- Phishing Intent Detection
-    +-- Credential Harvesting Detection
-    |
-    v
-Threat Scoring System
-    |
-    +-- Combine visual + content + domain signals
-    +-- Confidence scoring (0-10)
-    |
-    v
-Alert Prioritization
-    |
-    +-- Confidence-based thresholds
-    +-- Explanation generation
-    |
-    v
-Report Generation (existing, enhanced with AI findings)
-```
+Landing Page Flow:
+Mobile Optimization → Fast Load Speed → Clear Value Prop → Trust Signals → Short Form → Conversion
 
-**Critical Path for AI Milestone:**
-1. Visual Similarity Analysis (compare captured screenshots to brand's official site)
-2. Content Analysis (detect phishing indicators in HTML/text)
-3. Threat Scoring (combine signals into 0-10 score)
-4. Alert Integration (surface high-confidence threats in existing dashboard)
+App UI Foundation:
+Design System (spacing + typography) → Component Library → Dark Mode → Customization
+
+Dark Mode Dependency Chain:
+Color Tokens → System Preference Detection → Manual Toggle → Persistence → Elevation System
+```
 
 ## MVP Recommendation
 
-For AI-powered brand protection v1, prioritize:
+For v1.2 polish milestone, prioritize:
 
-1. **Visual Similarity Detection** - Table stakes, enables zero-day detection
-2. **Basic Threat Scoring** - Combine domain type + visual match + content flags into simple 0-10 score
-3. **Phishing Intent Detection** - Differentiator; use vision API to assess screenshots for credential forms, urgency language
-4. **Confidence-Based Alerting** - Reduce noise; only surface high-confidence threats
-5. **Explanation Generation** - Demo-friendly; show prospects WHY their brand is at risk
+### Landing Page (High Impact):
+1. Clear 5-second value prop (rewrite hero section)
+2. Reduce form fields to 3 max
+3. Add trust signals (badges, testimonials near CTA)
+4. Mobile optimization audit
+5. Page speed optimization
 
-Defer to post-MVP:
+### App UI (Medium Impact):
+1. Implement 8pt spacing system consistently
+2. Audit typography (reduce to 1-2 fonts)
+3. Add proper loading/empty states
+4. Fix contrast ratio issues
+5. Consistent focus states for accessibility
 
-- **Brand Asset Library** - Start with single official site comparison; add custom asset library if customers request
-- **Multimodal Fusion** - Begin with simple weighted score; evolve to sophisticated fusion if accuracy insufficient
-- **Semantic URL Analysis** - Domain pattern matching sufficient for v1; add if URL obfuscation becomes common
-- **Dark Web Monitoring** - Different infrastructure; wait for enterprise customer demand
-- **Historical Analytics** - Storage overhead; focus on real-time detection for launch
+### Dark Mode (High Impact):
+1. Manual toggle + system preference detection
+2. Proper color palette (#121212 backgrounds, desaturated accents)
+3. Elevation via lightness (not shadows)
+4. Persist user choice
+5. Smooth transitions
 
-## Implementation Strategy
+## Defer to Post-v1.2
 
-**Quick Win Path (Weekend Sprint):**
-1. Use GPT-4 Vision or Claude Vision API (already have access)
-2. Simple prompt: "Compare these two screenshots. Rate visual similarity 0-10 and identify phishing indicators."
-3. Combine vision score + existing domain type + simple content flags (login forms, "urgent", brand name)
-4. Threshold at score >= 7 for high-priority alerts
-5. Display AI explanation in existing dashboard
+Features that add polish but aren't critical for professional appearance:
 
-**Avoid:**
-- Custom ML models (use API vision models)
-- Complex multimodal architectures (simple weighted score works)
-- Automated takedowns (legal risk)
-- Over-engineered scoring (0-10 scale sufficient)
-
-## Competitive Landscape Insights
-
-**What competitors do:**
-- **MarqVision**: 99%+ accuracy with image recognition + semantic analysis across 1,500+ platforms
-- **Doppel**: Agentic AI for automated takedowns (note: this is different company, not this product)
-- **Red Points**: ML models detect counterfeits even when images/wording altered
-- **Allure Security**: Analyze tens of millions of assets daily, detect scams in minutes
-
-**Differentiation opportunity:**
-- Most competitors focus on counterfeit product listings (e-commerce)
-- Fewer focus on phishing/impersonation for B2B brands
-- "Live demo" cold outreach angle is underutilized
-- Explanation generation creates trust vs black-box scoring
-
-## Confidence Assessment
-
-| Aspect | Level | Reason |
-|--------|-------|--------|
-| Table Stakes Features | HIGH | Multiple industry sources confirm visual similarity + threat scoring expected |
-| Differentiators | MEDIUM | Based on competitor analysis and research papers; some features may be table stakes in 6 months |
-| Anti-Features | MEDIUM | Based on analysis of what enterprises request vs MVP needs; may need adjustment based on customer feedback |
-| Technical Feasibility | HIGH | Vision APIs proven effective; recent research confirms viability |
-| MVP Scope | HIGH | Aligned with weekend sprint timeline and existing codebase capabilities |
-
-## Research Gaps
-
-- **Vision API Cost Comparison**: Need to test GPT-4 Vision vs Claude Vision for cost/accuracy tradeoffs in bulk scanning
-- **False Positive Rates**: Industry benchmarks exist but need validation against DoppelDown's specific use case
-- **Customer Willingness to Pay**: No data on pricing sensitivity for AI features vs basic pattern matching
-- **Takedown Success Rates**: Unknown how AI-generated evidence reports impact registrar/host takedown compliance
+- Interactive product demos (High complexity, can use video instead)
+- AI personalization (Requires significant backend work)
+- Customizable dashboards (Complex, current fixed layout acceptable)
+- 3D visualizations (Emerging trend, not expected yet)
+- Progressive disclosure refactoring (Can improve incrementally)
 
 ## Sources
 
-### Brand Protection Industry (2026)
-- [Cyble: AI-Powered Brand Monitoring](https://cyble.com/knowledge-hub/ai-brand-monitoring-cyber-threat-detection/)
-- [BrandShield: The Future of AI-Powered Brand Protection](https://www.brandshield.com/blog/brand-protection-ai/)
-- [MarqVision: 10 Best Brand Protection Tools Reviewed (2026)](https://www.marqvision.com/blog/brand-protection-tools)
-- [The CMO: 27 Best Brand Protection Software Reviewed For 2026](https://thecmo.com/tools/best-brand-protection-software/)
-- [Netcraft: The Comprehensive Guide to Brand Protection (2026)](https://www.netcraft.com/blog/the-comprehensive-guide-to-brand-protection-7-proven-ways-to-protect-your-brand-in-2026)
+### Landing Page Research
+- [Best B2B SaaS Website Examples (2026)](https://www.vezadigital.com/post/best-b2b-saas-websites-2026)
+- [Best Practices for Designing B2B SaaS Landing Pages – 2026](https://genesysgrowth.com/blog/designing-b2b-saas-landing-pages)
+- [20 Best SaaS Landing Pages + 2026 Best Practices](https://fibr.ai/landing-page/saas-landing-pages)
+- [10 SaaS Landing Page Trends for 2026](https://www.saasframe.io/blog/10-saas-landing-page-trends-for-2026-with-real-examples)
+- [8 Costly B2B Landing Page Mistakes](https://www.exitfive.com/articles/8-reasons-your-b2b-landing-pages-arent-converting)
+- [10 Landing Page Mistakes to Avoid in 2026](https://moosend.com/blog/landing-page-mistakes/)
+- [9 B2B Landing Page Lessons From 2025](https://instapage.com/blog/b2b-landing-page-best-practices/)
 
-### Visual Similarity Detection
-- [Cyble: Brand Impersonation 2025 Threats and 2026 Outlook](https://cyble.com/knowledge-hub/brand-impersonation-2025-threats-2026/)
-- [MDPI: Phishing Website Impersonation Detection Methods (Jan 2026)](https://www.mdpi.com/2076-3417/16/2/640)
-- [arXiv: Evaluating Visual Similarity-based Phishing Detection Models (2025)](https://arxiv.org/html/2405.19598v2)
-- [ACM: VisualPhishNet Zero-Day Detection by Visual Similarity (2020)](https://dl.acm.org/doi/10.1145/3372297.3417233)
+### App UI Research
+- [159 SaaS Dashboard UI Design Examples](https://www.saasframe.io/categories/dashboard)
+- [B2B SaaS UX Design in 2026](https://www.onething.design/post/b2b-saas-ux-design)
+- [Top 12 SaaS Design Trends for 2026](https://www.designstudiouiux.com/blog/top-saas-design-trends/)
+- [Best Dashboard Design Examples 2026](https://muz.li/blog/best-dashboard-design-examples-inspirations-for-2026/)
+- [SaaS UX Design Best Practices 2026](https://www.designstudiouiux.com/blog/saas-ux-design-the-ultimate-guide/)
+- [Datadog vs New Relic Comparison 2026](https://betterstack.com/community/comparisons/datadog-vs-newrelic/)
+- [The Art of UI Consistency](https://medium.com/@atnoforuiuxdesigning/the-art-of-ui-consistency-grids-typography-and-spacing-3d27352c7974)
+- [Best UI Design Fonts 2026](https://www.designmonks.co/blog/best-fonts-for-ui-design)
 
-### AI Phishing Detection
-- [USCS Institute: AI-Powered Phishing Detection Strategies for 2026](https://www.uscsinstitute.org/cybersecurity-insights/blog/ai-powered-phishing-detection-and-prevention-strategies-for-2026)
-- [AI News: Why AI Phishing Detection Will Define Cybersecurity in 2026](https://www.artificialintelligence-news.com/news/why-ai-phishing-detection-will-define-cybersecurity-in-2026/)
-- [StrongestLayer: AI-Generated Phishing Enterprise Threat of 2026](https://www.strongestlayer.com/blog/ai-generated-phishing-enterprise-threat)
-- [MDPI: AI-Driven Phishing Detection with Reinforcement Learning](https://www.mdpi.com/2624-800X/5/2/26)
+### Dark Mode Research
+- [Best Practices for Dark Mode in Web Design 2026](https://natebal.com/best-practices-for-dark-mode/)
+- [Dark Mode Design Best Practices in 2026](https://www.tech-rz.com/blog/dark-mode-design-best-practices-in-2026/)
+- [10 Dark Mode UI Best Practices 2026](https://www.designstudiouiux.com/blog/dark-mode-ui-design-best-practices/)
+- [WCAG Contrast Requirements](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html) (Official W3C)
+- [Dark Mode Done Right: Best Practices for 2026](https://medium.com/@social_7132/dark-mode-done-right-best-practices-for-2026-c223a4b92417)
 
-### Threat Scoring and Intelligence
-- [SecurityScorecard: How Brand Protection Software Shields Your Reputation](https://securityscorecard.com/blog/how-brand-protection-software-shields-your-reputation/)
-- [Recorded Future: Brand Intelligence Overview](https://www.recordedfuture.com/products/brand-intelligence)
-- [ShadowDragon: 21 Best Threat Intelligence Platforms (2026)](https://shadowdragon.io/blog/best-threat-intelligence-platforms/)
+### Brand Protection Tools
+- [10 Best Brand Protection Softwares 2026](https://www.redpoints.com/blog/best-brand-protection-software/)
+- [Top 7 Cloud Security Monitoring Tools 2026](https://www.supermonitoring.com/blog/best-cloud-security-monitoring-tools/)
 
-### False Positive Reduction
-- [ZeroFox: How AI Augments Brand Protection Software](https://www.zerofox.com/blog/ai-brand-protection-software/)
-- [MarqVision: How AI is Revolutionizing Brand Protection Beyond Mass Detection](https://www.marqvision.com/blog/how-ai-is-revolutionizing-brand-protection-beyond-mass-detection)
-- [Hyperproof: Data Protection Strategies for 2026](https://hyperproof.io/resource/data-protection-strategies-for-2026/)
+## Confidence Assessment
 
-### Credential Harvesting Detection
-- [Abnormal AI: Understanding Credential Harvesting](https://abnormal.ai/blog/how-credential-harvesting-works)
-- [VMRay: Credential Harvesting Detection & Prevention](https://www.vmray.com/credential-harvesting/)
-- [PYMNTS: Predictive AI Bridges Security Response Gap](https://www.pymnts.com/artificial-intelligence-2/2026/predictive-ai-bridges-the-security-response-gap-in-automated-attacks/)
+| Category | Confidence | Reason |
+|----------|-----------|--------|
+| Landing Page Table Stakes | HIGH | Cross-verified across 7+ sources, consistent findings, backed by conversion data |
+| App UI Table Stakes | HIGH | Industry standards (8pt grid, WCAG), verified with official W3C documentation |
+| Dark Mode Technical | HIGH | CSS standards verified, WCAG contrast verified with official source |
+| Differentiators | MEDIUM | Based on 2026 trends from WebSearch, not all tested in production |
+| Specific Statistics | MEDIUM | Sourced from industry reports via WebSearch, not independently verified |
+
+## Research Notes
+
+**What makes this research specific to security/monitoring SaaS:**
+- Trust signals (SOC 2, ISO 27001) are table stakes, not differentiators
+- Value proposition must address pain (brand damage, financial loss) before features
+- Real-time data visualization is more critical than in other SaaS categories
+- Security tools must demonstrate their own security credibility
+
+**Key insight from competitor analysis:**
+Leading tools (Datadog, New Relic) invest heavily in dashboard customization and pre-built templates. Both have "clean, intuitive" UIs but rich functionality through progressive disclosure.
+
+**2026-specific trends:**
+- AI personalization becoming expected (not just differentiator)
+- Dark mode now table stakes (82.7% usage)
+- Interactive demos replacing static screenshots
+- Minimal motion (not no motion) signals polish

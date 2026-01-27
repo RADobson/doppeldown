@@ -1,367 +1,618 @@
-# Domain Pitfalls: AI-Powered Brand Protection
+# Pitfalls Research: v1.2 Polish
 
-**Domain:** Brand protection / phishing detection with AI
-**Researched:** 2026-01-23
-**Confidence:** MEDIUM (verified patterns from multiple 2026 sources, some LOW confidence on specific API behaviors)
+**Domain:** B2B SaaS Polish (Landing Page Redesign, UI Polish, Dark Mode)
+**Researched:** 2026-01-27
+**Overall Confidence:** HIGH (verified with multiple 2026 sources)
 
-## Critical Pitfalls
+## Executive Summary
 
-Mistakes that cause rewrites, revenue loss, or major issues.
+Polish milestones are deceptively dangerous. The risk isn't technical complexity but scope creep, broken workflows, and alienating existing users. Teams frequently underestimate how "just polish" spirals into feature development, how redesigns break learned behaviors, and how dark mode exposes hardcoded assumptions throughout the codebase.
 
-### Pitfall 1: Uncontrolled Vision API Costs
-**What goes wrong:** Vision API costs spiral out of control due to naive implementation scanning every threat at full resolution without batching, caching, or rate limiting.
+**Critical insight:** Revolutionary redesigns fail more often than evolutionary ones. Users resist change even when designs are objectively better. Success requires incremental rollouts, extensive testing, and preserving functional anchors that users rely on.
 
-**Why it happens:** Teams implement "scan everything immediately" without considering:
-- Each GPT-4 Vision API call costs based on image size and token output
-- Scanning 500+ domain variations per brand = 500+ API calls
-- No caching means rescanning unchanged screenshots repeatedly
-- Video/complex image processing can cost 10-100x more than simple queries
+---
 
-**Consequences:**
-- $1000+ monthly bill for small user base
-- Unable to offer free tier profitably
-- Forced to raise prices or cut features
-- Weekend budget exhausted before launch
+## Landing Page Pitfalls
 
-**Prevention:**
-- **Cache aggressively:** Store Vision API results with screenshot hash, skip rescans for 7+ days
-- **Batch intelligently:** Scan top 50 high-risk domains first, defer low-priority
-- **Optimize image size:** Resize screenshots to 640x480 minimum (not 4K) before sending
-- **Set hard limits:** Per-user daily scan limits, alert at 80% budget threshold
-- **Choose right API:** Claude Vision often cheaper than GPT-4V for similarity tasks
+### Critical: Redesigning for Existing Customers
 
-**Detection:**
-- Vision API costs >$100 in first week
-- Cost per scan >$0.10
-- No caching layer in architecture
-- Full-resolution screenshots sent to API
+**What goes wrong:** Existing customers bookmark or link directly to landing pages. A redesign that changes URLs, CTAs, or navigation breaks their workflows. Worse, redesigning for new acquisition can confuse existing customers trying to access their accounts.
 
-**Phase impact:** Phase 1 (AI Integration) must include cost management from day one, or demo costs become unsustainable.
-
-### Pitfall 2: False Positive Overload
-**What goes wrong:** AI flags too many benign sites as threats, overwhelming users and destroying trust in the system.
-
-**Why it happens:**
-- Default similarity thresholds (0.7-0.8) too sensitive for brand protection
-- No domain context (parked domains, competitors, news articles all flagged)
-- Visual similarity alone misses intent (lookalike logo on legitimate news article)
-- Lack of human-in-the-loop validation for edge cases
+**Why it happens:** Teams focus solely on acquisition metrics and forget existing users interact with the landing page.
 
 **Consequences:**
-- Users ignore all alerts (alert fatigue)
-- "Boy who cried wolf" problem kills product value
-- Support overwhelmed with "why is this flagged?" tickets
-- Churn from frustrated users
+- Lost customers unable to find login
+- Support tickets surge during rollout
+- Existing customers see messaging that doesn't apply to them
+- Broken inbound links from docs/emails
 
 **Prevention:**
-- **Multi-signal scoring:** Combine visual similarity + domain reputation + content analysis + WHOIS age
-- **Conservative defaults:** Start with 0.85+ similarity threshold, let users lower if needed
-- **Domain context filters:** Auto-exclude news sites, established competitors, parked domains >1 year old
-- **Tiered alerts:** Critical (95%+ match + new domain), Warning (80-95%), Info (70-80%)
-- **Human validation loop:** For demo/outreach, manually verify top threats before showing prospects
+- Maintain URL structure (use redirects if URLs must change)
+- Preserve login/dashboard access paths
+- Test with existing customer segments, not just prospects
+- A/B test gradually (not big-bang rollout)
+- Add "existing customer?" shortcuts prominently
 
-**Detection:**
-- >40% of flagged threats marked "false positive" by users
-- Users disable email alerts
-- Average threat score <0.75
-- No differentiation between threat severities
+**Detection:** Monitor bounce rates and support tickets from logged-in vs logged-out traffic during rollout.
 
-**Phase impact:** Phase 1 must establish scoring thresholds through testing real brands before launch. Phase 2 needs feedback loop for threshold tuning.
+**Phase to address:** Phase 1 (Landing Page) - Add testing plan that includes existing customer flows.
 
-### Pitfall 3: Training Data Poverty
-**What goes wrong:** AI models trained on insufficient or outdated examples produce unreliable threat assessments, especially for phishing intent detection.
+---
 
-**Why it happens:**
-- Small dataset of "known good" vs "known bad" examples
-- Training on old phishing patterns (pre-AI-generated content)
-- No examples of customer's specific brand/industry
-- Overfitting to limited dataset causes poor generalization
+### Critical: Design Over Outcomes
+
+**What goes wrong:** Pages that win design awards can still underperform if they lack clarity, proof, or clear next steps. Teams optimize for aesthetics instead of conversion.
+
+**Why it happens:** Designers prioritize visual impact, stakeholders have subjective opinions, and teams lack conversion baseline data.
 
 **Consequences:**
-- Model misses modern AI-generated phishing (82.6% of phishing in 2026 uses AI)
-- Fails to detect subtle brand impersonation
-- High variance between similar threats (inconsistent scoring)
-- Can't adapt to new attack patterns
+- Lower conversion rates despite "better" design
+- Unclear value proposition
+- Users bounce because they don't understand what product does
+- Wasted redesign effort
 
 **Prevention:**
-- **Use pre-trained models first:** Don't train from scratch—leverage Claude/GPT-4V's existing phishing knowledge
-- **Prompt engineering over training:** Craft detailed prompts with examples rather than fine-tuning
-- **Continuous learning:** Log all user feedback (real threat / false positive) for future model improvement
-- **Domain-specific context:** Include brand guidelines, official color schemes, legitimate domain list in prompts
-- **Simulation datasets:** Generate synthetic phishing examples using AI to expand training data
+- Establish conversion baseline BEFORE redesign
+- Treat landing page as conversion system, not visual asset
+- Test headline/value prop variations first (copy matters more than visuals)
+- Include clear proof points and next steps
+- Validate with A/B testing against current page
 
-**Detection:**
-- Model confidence scores <0.6 on clear threats
-- Inconsistent scores for visually similar sites
-- Missing obvious credential harvesting forms
-- No mechanism to incorporate user feedback
+**Detection:** Conversion rate drops or fails to improve post-redesign.
 
-**Phase impact:** Phase 1 should use prompt engineering with GPT-4V/Claude rather than attempting model training. Phase 3+ can explore fine-tuning if needed.
+**Phase to address:** Phase 1 (Landing Page) - Set success metrics before design work begins.
 
-### Pitfall 4: Vision API Limitations Blindness
-**What goes wrong:** Relying on Vision API for tasks it fundamentally struggles with (OCR, counting, spatial reasoning, color accuracy) causes systematic misdetection.
+---
 
-**Why it happens:**
-- Assuming Vision APIs are perfect at "seeing"
-- Not understanding documented limitations (small text, non-Latin characters, object counting)
-- Using API vs web interface results (API often less accurate)
-- No fallback for API failure modes
+### High: Buzzword-Heavy Copy
+
+**What goes wrong:** Copy stuffed with "seamless," "AI-powered," "revolutionary," "game-changing" communicates nothing. About 95% of B2B landing pages have this problem. Users can't determine if product solves their actual problem.
+
+**Why it happens:** Teams copy competitor language, avoid specificity, or try to sound impressive rather than clear.
+
+**Prevention:**
+- Use specific, concrete language about what product does
+- Show don't tell (use screenshots/demos instead of adjectives)
+- Test copy with non-technical users
+- Remove every buzzword that could apply to any product
+- Focus on user problems, not product features
+
+**Detection:** Users say "I don't understand what this does" in testing.
+
+**Phase to address:** Phase 1 (Landing Page) - Content audit before design work.
+
+---
+
+### High: Slow Loading Times
+
+**What goes wrong:** Landing page redesigns often add visual flourishes (gradients, 3D shapes, animations, high-res images) that tank performance. Slow pages increase bounce rate and hurt conversion.
 
 **Consequences:**
-- Misses phishing sites with altered text (reads "Eggs" instead of "Eggless")
-- Fails on non-English brand names
-- Can't count social icons to detect fake social proof
-- Mixes up adjacent element colors (critical for logo matching)
-- Returns "I can't read this image" errors silently
+- Higher bounce rate
+- Lower conversion rate
+- Worse SEO rankings
+- Poor mobile experience
 
 **Prevention:**
-- **Dedicated OCR for text extraction:** Use separate OCR API (Tesseract, Google Vision OCR) for text-heavy analysis
-- **Pre-process images:** Ensure 300+ DPI, remove noise, proper contrast before sending
-- **Multi-model validation:** Use Claude Vision AND GPT-4V for critical decisions, require agreement
-- **Explicit prompts:** "Focus on logo in top-left, ignore text" rather than generic "analyze this"
-- **Error handling:** Detect "can't read image" responses, retry with preprocessing or human review
+- Set performance budget before design (target load time < 2s)
+- Optimize images (WebP, lazy loading, compression)
+- Minimize JavaScript for decorative elements
+- Test on throttled connections
+- Monitor Core Web Vitals
 
-**Detection:**
-- Frequent OCR errors in logs
-- Vision API returns generic "unable to analyze" responses
-- Text-based phishing indicators missed (urgency language, credential forms)
-- Reports show obvious logo differences scored as high similarity
+**Detection:** Performance monitoring shows degradation; bounce rate increases on slower connections.
 
-**Phase impact:** Phase 1 needs robust error handling and multi-signal detection (not Vision-only). Phase 2 should add dedicated OCR for text analysis.
+**Phase to address:** Phase 1 (Landing Page) - Performance testing as gate before launch.
 
-## Moderate Pitfalls
+---
 
-Mistakes that cause delays, technical debt, or reduced accuracy.
+### Medium: One-Size-Fits-All Content
 
-### Pitfall 5: Screenshot Quality Inconsistency
-**What goes wrong:** Inconsistent screenshot quality (resolution, timing, viewport size) causes same site to score differently across scans.
+**What goes wrong:** Single landing page for all roles/industries fails to address critical questions for each decision-maker. A CTO, VP of Finance, and operations lead need different information.
 
-**Why it happens:**
-- Variable viewport sizes (mobile vs desktop)
-- Capturing before page fully loads (missing images/CSS)
-- Different browser rendering engines
-- No standardization of screenshot parameters
+**Why it happens:** Easier to maintain one page than multiple variants.
 
 **Prevention:**
-- **Standardize capture:** Fixed 1920x1080 viewport, wait 5s after page load, disable animations
-- **Consistent browser:** Use single Playwright/Puppeteer config for all screenshots
-- **Retry logic:** If screenshot fails quality checks (too small, blank), retry once
-- **Image normalization:** Resize all to same dimensions before Vision API comparison
+- Create role-specific landing pages if targeting multiple personas
+- Use dynamic content based on traffic source
+- Test "Who are you?" hero section that directs to tailored sub-pages
+- Prioritize primary persona if resources limited
 
-**Detection:**
-- Same domain shows different similarity scores across scans
-- Screenshots include loading spinners or broken images
-- Inconsistent image dimensions in storage
+**Detection:** Low engagement from specific traffic segments.
 
-**Phase impact:** Phase 1 should establish screenshot standards in scanning service.
+**Phase to address:** Phase 1 (Landing Page) - Define primary persona early; defer multi-persona support to post-v1.2.
 
-### Pitfall 6: Rate Limiting Naivety
-**What goes wrong:** Hitting Vision API rate limits during batch scans causes job failures and incomplete threat assessments.
+---
 
-**Why it happens:**
-- No exponential backoff on API errors
-- Parallel scanning without concurrency limits
-- Ignoring 429 Too Many Requests responses
-- No queue system for large scan jobs
+### Medium: Form Placement Issues
+
+**What goes wrong:** Most B2B landing pages put forms at the top before visitors understand if product solves their problem. Premature friction kills conversion.
 
 **Prevention:**
-- **Implement queue:** Bull/BullMQ for scan jobs with concurrency = 3-5
-- **Exponential backoff:** Retry failed API calls with 2x delay up to 5 attempts
-- **Monitor rate limits:** Track API usage per minute, pause if approaching limits
-- **Stagger batch scans:** Scan 50 domains over 10 minutes rather than all at once
+- Place forms after value proposition and proof points
+- Use progressive disclosure (start with low-commitment CTA)
+- Test form length (fewer fields usually convert better)
+- For high-value offers, forms can be longer
 
-**Detection:**
-- API 429 errors in logs
-- Scan jobs marked "failed" without retry
-- Missing threat data for some domains in batch
+**Detection:** High form abandonment rate, low form completion.
 
-**Phase impact:** Phase 2 (Automated Scanning) must include proper queue system before enabling scheduled scans.
+**Phase to address:** Phase 1 (Landing Page) - CTA placement testing.
 
-### Pitfall 7: Prompt Engineering Neglect
-**What goes wrong:** Generic prompts to Vision API produce vague, unusable responses instead of structured threat intelligence.
+---
 
-**Why it happens:**
-- Treating Vision API like image upload (no context provided)
-- Not requesting structured output (JSON)
-- Failing to specify what to look for
-- No examples in prompt for few-shot learning
+### Low: Rare, Large Redesigns
+
+**What goes wrong:** Teams that treat landing pages as static assets and do infrequent large redesigns see worse results than teams that iterate continuously with weekly/biweekly tests.
 
 **Prevention:**
-- **Structured prompts:** "Analyze screenshot for phishing indicators. Return JSON: {visualSimilarity: 0-1, hasLoginForm: boolean, brandMismatch: string, urgencyLanguage: boolean, overallThreat: 0-1}"
-- **Brand context:** Include brand's official domain, logo description, color scheme in prompt
-- **Few-shot examples:** Provide 2-3 examples of phishing vs legitimate sites
-- **Specific instructions:** "Focus on logo in top-left, color scheme, presence of password fields"
+- Build continuous testing into roadmap
+- Start A/B testing immediately post-launch
+- Make small, measurable improvements
+- Track landing page as living product, not project
 
-**Detection:**
-- Vision API returns narrative text instead of structured data
-- Need manual parsing of AI responses
-- Inconsistent response formats
-- Missing key threat indicators in analysis
+**Phase to address:** Post-v1.2 - Establish continuous optimization process.
 
-**Phase impact:** Phase 1 prompt design is critical—bad prompts mean rewriting all AI integration logic later.
+---
 
-### Pitfall 8: Adversarial Manipulation Ignorance
-**What goes wrong:** Simple attacker strategies bypass AI detection (changing logo color, removing login form, text perturbation).
+## UI Polish Pitfalls
 
-**Why it happens:**
-- Over-reliance on single signal (visual similarity only)
-- No preprocessing to normalize adversarial changes
-- Assuming attackers won't adapt to detection
-- Logo-only matching easily defeated
+### Critical: Breaking Existing User Workflows
 
-**Prevention:**
-- **Multi-modal detection:** Visual + text content + domain signals + WHOIS data
-- **Preprocessing defenses:** Scaling, denoising, color normalization before analysis
-- **Text recognition integration:** Detect brand name in text even if logo altered
-- **Behavioral signals:** New domain (<30 days) + login form + brand keywords = high risk
-- **Continuous model updates:** Log bypass attempts, update detection logic monthly
+**What goes wrong:** Redesigns aren't just visual, they're psychological. Users invest in existing workflows, and familiarity often trumps efficiency. Even elegant upgrades fail when learned behaviors are disrupted without clear signposting. When a redesign reshuffles or hides elements behind icons or global menus, the user's internal map breaks, causing them to feel lost and productivity to drop.
 
-**Detection:**
-- Known phishing sites scoring <0.5 similarity
-- Phishing sites with altered logos marked "safe"
-- No detection of text-based impersonation
-- Static detection rules unchanged >60 days
+**Why it happens:** Teams optimize for new user experience and forget existing users have muscle memory. Design is done in isolation without observing real user workflows.
 
-**Phase impact:** Phase 1 should include multi-signal scoring. Phase 3+ needs continuous improvement loop based on real threats.
-
-## Minor Pitfalls
-
-Mistakes that cause annoyance but are fixable.
-
-### Pitfall 9: No Confidence Calibration
-**What goes wrong:** AI returns precise scores (0.847) that aren't actually calibrated, causing false confidence in borderline cases.
+**Consequences:**
+- User backlash and negative feedback
+- Support ticket surge
+- Productivity drops as users relearn interface
+- Power users abandon product
+- Churn increases
 
 **Prevention:**
-- Round scores to nearest 0.05 for display
-- Show confidence intervals ("75-85% match") not false precision
-- Tag scores as "preliminary" until human-validated
-- Track prediction accuracy over time to calibrate thresholds
+- Map critical user workflows BEFORE redesign
+- Preserve "functional anchors" - core interaction patterns users rely on
+- Use evolutionary approach (series of small changes) not revolutionary (complete overhaul)
+- Beta test with power users first
+- Provide in-app migration guides for changed workflows
+- Allow gradual rollout with opt-in period
 
-**Detection:**
-- All scores shown to 3 decimal places
-- No differentiation between high-confidence and low-confidence predictions
-- Users treating 0.74 as meaningful vs 0.76
+**Detection:** Support tickets about "where did X go?", negative app store reviews, increased session duration without increased outcomes.
 
-### Pitfall 10: Ignoring Existing Scanning Infrastructure
-**What goes wrong:** Replacing working domain scanning logic with AI, breaking existing features unnecessarily.
+**Phase to address:** Phase 2 (UI Polish) - User workflow audit must precede design work.
 
-**Prevention:**
-- **Add AI as layer:** Enhance existing scans with AI scoring, don't replace
-- **Keep rule-based checks:** Domain typosquatting patterns still valuable as pre-filter
-- **Incremental migration:** Add AI to new scans first, backfill old data later
-- **A/B test:** Compare AI vs rule-based accuracy before full migration
+---
 
-**Detection:**
-- Rewriting working code for no user-facing benefit
-- Breaking existing features during AI integration
-- All-or-nothing migration approach
+### Critical: Scope Creep (Polish → Features)
 
-**Phase impact:** Phase 1 should integrate AI alongside existing scanning, not replace it.
+**What goes wrong:** "Just polish" milestones spiral into feature development. "While we're redesigning this page, let's add..." becomes the default mindset. Feature creep causes projects to go over budget and extend deadlines.
 
-### Pitfall 11: Synchronous AI Calls in Request Path
-**What goes wrong:** Making Vision API calls synchronously during user requests causes 5-30 second page loads.
+**Why it happens:** Poor planning, insufficient product strategy, misaligned priorities. Lack of clear scope definition. Stakeholders see design mockups and request additions.
+
+**Consequences:**
+- Missed deadlines
+- Budget overruns
+- Original polish goals get diluted
+- Team frustration
+- Polish never ships
 
 **Prevention:**
-- **Background jobs only:** AI analysis happens in queued jobs, not during HTTP requests
-- **Optimistic UI:** Show "analyzing..." state, stream results as available
-- **Cache previous results:** Display cached analysis instantly, refresh in background
-- **Webhook architecture:** Scan completes → webhook → update DB → notify user
+- Written scope of work approved by stakeholders BEFORE work begins
+- Explicit "anti-scope" list (what we're NOT doing)
+- Treat feature requests as v1.3 backlog items, not v1.2 additions
+- Time-box polish work
+- Track "just polish" vs "new functionality" ruthlessly
+- "It doesn't have to be perfect—it just has to ship"
 
-**Detection:**
-- API route timeouts
-- Users report "stuck loading"
-- P95 latency >10 seconds
-- Vision API calls in API route handlers
+**Detection:** Timeline slips, design mockups include new elements not in current app, engineers ask "is this polish or a feature?"
 
-**Phase impact:** Phase 1 architecture must use async job queue from start—retrofitting is painful.
+**Phase to address:** Phase 0 (Planning) - Define scope boundaries explicitly. Phase 2/3/4 - Gate reviews to prevent scope expansion.
+
+---
+
+### High: Inadequate Regression Testing
+
+**What goes wrong:** A superficial UI migration can break critical workflows if underlying dependencies aren't mapped. One of the biggest risks in mobile app redesign is regression, where previously working functionality breaks or degrades. Changing a button during migration can break an integration or disrupt a cross-application process.
+
+**Why it happens:** Teams test new UI but don't test all existing functionality. Visual changes seem safe but touch business logic. QA focuses on new changes, not existing features.
+
+**Consequences:**
+- Previously working features break
+- Data corruption
+- Integration failures
+- Lost revenue
+- Emergency rollback required
+
+**Prevention:**
+- Automated regression test suite for critical flows
+- Manual QA checklist for all existing features
+- Test across devices, browsers, themes
+- Feature parity checks (redesigned screens still support existing use cases)
+- Don't underestimate how tightly coupled UI elements are to backend logic
+- Staged rollout with monitoring
+- Visual regression testing (automated screenshot comparison)
+
+**Detection:** Bug reports about features that "used to work," integration failures, unexpected errors in logs.
+
+**Phase to address:** Phase 2/3/4 (All polish phases) - Regression testing gate before each release.
+
+---
+
+### High: UI Complexity Through Incremental Changes
+
+**What goes wrong:** Small UI additions accumulate over time, making interface overly complex and difficult to use. Each change seems minor but compound effect is bloat. Microsoft Word 2000 is the classic example.
+
+**Prevention:**
+- Audit current UI complexity BEFORE adding polish
+- For each element added, remove one element
+- Simplify navigation/IA as part of polish
+- User test for cognitive load
+- Review entire app holistically, not page-by-page
+
+**Detection:** Users report app feels "cluttered" or "overwhelming," tooltips everywhere, increasing time-to-completion for basic tasks.
+
+**Phase to address:** Phase 2 (UI Polish) - Include simplification goals, not just beautification.
+
+---
+
+### Medium: Inconsistent Design System Application
+
+**What goes wrong:** Polish applied inconsistently across app creates jarring experience. Some pages modern, others dated. Design tokens used in some places, hardcoded values in others.
+
+**Prevention:**
+- Audit all pages/components before starting
+- Prioritize high-traffic areas if can't polish everything
+- Document design system clearly
+- Use design tokens/CSS variables consistently
+- Create component library
+- Phase rollout by feature area, not by pattern
+
+**Detection:** Users comment on inconsistency, QA flags mismatched styles, engineers find hardcoded colors.
+
+**Phase to address:** Phase 2 (UI Polish) - Full UI audit in planning; prioritize coverage areas.
+
+---
+
+### Medium: Ignoring Mobile Experience
+
+**What goes wrong:** Polish work focuses on desktop, mobile becomes afterthought. Poor mobile performance even in B2B leads to lost opportunities and lower search visibility.
+
+**Prevention:**
+- Mobile-first design approach
+- Test on real devices (not just browser emulation)
+- Performance testing on throttled connections
+- Touch target sizes, tap-friendly interactions
+
+**Detection:** High mobile bounce rate, mobile conversion rate significantly lower than desktop.
+
+**Phase to address:** Phase 1/2 (Landing Page + UI Polish) - Mobile testing mandatory for all changes.
+
+---
+
+### Low: Over-Polishing (Diminishing Returns)
+
+**What goes wrong:** Time to market often matters more than polish. Teams spend weeks on micro-animations and pixel-perfection that users don't notice while delaying launch.
+
+**Prevention:**
+- Set "good enough" criteria upfront
+- Time-box polish work
+- Ship and iterate rather than perfect before launch
+- Track diminishing returns on polish effort
+
+**Detection:** Engineers spending days on details users won't notice, stakeholders endlessly tweaking designs.
+
+**Phase to address:** Phase 0 (Planning) - Define "done" criteria that prevent over-polishing.
+
+---
+
+## Dark Mode Pitfalls
+
+### Critical: Pure Black Backgrounds (#000000)
+
+**What goes wrong:** Pure black backgrounds (#000000) look clean in mockups but brutal in real usage. Human eyes don't love extreme contrast over long sessions - pure white text on pure black is like reading glowing chalk on a void, causing edges to halo and fine strokes to blur.
+
+**Why it happens:** Designers assume "dark mode = black background." Looks striking in Figma.
+
+**Consequences:**
+- Eye strain for users
+- Poor readability, especially for extended sessions
+- Text appears to "glow" and blur
+- Accessibility complaints
+
+**Prevention:**
+- Use dark grey backgrounds (#121212 to #1E1E1E range)
+- Softens contrast without losing dark feeling
+- Follow Material Design dark theme guidelines
+- Test readability with real users for 15+ minute sessions
+
+**Detection:** User complaints about eye strain, readability issues reported in feedback.
+
+**Phase to address:** Phase 4 (Dark Mode) - Establish color palette before implementation.
+
+---
+
+### Critical: Naive Color Inversion
+
+**What goes wrong:** Many designers invert colors naively, leading to illegible text. Simply flipping the palette results in awkward images, illegible icons, and 'ghost' UI elements. True dark mode design is ground-up, intentional process.
+
+**Why it happens:** Fastest implementation approach, seems like it should work.
+
+**Consequences:**
+- Illegible text (dark text on dark background)
+- Brand colors look wrong
+- Images/logos disappear into background
+- Icons invisible or hard to see
+- Charts and visualizations break
+
+**Prevention:**
+- Create brand-specific dark palette (don't just invert)
+- Desaturate accent colors to 70-80% saturation
+- Test every component individually
+- Adjust logo/images for dark backgrounds
+- Build separate color palette for dark mode that maintains brand feel
+
+**Detection:** Dark text on dark background, invisible UI elements, user reports of illegibility.
+
+**Phase to address:** Phase 4 (Dark Mode) - Design dark-specific palette, not inverted light palette.
+
+---
+
+### Critical: Hardcoded Color Values
+
+**What goes wrong:** Common pitfalls include assuming background color is always light, hardcoding text colors, and setting hardcoded background color while using default text color. Dark mode exposes every hardcoded assumption throughout codebase.
+
+**Why it happens:** Original code written without dark mode consideration. CSS values hardcoded instead of using variables.
+
+**Consequences:**
+- Dark mode partially works but breaks in unexpected places
+- Time-consuming hunt through codebase for hardcoded values
+- Inconsistent appearance across app
+- Major refactoring required
+
+**Prevention:**
+- Use CSS variables / design tokens from day one
+- Use semantic naming (--surface-0, --text-primary, not --white, --black)
+- Audit codebase for hardcoded color values BEFORE dark mode work
+- Use linting rules to prevent hardcoded colors
+- Most robust: color-scheme: light dark + data-theme="dark/light" + CSS variables
+
+**Detection:** Grep codebase for hex values (#fff, #000, color codes), search for "color:" in CSS.
+
+**Phase to address:** Phase 3 (Supabase Migration) - Refactor to CSS variables as part of migration prep. Phase 4 (Dark Mode) - Variable-based system required before theme work.
+
+---
+
+### High: Drop Shadow Issues
+
+**What goes wrong:** Drop shadows, which are very common in light mode, do not usually work well when theme is dark. Shadows designed for light backgrounds become invisible or produce wrong effect.
+
+**Prevention:**
+- Use elevation through color layers (lighter shades for higher elements)
+- Replace shadows with subtle borders/gradients
+- Invert shadow direction (lighten instead of darken)
+- Test shadow visibility in both themes
+
+**Detection:** Visual regression testing shows missing depth/hierarchy in dark mode.
+
+**Phase to address:** Phase 4 (Dark Mode) - Shadow audit and replacement strategy.
+
+---
+
+### High: Typography Readability Issues
+
+**What goes wrong:** Thin or lightweight fonts can hinder readability as they fade into darker backgrounds. Contrast ratios that worked in light mode fail in dark mode.
+
+**Prevention:**
+- Use slightly heavier font weights in dark mode
+- Increase letter spacing for readability
+- Aim for 4.5:1 contrast ratio for body text, 3:1 for large text
+- Use off-white text (#E0E0E0 or #C9D1D9) not pure white
+- Run contrast checker to verify WCAG AA compliance
+
+**Detection:** Accessibility testing fails, users report text is hard to read.
+
+**Phase to address:** Phase 4 (Dark Mode) - Typography testing for both themes.
+
+---
+
+### High: Inadequate Visual Regression Testing
+
+**What goes wrong:** Dark text rendering on dark background makes it unreadable. Dark mode settings on iOS render differently than Android. Common visual bugs emerge only in dark mode that functional tests don't catch.
+
+**Why it happens:** Teams test functionality but not visual output. Each theme needs separate test baseline.
+
+**Prevention:**
+- Maintain separate visual baselines for light and dark themes
+- Run visual regression tests for BOTH themes
+- Use tools like Percy, Chromatic, Playwright for automated screenshot comparison
+- Test on multiple platforms (iOS, Android, browsers)
+- Verify smooth transition when toggling themes mid-session
+- Check contrast ratios programmatically
+
+**Detection:** Visual bugs reported by users, inconsistent appearance across platforms.
+
+**Phase to address:** Phase 4 (Dark Mode) - Visual regression testing setup before launch.
+
+---
+
+### Medium: Ignoring System Preferences
+
+**What goes wrong:** If you ignore prefers-color-scheme, you're fighting the platform. Browsers expose this user preference because people already told their OS what they like. Forcing theme or not respecting system default alienates users.
+
+**Prevention:**
+- Respect prefers-color-scheme by default
+- Listen to prefers-color-scheme changes dynamically
+- Allow user override (manual toggle)
+- Store preference in localStorage
+- Sync preference across devices if auth system exists
+
+**Detection:** Users complain about theme not matching system, theme resets on reload.
+
+**Phase to address:** Phase 4 (Dark Mode) - System preference detection as core requirement.
+
+---
+
+### Medium: Cross-Channel Inconsistency
+
+**What goes wrong:** Mobile apps often contain outbound links that open in external browsers - redirecting visitors to light mode web link from dark-themed app could interfere with user experience. Email notifications, docs, marketing site have different theme than app.
+
+**Prevention:**
+- Apply dark mode to all user touchpoints
+- Pass theme preference in URLs if possible
+- Design emails to work in both themes
+- Test complete user journey across channels
+
+**Detection:** User feedback about jarring transitions between app and web.
+
+**Phase to address:** Phase 4 (Dark Mode) - Scope must include all user touchpoints, not just main app.
+
+---
+
+### Medium: Desaturation Neglect
+
+**What goes wrong:** Vibrant accent colors that work in light mode become overbearingly bright in dark mode. Colors need desaturation.
+
+**Prevention:**
+- Tone vibrant hues down to 70-80% saturation for dark mode
+- Desaturated colors prevent overly bright images
+- Still maintain effective contrast ratio
+- Test brand colors specifically in dark context
+
+**Detection:** Colors feel too bright/harsh in dark mode, eye strain.
+
+**Phase to address:** Phase 4 (Dark Mode) - Color palette design includes desaturation strategy.
+
+---
+
+### Low: Forced Implementation Without User Choice
+
+**What goes wrong:** Forcing dark mode alienates users. Always offer choice.
+
+**Prevention:**
+- Provide toggle in settings
+- Remember user preference
+- Default to system preference but allow override
+
+**Detection:** User complaints about being unable to use light mode.
+
+**Phase to address:** Phase 4 (Dark Mode) - Toggle is core requirement.
+
+---
+
+## Scope Creep Risks
+
+### Specific Risks for v1.2 (Polish Milestone)
+
+**How polish milestones differ from feature milestones:**
+- Polish has no obvious "done" signal (can always polish more)
+- Stakeholder opinions are more subjective (everyone has design preferences)
+- Easy to justify "just one more thing" since it's visual
+- Design reveals missing features that "should have been there"
+- Technical debt tempting to fix "while we're here"
+
+**Warning Signs:**
+
+1. **Timeline Extensions**
+   - "Just need one more week to perfect X"
+   - Design iterations exceed 3 rounds
+   - Engineers blocked waiting for final designs
+
+2. **Scope Additions**
+   - Mockups include elements not in current app
+   - "Since we're redesigning the dashboard, let's add analytics"
+   - Technical refactoring justified as "necessary for polish"
+   - New user flows introduced under guise of "better UX"
+
+3. **Feature Requests Disguised as Polish**
+   - "This page needs more information" → new data fetching
+   - "Users need to do X here" → new capability
+   - "Let's improve onboarding" → tutorial system
+   - "Dark mode should remember per-page" → new preference system
+
+4. **Perfectionism**
+   - Endless micro-animation tweaking
+   - Pixel-pushing instead of shipping
+   - A/B testing every small decision
+   - "Not ready to show users yet"
+
+**Prevention Strategies:**
+
+1. **Hard Scope Boundaries**
+   - Document explicit anti-scope: "v1.2 will NOT include: [list]"
+   - Feature requests go to v1.3 backlog automatically
+   - Design freeze date in schedule
+   - Time-box polish work (if not shippable by date X, defer item)
+
+2. **Objective Criteria**
+   - Define "good enough" upfront with examples
+   - Use design system/component library to limit decisions
+   - Conversion rate improvement target (landing page)
+   - Performance budget (load time targets)
+   - Accessibility compliance level (WCAG AA)
+
+3. **Incremental Shipping**
+   - Ship Phase 1, then Phase 2, then Phase 3 (don't wait for perfect)
+   - Each phase has launch gate review
+   - User feedback after each phase informs next
+   - "Ship to learn" mindset over "ship when perfect"
+
+4. **Stakeholder Management**
+   - Weekly demo prevents "big reveal" surprise requests
+   - Decision-making framework (who decides what)
+   - Defer decisions when possible ("let's see how users react")
+   - Shared definition of "polish" vs "feature"
+
+**Mitigation When Scope Creeps:**
+
+- Call it out explicitly: "This is scope creep"
+- Quantify impact: "This adds 2 weeks"
+- Force tradeoff decision: "We can do X OR stay on schedule, not both"
+- Document decision and reasoning
+- Reset expectations with stakeholders
+
+**Phase to address:** Phase 0 (Planning) - Establish scope boundaries and gates. Ongoing - vigilance at each phase review.
+
+---
 
 ## Phase-Specific Warnings
 
-| Phase Topic | Likely Pitfall | Mitigation |
-|-------------|---------------|------------|
-| Phase 1: AI Integration | Uncontrolled Vision API costs | Implement caching, image optimization, hard limits before first scan |
-| Phase 1: AI Integration | Synchronous API calls | Use Bull queue for all AI analysis from day one |
-| Phase 1: Threat Scoring | False positive overload | Test thresholds on 10+ real brands before launch, start conservative |
-| Phase 1: Prompt Design | Generic prompts | Design structured JSON prompts with brand context and examples |
-| Phase 2: Automated Scanning | Rate limiting failures | Implement queue with concurrency limits and exponential backoff |
-| Phase 2: Batch Processing | Screenshot inconsistency | Standardize Playwright config before enabling scheduled scans |
-| Phase 3: Model Refinement | Training data poverty | Use prompt engineering first, defer fine-tuning until proven need |
-| Phase 3: Adversarial Defense | Single-signal detection | Add text recognition and domain signals to scoring logic |
-| Phase 4: Scale | Cost per user economics | Monitor cost per scan, optimize image sizes and caching strategy |
-| Phase 4: Accuracy | No calibration feedback loop | Build user feedback system to tune thresholds based on real FP/FN rates |
+| Phase | Likely Pitfall | Mitigation |
+|-------|---------------|------------|
+| **Phase 1: Landing Page** | Design over outcomes; breaking existing customer flows | Set conversion baseline first; test with existing customers |
+| **Phase 2: UI Polish** | Scope creep; breaking user workflows | Hard scope boundaries; user workflow audit |
+| **Phase 3: Supabase Migration** | Perfect time for scope creep ("while we're refactoring...") | Strict "migration only" policy; new features go to v1.3 |
+| **Phase 4: Dark Mode** | Hardcoded colors everywhere; naive inversion | Refactor to CSS variables in Phase 3; design dark-specific palette |
+| **All Phases** | Inadequate regression testing; perfectionism delays | Automated regression suite; time-box polish work |
 
-## Cost Management Cheatsheet
-
-**Vision API optimization priorities** (implement in order):
-
-1. **Image optimization:** Resize to 640x480 before API calls (saves 70-90% on large screenshots)
-2. **Aggressive caching:** Hash-based cache with 7-day TTL (saves 80%+ on rescans)
-3. **Smart batching:** Scan top 50 high-risk domains first, defer remainder (immediate value, lower costs)
-4. **Choose right model:** Claude Vision for similarity, GPT-4V-mini for text analysis (2-5x cost difference)
-5. **Rate limiting:** Per-user daily scan limits (prevents runaway costs from single user)
-6. **Monitoring alerts:** Alert at 80% of daily budget (catch cost explosions early)
-
-**Expected costs** (2026 pricing):
-- GPT-4 Vision: ~$0.01-0.05 per image (varies by size, detail level)
-- Claude Vision: ~$0.005-0.02 per image
-- Target: <$0.02 per domain scanned (after optimization)
-- Free tier budget: $10-20/month = 500-1000 scans
-- Pro tier budget: $100/month = 5000-10000 scans
-
-## Research Confidence Notes
-
-**HIGH confidence findings** (multiple 2026 sources + official docs):
-- Vision API cost management critical (verified in pricing docs and community issues)
-- False positive rate 2-5% achievable with RL models (verified in academic research)
-- GPT-4V limitations on OCR, counting, colors (verified in OpenAI docs and TechCrunch reporting)
-- 82.6% of phishing now AI-generated (verified industry reports)
-
-**MEDIUM confidence findings** (multiple sources, not officially verified):
-- Specific cost optimization strategies (community best practices)
-- Threshold recommendations (derived from research, not tested on this codebase)
-- Adversarial bypass techniques (academic research, real-world validation unknown)
-
-**LOW confidence findings** (single source or inferred):
-- Exact cost per scan estimates (varies by implementation details)
-- Specific cache TTL recommendations (domain-specific, needs testing)
+---
 
 ## Sources
 
-### Vision API Costs & Management
-- [Trouble understanding API pricing for Vision - OpenAI Developer Community](https://community.openai.com/t/trouble-understanding-api-pricing-for-vision/499981)
-- [4 AI pricing models: In-depth comparison and common mistakes](https://blog.alguna.com/ai-pricing-models/)
-- [Google Cloud Vision API Pricing](https://cloud.google.com/vision/pricing)
+**Landing Page:**
+- [8 Costly B2B Landing Page Mistakes](https://www.exitfive.com/articles/8-reasons-your-b2b-landing-pages-arent-converting)
+- [27 Best SaaS Landing Page Examples](https://unbounce.com/conversion-rate-optimization/the-state-of-saas-landing-pages/)
+- [Top Landing Page Design Trends for B2B SaaS in 2026](https://www.saashero.net/content/top-landing-page-design-trends/)
+- [A/B Testing for B2B Products: Best Practices](https://www.statsig.com/ab-testing-b2b-best-practices)
 
-### False Positives & Accuracy
-- [AI-Powered Phishing Detection & Prevention Strategies for 2026](https://www.uscsinstitute.org/cybersecurity-insights/blog/ai-powered-phishing-detection-and-prevention-strategies-for-2026)
-- [AI-Driven Phishing Detection: Enhancing Cybersecurity with Reinforcement Learning](https://www.mdpi.com/2624-800X/5/2/26)
-- [False Positives in AI Detection: Complete Guide 2026](https://proofademic.ai/blog/false-positives-ai-detection-guide/)
+**Dark Mode:**
+- [Best Practices for Dark Mode in Web Design 2026](https://natebal.com/best-practices-for-dark-mode/)
+- [Dark Mode Done Right: Best Practices for 2026](https://medium.com/@social_7132/dark-mode-done-right-best-practices-for-2026-c223a4b92417)
+- [Dark Mode Design Best Practices in 2026](https://www.tech-rz.com/blog/dark-mode-design-best-practices-in-2026/)
+- [How to Test Dark Mode Effectively](https://www.browserstack.com/guide/how-to-test-apps-in-dark-mode)
+- [Dark Mode Design: Trends, Myths, and Common Mistakes](https://webwave.me/blog/dark-mode-design-trends)
 
-### Vision API Limitations
-- [As OpenAI's multimodal API launches broadly, research shows it's still flawed | TechCrunch](https://techcrunch.com/2023/11/06/openai-gpt-4-with-vision-release-research-flaws/)
-- [GPT-4 with Vision: Complete Guide and Evaluation](https://blog.roboflow.com/gpt-4-vision/)
-- [OpenAI's Vision API Guide](https://platform.openai.com/docs/guides/vision)
+**UI Polish & Redesign:**
+- [How to Redesign a Legacy UI Without Losing Users](https://xbsoftware.com/blog/legacy-app-ui-redesign-mistakes/)
+- [How to Redesign an App: A Proven Step-by-Step Guide (2026)](https://volpis.com/blog/comprehensive-guide-to-app-redesign/)
+- [UX/UI Migration Strategy For Your Web Application](https://xbsoftware.com/blog/migrating-your-web-app-to-a-new-ui-ux/)
+- [Playbook for Redesigning an Existing Application](https://www.fullstack.com/labs/resources/playbooks/redesigning-existing-application)
 
-### Image Quality & Preprocessing
-- [How to Fix Vision AI API Image Analysis Failures | Medium](https://medium.com/@Adekola_Olawale/how-to-fix-vision-ai-api-image-analysis-failures-0642286a0bac)
-- [Mastering Image Preprocessing: Optimizing Your Visual AI Workflow](https://voxel51.com/blog/image-preprocessing-best-practices-to-optimize-your-ai-workflows)
-- [Vision API: preprocessing | Microsoft Community Hub](https://techcommunity.microsoft.com/discussions/azure-ai-foundry-discussions/vision-api-preprocessing/1799264)
+**Scope Creep:**
+- [Feature Creep: What Causes It and How to Avoid It](https://www.shopify.com/partners/blog/feature-creep)
+- [The Product Manager's Guide to Feature Creep](https://theproductmanager.com/product-management/feature-creep/)
+- [Managing Scope Creep: 6 Steps](https://ripcorddesigns.com/blog-news/managing-scope-creep-6-steps-to-help-keep-your-product-design-on-track)
 
-### Visual Similarity Detection
-- [Evaluating the Effectiveness and Robustness of Visual Similarity-based Phishing Detection Models](https://arxiv.org/html/2405.19598v2)
-- [Comparing Image Similarity Methods: BEiT, SWIN and ViT-MAE](https://bolster.ai/blog/image-similarity-beit-swin-vit-mae)
-- [Why Screenshot Image Comparison Tools Fail With Dynamic Visual Content](https://applitools.com/blog/why-screenshot-image-comparison-tools-fail/)
-
-### Training Data & Model Quality
-- [Understanding AI Fraud Detection and Prevention in 2026 | DigitalOcean](https://www.digitalocean.com/resources/articles/ai-fraud-detection)
-- [AI-Generated Phishing: The Top Enterprise Threat of 2026](https://www.strongestlayer.com/blog/ai-generated-phishing-enterprise-threat)
-
-### Threshold Tuning & Bias
-- [The Future of AI-Powered Brand Protection - BrandShield](https://www.brandshield.com/blog/brand-protection-ai/)
-- [False Positive Reduction: How AI Improves Security Alert](https://www.avatier.com/false-positive-reduction-ai/)
-- [Why You Need to Care About AI Bias in 2026 | Fisher Phillips](https://www.fisherphillips.com/en/news-insights/why-you-need-to-care-about-ai-bias-in-2026.html)
-
-### Rate Limiting & API Costs
-- [API Security Pricing: Everything You Need to Know (2026)](https://www.getastra.com/blog/api-security/api-security-pricing/)
-- [API Rate Limiting: A Critical Layer for API Protection](https://sixthsense.rakuten.com/blog/API-Rate-Limiting-A-Critical-Layer-for-API-Protection)
-- [Phishing Statistics 2025: Costs, AI Attacks & Top Targets](https://deepstrike.io/blog/Phishing-Statistics-2025)
+**Visual Regression Testing:**
+- [Visual Regression Testing in Mobile QA: The 2026 Guide](https://www.getpanto.ai/blog/visual-regression-testing-in-mobile-qa)
+- [How to Implement Visual Regression Testing for React with Chromatic](https://oneuptime.com/blog/post/2026-01-15-visual-regression-testing-react-chromatic/view)
+- [The UI Visual Regression Testing Best Practices Playbook](https://medium.com/@ss-tech/the-ui-visual-regression-testing-best-practices-playbook-dc27db61ebe0)
