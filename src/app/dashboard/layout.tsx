@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  Shield,
   LayoutDashboard,
   Building2,
   AlertTriangle,
@@ -17,6 +16,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { NotificationDropdown } from '@/components/NotificationDropdown'
+import { Logo } from '@/components/Logo'
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -62,8 +62,7 @@ export default function DashboardLayout({
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-4 border-b border-border">
             <Link href="/dashboard" className="flex items-center">
-              <Shield className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-lg font-bold text-foreground">DoppelDown</span>
+              <Logo mode="dark" size="lg" />
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
