@@ -148,8 +148,8 @@ export default function ReportsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
-          <p className="text-gray-500 mt-1">Generate and manage takedown reports</p>
+          <h1 className="text-2xl font-bold text-foreground">Reports</h1>
+          <p className="text-muted-foreground mt-1">Generate and manage takedown reports</p>
         </div>
         <Link href="/dashboard/reports/new">
           <Button>
@@ -165,7 +165,7 @@ export default function ReportsPage() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search by brand..."
                   value={searchQuery}
@@ -177,7 +177,7 @@ export default function ReportsPage() {
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All Types</option>
               <option value="takedown_request">Takedown Request</option>
@@ -192,9 +192,9 @@ export default function ReportsPage() {
       {filteredReports.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No reports found</h3>
-            <p className="text-gray-500 mb-6">
+            <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">No reports found</h3>
+            <p className="text-muted-foreground mb-6">
               {searchQuery || typeFilter !== 'all'
                 ? 'Try adjusting your filters'
                 : 'Generate your first report to get started'}
@@ -220,12 +220,12 @@ export default function ReportsPage() {
                 <CardContent className="pt-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-gray-100 rounded-lg">
-                        <FileText className="h-6 w-6 text-gray-600" />
+                      <div className="p-3 bg-accent rounded-lg">
+                        <FileText className="h-6 w-6 text-muted-foreground" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-gray-900">
+                          <h3 className="font-semibold text-foreground">
                             {reportTypeLabels[report.type] || report.type}
                           </h3>
                           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
@@ -233,10 +233,10 @@ export default function ReportsPage() {
                             {statusInfo.label}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {report.brands?.name} • {report.threat_ids?.length || 0} threats included
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           Created {formatDateTime(report.created_at)}
                           {report.sent_to && ` • Sent to ${report.sent_to}`}
                         </p>
@@ -297,23 +297,23 @@ export default function ReportsPage() {
       {/* Quick Tips */}
       <Card>
         <CardContent className="pt-6">
-          <h3 className="font-semibold text-gray-900 mb-3">Report Types</h3>
+          <h3 className="font-semibold text-foreground mb-3">Report Types</h3>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-1">Takedown Request</h4>
-              <p className="text-sm text-gray-500">
+            <div className="p-4 bg-muted rounded-lg">
+              <h4 className="font-medium text-foreground mb-1">Takedown Request</h4>
+              <p className="text-sm text-muted-foreground">
                 Professional report ready to send to registrars and hosting providers
               </p>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-1">Evidence Package</h4>
-              <p className="text-sm text-gray-500">
+            <div className="p-4 bg-muted rounded-lg">
+              <h4 className="font-medium text-foreground mb-1">Evidence Package</h4>
+              <p className="text-sm text-muted-foreground">
                 Complete evidence bundle with screenshots, WHOIS, and HTML captures
               </p>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-1">Summary Report</h4>
-              <p className="text-sm text-gray-500">
+            <div className="p-4 bg-muted rounded-lg">
+              <h4 className="font-medium text-foreground mb-1">Summary Report</h4>
+              <p className="text-sm text-muted-foreground">
                 Overview of all threats for internal review and stakeholder updates
               </p>
             </div>

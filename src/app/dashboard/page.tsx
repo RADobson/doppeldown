@@ -536,12 +536,12 @@ function OnboardingFlow() {
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center font-medium ${
-              step >= s ? 'bg-primary-600 text-white' : 'bg-gray-200 text-muted-foreground'
+              step >= s ? 'bg-primary-600 text-white' : 'bg-muted text-muted-foreground'
             }`}>
               {step > s ? <CheckCircle className="h-5 w-5" /> : s}
             </div>
             {s < 3 && (
-              <div className={`w-16 h-1 mx-2 ${step > s ? 'bg-primary-600' : 'bg-gray-200'}`} />
+              <div className={`w-16 h-1 mx-2 ${step > s ? 'bg-primary-600' : 'bg-muted'}`} />
             )}
           </div>
         ))}

@@ -321,8 +321,8 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="text-gray-500 mt-1">Manage your account and preferences</p>
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-1">Manage your account and preferences</p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -377,17 +377,17 @@ export default function SettingsPage() {
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Email Alerts</p>
-                  <p className="text-sm text-gray-500">Receive email notifications for new threats</p>
+                  <p className="font-medium text-foreground">Email Alerts</p>
+                  <p className="text-sm text-muted-foreground">Receive email notifications for new threats</p>
                 </div>
                 <button
                   onClick={() => setAlertSettings({ ...alertSettings, email_alerts: !alertSettings.email_alerts })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    alertSettings.email_alerts ? 'bg-primary-600' : 'bg-gray-200'
+                    alertSettings.email_alerts ? 'bg-primary-600' : 'bg-muted'
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
                       alertSettings.email_alerts ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
@@ -396,17 +396,17 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Instant Critical Alerts</p>
-                  <p className="text-sm text-gray-500">Get notified immediately for critical threats</p>
+                  <p className="font-medium text-foreground">Instant Critical Alerts</p>
+                  <p className="text-sm text-muted-foreground">Get notified immediately for critical threats</p>
                 </div>
                 <button
                   onClick={() => setAlertSettings({ ...alertSettings, instant_critical: !alertSettings.instant_critical })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    alertSettings.instant_critical ? 'bg-primary-600' : 'bg-gray-200'
+                    alertSettings.instant_critical ? 'bg-primary-600' : 'bg-muted'
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
                       alertSettings.instant_critical ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
@@ -415,17 +415,17 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Weekly Digest</p>
-                  <p className="text-sm text-gray-500">Receive a weekly summary every Monday</p>
+                  <p className="font-medium text-foreground">Weekly Digest</p>
+                  <p className="text-sm text-muted-foreground">Receive a weekly summary every Monday</p>
                 </div>
                 <button
                   onClick={() => setAlertSettings({ ...alertSettings, weekly_digest: !alertSettings.weekly_digest })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    alertSettings.weekly_digest ? 'bg-primary-600' : 'bg-gray-200'
+                    alertSettings.weekly_digest ? 'bg-primary-600' : 'bg-muted'
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
                       alertSettings.weekly_digest ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
@@ -444,17 +444,17 @@ export default function SettingsPage() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Scan Summary Emails</p>
-                  <p className="text-sm text-gray-500">Receive summary after each scan completes</p>
+                  <p className="font-medium text-foreground">Scan Summary Emails</p>
+                  <p className="text-sm text-muted-foreground">Receive summary after each scan completes</p>
                 </div>
                 <button
                   onClick={() => setAlertSettings({ ...alertSettings, scan_summary_emails: !alertSettings.scan_summary_emails })}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    alertSettings.scan_summary_emails ? 'bg-primary-600' : 'bg-gray-200'
+                    alertSettings.scan_summary_emails ? 'bg-primary-600' : 'bg-muted'
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    className={`inline-block h-4 w-4 transform rounded-full bg-card transition-transform ${
                       alertSettings.scan_summary_emails ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
@@ -462,8 +462,8 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <p className="font-medium text-gray-900 mb-2">Alert Severity Threshold</p>
-                <p className="text-sm text-gray-500 mb-3">Which threats should trigger email alerts?</p>
+                <p className="font-medium text-foreground mb-2">Alert Severity Threshold</p>
+                <p className="text-sm text-muted-foreground mb-3">Which threats should trigger email alerts?</p>
                 <div className="space-y-2">
                   {[
                     { value: 'all' as const, label: 'All Threats', desc: 'Low, Medium, High, and Critical' },
@@ -483,8 +483,8 @@ export default function SettingsPage() {
                         className="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500"
                       />
                       <div>
-                        <span className="font-medium text-gray-900">{option.label}</span>
-                        <p className="text-sm text-gray-500">{option.desc}</p>
+                        <span className="font-medium text-foreground">{option.label}</span>
+                        <p className="text-sm text-muted-foreground">{option.desc}</p>
                       </div>
                     </label>
                   ))}
@@ -519,7 +519,7 @@ export default function SettingsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Receive instant notifications via webhook when threats are detected.
                 </p>
                 <Input
@@ -602,24 +602,24 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className={`p-4 rounded-lg border ${
                 currentPlan === 'free'
-                  ? 'bg-gray-50 border-gray-200'
+                  ? 'bg-muted border-border'
                   : 'bg-primary-50 border-primary-200'
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <span className={`font-semibold ${
-                    currentPlan === 'free' ? 'text-gray-900' : 'text-primary-900'
+                    currentPlan === 'free' ? 'text-foreground' : 'text-primary-900'
                   }`}>
                     {planInfo.name}
                   </span>
                   <span className={`text-sm font-medium ${
-                    currentPlan === 'free' ? 'text-gray-700' : 'text-primary-700'
+                    currentPlan === 'free' ? 'text-foreground' : 'text-primary-700'
                   }`}>
                     {planInfo.price}
                   </span>
                 </div>
                 <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                   currentPlan === 'free'
-                    ? 'bg-gray-200 text-gray-700'
+                    ? 'bg-muted text-foreground'
                     : subscriptionStatus === 'active'
                       ? 'bg-green-100 text-green-700'
                       : subscriptionStatus === 'past_due'
@@ -632,8 +632,8 @@ export default function SettingsPage() {
 
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Brands used</span>
-                  <span className="text-gray-900">
+                  <span className="text-muted-foreground">Brands used</span>
+                  <span className="text-foreground">
                     {brandsCount} / {planInfo.brandLimit || 'Unlimited'}
                   </span>
                 </div>
@@ -686,7 +686,7 @@ export default function SettingsPage() {
               <CardTitle className="text-red-600">Danger Zone</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Once you delete your account, there is no going back. Please be certain.
               </p>
               <Button

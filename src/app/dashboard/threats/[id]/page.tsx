@@ -379,7 +379,7 @@ export default function ThreatDetailPage() {
   if (!threat) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Threat not found</p>
+        <p className="text-muted-foreground">Threat not found</p>
         <Link href="/dashboard/threats">
           <Button variant="outline" className="mt-4">Back to Threats</Button>
         </Link>
@@ -449,15 +449,15 @@ export default function ThreatDetailPage() {
         <div>
           <div className="flex items-center gap-3 mb-2">
             <SeverityBadge severity={threat.severity} />
-            <span className="text-gray-500">{threatTypeLabels[threat.type] || threat.type}</span>
+            <span className="text-muted-foreground">{threatTypeLabels[threat.type] || threat.type}</span>
             {compositeScore !== null && (
-              <span className="text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5">
+              <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
                 Score {compositeScore}
               </span>
             )}
           </div>
-          <h1 className="text-xl font-bold text-gray-900 break-all">{threat.url}</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-xl font-bold text-foreground break-all">{threat.url}</h1>
+          <p className="text-muted-foreground mt-1">
             Detected {formatDateTime(threat.detected_at)} • {threat.brands?.name}
           </p>
         </div>
@@ -486,22 +486,22 @@ export default function ThreatDetailPage() {
               <CardTitle>Threat Analysis</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 mb-4">
+              <p className="text-foreground mb-4">
                 {threat.description || `This ${threatTypeLabels[threat.type]?.toLowerCase() || 'threat'} was detected targeting ${threat.brands?.name}. The domain ${threat.domain || new URL(threat.url).hostname} may be attempting to impersonate the legitimate brand.`}
               </p>
 
               <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{analysisResults.brandMentions}</p>
-                  <p className="text-xs text-gray-500">Brand Mentions</p>
+                  <p className="text-2xl font-bold text-foreground">{analysisResults.brandMentions}</p>
+                  <p className="text-xs text-muted-foreground">Brand Mentions</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{analysisResults.hasLoginForm ? 'Yes' : 'No'}</p>
-                  <p className="text-xs text-gray-500">Login Form</p>
+                  <p className="text-2xl font-bold text-foreground">{analysisResults.hasLoginForm ? 'Yes' : 'No'}</p>
+                  <p className="text-xs text-muted-foreground">Login Form</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{analysisResults.hasPaymentForm ? 'Yes' : 'No'}</p>
-                  <p className="text-xs text-gray-500">Payment Form</p>
+                  <p className="text-2xl font-bold text-foreground">{analysisResults.hasPaymentForm ? 'Yes' : 'No'}</p>
+                  <p className="text-xs text-muted-foreground">Payment Form</p>
                 </div>
               </div>
             </CardContent>
@@ -515,62 +515,62 @@ export default function ThreatDetailPage() {
             <CardContent>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="border rounded-lg p-4 text-center">
-                  <p className="text-xs text-gray-500">Composite Score</p>
-                  <p className="text-2xl font-bold text-gray-900">{compositeScore ?? '—'}</p>
-                  <p className="text-xs text-gray-500">Severity: {analysis.compositeSeverity || threat.severity}</p>
+                  <p className="text-xs text-muted-foreground">Composite Score</p>
+                  <p className="text-2xl font-bold text-foreground">{compositeScore ?? '—'}</p>
+                  <p className="text-xs text-muted-foreground">Severity: {analysis.compositeSeverity || threat.severity}</p>
                 </div>
                 <div className="border rounded-lg p-4 text-center">
-                  <p className="text-xs text-gray-500">Visual Similarity</p>
-                  <p className="text-2xl font-bold text-gray-900">{visualScore !== null ? `${visualScore}%` : '—'}</p>
-                  <p className="text-xs text-gray-500 capitalize">
+                  <p className="text-xs text-muted-foreground">Visual Similarity</p>
+                  <p className="text-2xl font-bold text-foreground">{visualScore !== null ? `${visualScore}%` : '—'}</p>
+                  <p className="text-xs text-muted-foreground capitalize">
                     {visualStatus}
                     {analysis.visualSimilarityProvider ? ` • ${analysis.visualSimilarityProvider}` : ''}
                   </p>
                 </div>
                 <div className="border rounded-lg p-4 text-center">
-                  <p className="text-xs text-gray-500">Phishing Intent</p>
-                  <p className="text-2xl font-bold text-gray-900">{intentScore !== null ? `${intentScore}%` : '—'}</p>
-                  <p className="text-xs text-gray-500 capitalize">{intentClass}</p>
+                  <p className="text-xs text-muted-foreground">Phishing Intent</p>
+                  <p className="text-2xl font-bold text-foreground">{intentScore !== null ? `${intentScore}%` : '—'}</p>
+                  <p className="text-xs text-muted-foreground capitalize">{intentClass}</p>
                 </div>
               </div>
 
-              <div className="mt-4 grid md:grid-cols-2 gap-4 text-sm text-gray-700">
-                <div className="rounded-lg border border-gray-200 p-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Visual Details</p>
+              <div className="mt-4 grid md:grid-cols-2 gap-4 text-sm text-foreground">
+                <div className="rounded-lg border border-border p-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Visual Details</p>
                   <div className="mt-3 space-y-1">
-                    <p><span className="text-gray-500">Status:</span> <span className="capitalize">{visualStatus}</span></p>
-                    <p><span className="text-gray-500">Provider:</span> {analysis.visualSimilarityProvider || '—'}</p>
-                    <p><span className="text-gray-500">Model:</span> {analysis.visualSimilarityModel || '—'}</p>
-                    <p><span className="text-gray-500">Confidence:</span> {typeof analysis.visualSimilarityConfidence === 'number' ? `${Math.round(analysis.visualSimilarityConfidence * 100)}%` : '—'}</p>
+                    <p><span className="text-muted-foreground">Status:</span> <span className="capitalize">{visualStatus}</span></p>
+                    <p><span className="text-muted-foreground">Provider:</span> {analysis.visualSimilarityProvider || '—'}</p>
+                    <p><span className="text-muted-foreground">Model:</span> {analysis.visualSimilarityModel || '—'}</p>
+                    <p><span className="text-muted-foreground">Confidence:</span> {typeof analysis.visualSimilarityConfidence === 'number' ? `${Math.round(analysis.visualSimilarityConfidence * 100)}%` : '—'}</p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-3">
+                  <p className="text-xs text-muted-foreground mt-3">
                     {analysis.visualSimilarityRationale || 'No visual rationale available yet.'}
                   </p>
                 </div>
 
-                <div className="rounded-lg border border-gray-200 p-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Intent Details</p>
+                <div className="rounded-lg border border-border p-4">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Intent Details</p>
                   <div className="mt-3 space-y-1">
-                    <p><span className="text-gray-500">Source:</span> {intentSource}</p>
-                    <p><span className="text-gray-500">Class:</span> <span className="capitalize">{intentClass}</span></p>
-                    <p><span className="text-gray-500">Model:</span> {analysis.phishingIntentModel || '—'}</p>
-                    <p><span className="text-gray-500">Confidence:</span> {typeof analysis.phishingIntentConfidence === 'number' ? `${Math.round(analysis.phishingIntentConfidence * 100)}%` : '—'}</p>
+                    <p><span className="text-muted-foreground">Source:</span> {intentSource}</p>
+                    <p><span className="text-muted-foreground">Class:</span> <span className="capitalize">{intentClass}</span></p>
+                    <p><span className="text-muted-foreground">Model:</span> {analysis.phishingIntentModel || '—'}</p>
+                    <p><span className="text-muted-foreground">Confidence:</span> {typeof analysis.phishingIntentConfidence === 'number' ? `${Math.round(analysis.phishingIntentConfidence * 100)}%` : '—'}</p>
                   </div>
                   {intentSignals.length > 0 ? (
                     <div className="mt-3 flex flex-wrap gap-2">
                       {intentSignals.map((signal) => (
                         <span
                           key={signal}
-                          className="text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5"
+                          className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5"
                         >
                           {signal.replace(/_/g, ' ')}
                         </span>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-gray-500 mt-3">No intent signals recorded yet.</p>
+                    <p className="text-xs text-muted-foreground mt-3">No intent signals recorded yet.</p>
                   )}
-                  <p className="text-xs text-gray-500 mt-3">
+                  <p className="text-xs text-muted-foreground mt-3">
                     {analysis.phishingIntentRationale || 'No intent rationale available yet.'}
                   </p>
                 </div>
@@ -591,40 +591,40 @@ export default function ThreatDetailPage() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Building className="h-4 w-4 text-gray-400" />
+                      <Building className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-gray-500">Registrar</p>
+                        <p className="text-xs text-muted-foreground">Registrar</p>
                         <p className="text-sm font-medium">{threat.whois_data.registrar || 'Unknown'}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Calendar className="h-4 w-4 text-gray-400" />
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-gray-500">Created</p>
+                        <p className="text-xs text-muted-foreground">Created</p>
                         <p className="text-sm font-medium">{threat.whois_data.creation_date || 'Unknown'}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Calendar className="h-4 w-4 text-gray-400" />
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-gray-500">Expires</p>
+                        <p className="text-xs text-muted-foreground">Expires</p>
                         <p className="text-sm font-medium">{threat.whois_data.expiration_date || 'Unknown'}</p>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Globe className="h-4 w-4 text-gray-400" />
+                      <Globe className="h-4 w-4 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-gray-500">Registrant Country</p>
+                        <p className="text-xs text-muted-foreground">Registrant Country</p>
                         <p className="text-sm font-medium">{threat.whois_data.registrant_country || 'Hidden'}</p>
                       </div>
                     </div>
                     {threat.whois_data.name_servers && threat.whois_data.name_servers.length > 0 && (
                       <div className="flex items-start gap-3">
-                        <Server className="h-4 w-4 text-gray-400 mt-1" />
+                        <Server className="h-4 w-4 text-muted-foreground mt-1" />
                         <div>
-                          <p className="text-xs text-gray-500">Name Servers</p>
+                          <p className="text-xs text-muted-foreground">Name Servers</p>
                           {threat.whois_data.name_servers.map((ns: string, i: number) => (
                             <p key={i} className="text-sm font-mono">{ns}</p>
                           ))}
@@ -645,25 +645,25 @@ export default function ThreatDetailPage() {
             <CardContent>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="border rounded-lg p-4 text-center">
-                  <Camera className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="font-medium text-gray-900">{threat.evidence?.screenshots?.length || 0}</p>
-                  <p className="text-sm text-gray-500">Screenshots</p>
+                  <Camera className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">{threat.evidence?.screenshots?.length || 0}</p>
+                  <p className="text-sm text-muted-foreground">Screenshots</p>
                 </div>
                 <div className="border rounded-lg p-4 text-center">
-                  <Code className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="font-medium text-gray-900">{threat.evidence?.html_snapshots?.length || 0}</p>
-                  <p className="text-sm text-gray-500">HTML Snapshots</p>
+                  <Code className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">{threat.evidence?.html_snapshots?.length || 0}</p>
+                  <p className="text-sm text-muted-foreground">HTML Snapshots</p>
                 </div>
                 <div className="border rounded-lg p-4 text-center">
-                  <Globe className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                  <p className="font-medium text-gray-900">{threat.evidence?.whois_snapshots?.length || 0}</p>
-                  <p className="text-sm text-gray-500">WHOIS Records</p>
+                  <Globe className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="font-medium text-foreground">{threat.evidence?.whois_snapshots?.length || 0}</p>
+                  <p className="text-sm text-muted-foreground">WHOIS Records</p>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div className="mt-6 rounded-lg border border-border bg-muted p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-gray-900">Latest Screenshot</p>
+                  <p className="text-sm font-medium text-foreground">Latest Screenshot</p>
                   <div className="flex items-center gap-2">
                     {screenshotError && (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
@@ -696,18 +696,18 @@ export default function ThreatDetailPage() {
                   <img
                     src={screenshotUrl}
                     alt="Evidence screenshot"
-                    className="w-full h-auto rounded-md border border-gray-200"
+                    className="w-full h-auto rounded-md border border-border"
                   />
                 ) : (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     {screenshotError || 'No screenshot available yet.'}
                   </p>
                 )}
               </div>
 
-              <div className="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div className="mt-6 rounded-lg border border-border bg-muted p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-gray-900">HTML Snapshot</p>
+                  <p className="text-sm font-medium text-foreground">HTML Snapshot</p>
                   <div className="flex items-center gap-2">
                     {htmlSnapshotError && (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
@@ -753,20 +753,20 @@ export default function ThreatDetailPage() {
                         title="HTML Snapshot Preview"
                         sandbox=""
                         srcDoc={htmlSnapshotContent}
-                        className="w-full h-64 rounded-md border border-gray-200 bg-white"
+                        className="w-full h-64 rounded-md border border-border bg-card"
                       />
                     ) : (
-                      <pre className="max-h-64 overflow-auto rounded-md border border-gray-200 bg-white p-3 text-xs text-gray-700 whitespace-pre-wrap">
+                      <pre className="max-h-64 overflow-auto rounded-md border border-border bg-card p-3 text-xs text-foreground whitespace-pre-wrap">
                         {htmlSnapshotContent}
                       </pre>
                     )}
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       Rendered preview is sandboxed (no scripts). Use "Download" for the full file.
                     </p>
                   </div>
                 ) : threat.evidence?.html_snapshots?.[0]?.html_preview || threat.evidence?.html_snapshots?.[0]?.html ? (
                   <div>
-                    <p className="text-xs text-gray-500 mb-2">
+                    <p className="text-xs text-muted-foreground mb-2">
                       Showing stored preview. Load the full snapshot to view the complete HTML.
                     </p>
                     {showHtmlFrame ? (
@@ -774,19 +774,19 @@ export default function ThreatDetailPage() {
                         title="HTML Snapshot Preview"
                         sandbox=""
                         srcDoc={threat.evidence?.html_snapshots?.[0]?.html || threat.evidence?.html_snapshots?.[0]?.html_preview}
-                        className="w-full h-64 rounded-md border border-gray-200 bg-white"
+                        className="w-full h-64 rounded-md border border-border bg-card"
                       />
                     ) : (
-                      <pre className="max-h-64 overflow-auto rounded-md border border-gray-200 bg-white p-3 text-xs text-gray-700 whitespace-pre-wrap">
+                      <pre className="max-h-64 overflow-auto rounded-md border border-border bg-card p-3 text-xs text-foreground whitespace-pre-wrap">
                         {threat.evidence?.html_snapshots?.[0]?.html || threat.evidence?.html_snapshots?.[0]?.html_preview}
                       </pre>
                     )}
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       Rendered preview is sandboxed (no scripts). Load the full snapshot for complete HTML.
                     </p>
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     {htmlSnapshotError || 'No HTML snapshot available yet.'}
                   </p>
                 )}
@@ -811,11 +811,11 @@ export default function ThreatDetailPage() {
                     className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors ${
                       status === option.value
                         ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-border hover:border-border'
                     }`}
                   >
-                    <option.icon className={`h-4 w-4 ${status === option.value ? 'text-primary-600' : 'text-gray-400'}`} />
-                    <span className={status === option.value ? 'font-medium text-primary-700' : 'text-gray-700'}>
+                    <option.icon className={`h-4 w-4 ${status === option.value ? 'text-primary-600' : 'text-muted-foreground'}`} />
+                    <span className={status === option.value ? 'font-medium text-primary-700' : 'text-foreground'}>
                       {option.label}
                     </span>
                   </button>
@@ -837,7 +837,7 @@ export default function ThreatDetailPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add notes about this threat..."
-                className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                className="w-full h-32 px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
               />
               <Button variant="outline" className="w-full mt-2" onClick={handleSave} disabled={saving}>
                 Save Notes

@@ -191,9 +191,9 @@ function NewReportContent() {
         </div>
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No brands found</h3>
-            <p className="text-gray-500 mb-6">
+            <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground mb-2">No brands found</h3>
+            <p className="text-muted-foreground mb-6">
               You need to add a brand before you can generate reports.
             </p>
             <Link href="/dashboard/brands/new">
@@ -218,8 +218,8 @@ function NewReportContent() {
       </div>
 
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Generate Report</h1>
-        <p className="text-gray-500 mt-1">Create a new takedown or evidence report</p>
+        <h1 className="text-2xl font-bold text-foreground">Generate Report</h1>
+        <p className="text-muted-foreground mt-1">Create a new takedown or evidence report</p>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -241,11 +241,11 @@ function NewReportContent() {
                     className={`p-4 border rounded-lg text-left transition-colors ${
                       selectedBrand === brand.id
                         ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-border hover:border-border'
                     }`}
                   >
-                    <p className="font-medium text-gray-900">{brand.name}</p>
-                    <p className="text-sm text-gray-500">{brand.domain}</p>
+                    <p className="font-medium text-foreground">{brand.name}</p>
+                    <p className="text-sm text-muted-foreground">{brand.domain}</p>
                   </button>
                 ))}
               </div>
@@ -266,13 +266,13 @@ function NewReportContent() {
                     className={`w-full p-4 border rounded-lg text-left transition-colors ${
                       selectedType === type.id
                         ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-border hover:border-border'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium text-gray-900">{type.name}</p>
-                        <p className="text-sm text-gray-500">{type.description}</p>
+                        <p className="font-medium text-foreground">{type.name}</p>
+                        <p className="text-sm text-muted-foreground">{type.description}</p>
                       </div>
                       {selectedType === type.id && (
                         <CheckCircle className="h-5 w-5 text-primary-600" />
@@ -297,7 +297,7 @@ function NewReportContent() {
             <CardContent>
               {brandThreats.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 mb-2">No active threats found for this brand</p>
+                  <p className="text-muted-foreground mb-2">No active threats found for this brand</p>
                   <p className="text-sm text-gray-400">
                     Run a scan to detect potential threats, or select a different brand.
                   </p>
@@ -311,7 +311,7 @@ function NewReportContent() {
                       className={`w-full p-3 border rounded-lg text-left transition-colors ${
                         selectedThreats.includes(threat.id)
                           ? 'border-primary-500 bg-primary-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-border hover:border-border'
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -322,7 +322,7 @@ function NewReportContent() {
                           className="h-4 w-4 text-primary-600 rounded"
                         />
                         <SeverityBadge severity={threat.severity} />
-                        <span className="text-sm font-mono text-gray-700 truncate">
+                        <span className="text-sm font-mono text-foreground truncate">
                           {threat.url}
                         </span>
                       </div>
@@ -342,19 +342,19 @@ function NewReportContent() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Brand</p>
+                <p className="text-sm text-muted-foreground">Brand</p>
                 <p className="font-medium">
                   {brands.find(b => b.id === selectedBrand)?.name || 'None selected'}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Report Type</p>
+                <p className="text-sm text-muted-foreground">Report Type</p>
                 <p className="font-medium">
                   {reportTypes.find(t => t.id === selectedType)?.name}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Threats Included</p>
+                <p className="text-sm text-muted-foreground">Threats Included</p>
                 <p className="font-medium">{selectedThreats.length} selected</p>
               </div>
 

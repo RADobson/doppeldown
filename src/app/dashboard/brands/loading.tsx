@@ -55,7 +55,7 @@ export default function BrandsLoading() {
               </div>
 
               {/* Created */}
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-border">
                 <div className="flex items-center justify-between">
                   <Skeleton className="h-3 w-12" />
                   <Skeleton className="h-3 w-24" />

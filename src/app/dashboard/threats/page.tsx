@@ -134,8 +134,8 @@ export default function ThreatsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Threats</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Threats</h1>
+          <p className="text-muted-foreground mt-1">
             {stats.total} total threats • {stats.critical} critical • {stats.new} new
           </p>
         </div>
@@ -151,7 +151,7 @@ export default function ThreatsPage() {
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search by URL or brand..."
                   value={searchQuery}
@@ -164,7 +164,7 @@ export default function ThreatsPage() {
               <select
                 value={severityFilter}
                 onChange={(e) => setSeverityFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">All Severities</option>
                 <option value="critical">Critical</option>
@@ -175,7 +175,7 @@ export default function ThreatsPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">All Statuses</option>
                 <option value="new">New</option>
@@ -188,7 +188,7 @@ export default function ThreatsPage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">All Types</option>
                 <option value="phishing_page">Phishing Page</option>
@@ -225,39 +225,39 @@ export default function ThreatsPage() {
       ) : (
         <Card>
           <CardContent className="p-0">
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-border">
               {filteredThreats.map((threat) => {
                 const score = getThreatScore(threat)
                 return (
                 <Link
                   key={threat.id}
                   href={`/dashboard/threats/${threat.id}`}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-4 hover:bg-muted transition-colors"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <SeverityBadge severity={threat.severity} />
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         {threatTypeLabels[threat.type] || threat.type}
                       </span>
                       {score !== null && (
-                        <span className="text-xs font-medium text-gray-600 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5">
+                        <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
                           Score {score}
                         </span>
                       )}
-                      <span className="text-xs text-gray-400">•</span>
-                      <span className="text-xs text-gray-500">{threat.brands?.name}</span>
+                      <span className="text-xs text-muted-foreground">•</span>
+                      <span className="text-xs text-muted-foreground">{threat.brands?.name}</span>
                     </div>
-                    <p className="text-sm font-mono text-gray-900 truncate">
+                    <p className="text-sm font-mono text-foreground truncate">
                       {truncateUrl(threat.url, 60)}
                     </p>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Detected: {formatDateTime(threat.detected_at)}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 ml-4">
                     <StatusBadge status={threat.status} />
-                    <ExternalLink className="h-4 w-4 text-gray-400" />
+                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
                   </div>
                 </Link>
                 )
