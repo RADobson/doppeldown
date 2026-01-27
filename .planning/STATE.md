@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 7 of 10 (UI Polish)
-Plan: —
-Status: Ready to plan
-Last activity: 2026-01-27 — Completed Phase 6
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 07-01-PLAN.md
 
-Progress: [████░░░░░░░░░░░░░░] 20% v1.2 (4/~12 plans estimated)
+Progress: [█████░░░░░░░░░░░░░] 25% v1.2 (5/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -55,6 +55,11 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - LAND-DARK-01: Landing page uses dark theme by default (gray-900 backgrounds)
 - LAND-SIMPLE-01: Simplified copy — removed verbose descriptions, false trust claims
 
+**v1.2 decisions (Phase 7):**
+- UIPOL-SKEL-01: Tailwind animate-pulse for skeletons (no external library)
+- UIPOL-A11Y-01: focus-visible for keyboard-only focus rings across all interactive elements
+- UIPOL-MOTION-01: motion-reduce support for reduced motion preference
+
 ### Pending Todos
 
 **Future milestones:**
@@ -82,6 +87,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed Phase 6 (Branding & Landing Page)
+Stopped at: Completed 07-01-PLAN.md (Foundation UI Components)
 Resume file: None
-Next: `/gsd:plan-phase 7`
+Next: `/gsd:execute-plan 07-02`
