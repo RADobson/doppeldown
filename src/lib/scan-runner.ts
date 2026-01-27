@@ -3,7 +3,7 @@ import { scanForThreats } from './web-scanner'
 import { searchLogoUsage } from './logo-scanner'
 import { collectEvidence, captureScreenshot } from './evidence-collector'
 import { scanSocialMedia } from './social-scanner'
-import { sendThreatAlert } from './email'
+import { sendThreatAlert, sendScanSummary } from './email'
 import { sendThreatDetectedWebhook } from './webhooks'
 import { buildThreatAnalysis } from './threat-analysis'
 import { dnsQueue, clearAllQueues } from './scan-queue'
@@ -876,7 +876,15 @@ export async function runScanForBrand(options: {
 
         if (shouldAlert) {
           const alertEmail = alertSettings?.alert_email || user.email
-          const alertSeverities = alertSettings?.alert_on_severity || ['critical', 'high']
+          // Convert severity_threshold to severity array
+          const thresholdToSeverities: Record<string, string[]> = {
+            'critical': ['critical'],
+            'high_critical': ['critical', 'high'],
+            'all': ['critical', 'high', 'medium', 'low']
+          }
+          const alertSeverities = thresholdToSeverities[alertSettings?.severity_threshold || 'high_critical']
+            || alertSettings?.alert_on_severity
+            || ['critical', 'high']
 
           const alertableThreats = threats.filter(t =>
             alertSeverities.includes(t.severity as string)
@@ -901,6 +909,20 @@ export async function runScanForBrand(options: {
             )
           } catch (webhookError) {
             console.error(`Failed to send webhook for brand ${brand.id}:`, webhookError)
+          }
+        }
+
+        // Send scan summary email if enabled
+        if (alertSettings?.scan_summary_emails !== false) {
+          const summaryEmail = alertSettings?.alert_email || user.email
+          try {
+            await sendScanSummary(summaryEmail, brand, {
+              domainsChecked,
+              threatsFound,
+              threats: threats as Threat[]
+            })
+          } catch (summaryError) {
+            console.error(`Failed to send scan summary for brand ${brand.id}:`, summaryError)
           }
         }
       }
