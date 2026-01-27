@@ -9,10 +9,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Alert Settings
 
-- [ ] **ALRT-01**: User can enable/disable email alerts in settings
-- [ ] **ALRT-02**: User can set severity threshold for alerts (all / high+critical / critical)
-- [ ] **ALRT-03**: User can toggle scan completion summary emails
-- [ ] **ALRT-04**: User can toggle weekly digest emails
+- [x] **ALRT-01**: User can enable/disable email alerts in settings
+- [x] **ALRT-02**: User can set severity threshold for alerts (all / high+critical / critical)
+- [x] **ALRT-03**: User can toggle scan completion summary emails
+- [x] **ALRT-04**: User can toggle weekly digest emails
 
 ### Background Scanning
 
@@ -83,10 +83,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ALRT-01 | Phase 5 | Pending |
-| ALRT-02 | Phase 5 | Pending |
-| ALRT-03 | Phase 5 | Pending |
-| ALRT-04 | Phase 5 | Pending |
+| ALRT-01 | Phase 5 | Complete |
+| ALRT-02 | Phase 5 | Complete |
+| ALRT-03 | Phase 5 | Complete |
+| ALRT-04 | Phase 5 | Complete |
 | SCAN-01 | Phase 4 | Complete |
 | SCAN-02 | Phase 4 | Complete |
 | SCAN-03 | Phase 3 | Complete |
@@ -108,4 +108,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-27 after Phase 4 completion*
+*Last updated: 2026-01-27 after Phase 5 completion (milestone complete)*

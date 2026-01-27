@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Scanning Hardening** - Fix reliability issues in existing scan flows
 - [x] **Phase 3: Manual Scan Limits** - Enforce tier-based manual scan quotas
 - [x] **Phase 4: Automated Scanning** - Background scan scheduler with tier schedules
-- [ ] **Phase 5: Alert Settings** - User-configurable email notification preferences
+- [x] **Phase 5: Alert Settings** - User-configurable email notification preferences
 
 ## Phase Details
 
@@ -91,11 +91,12 @@ Plans:
   3. User can toggle scan completion summary emails (sent after each scan)
   4. User can toggle weekly digest emails (summarizing week's threats)
   5. Alert preferences persist and apply to all future scans
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Add alert preference columns, update types, add email template functions
-- [ ] 05-02-PLAN.md — Update settings UI, create weekly digest cron endpoint
+- [x] 05-01-PLAN.md — Add alert preference columns, update types, add email template functions
+- [x] 05-02-PLAN.md — Update settings UI, create weekly digest cron endpoint
+- [x] 05-03-PLAN.md — Wire sendScanSummary and severity_threshold in scan-runner (gap closure)
 
 ## Progress
 
@@ -108,4 +109,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
 | 3. Manual Scan Limits | 2/2 | Complete | 2026-01-27 |
 | 4. Automated Scanning | 2/2 | Complete | 2026-01-27 |
-| 5. Alert Settings | 0/2 | Not started | - |
+| 5. Alert Settings | 3/3 | Complete | 2026-01-27 |
