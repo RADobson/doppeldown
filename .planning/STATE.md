@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** v1.2 Polish for Launch - Phase 6 (Branding & Landing Page)
+**Current focus:** v1.2 Polish for Launch - Phase 7 (UI Polish)
 
 ## Current Position
 
-Phase: 6 of 10 (Branding & Landing Page)
-Plan: 2 of ~4 complete (06-01, 06-02)
-Status: In progress
-Last activity: 2026-01-27 — Completed 06-02-PLAN.md
+Phase: 7 of 10 (UI Polish)
+Plan: —
+Status: Ready to plan
+Last activity: 2026-01-27 — Completed Phase 6
 
-Progress: [███░░░░░░░░░░░░░░░] 20% v1.2 (2/10 plans estimated)
+Progress: [████░░░░░░░░░░░░░░] 20% v1.2 (4/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -32,6 +32,7 @@ Progress: [███░░░░░░░░░░░░░░░] 20% v1.2 (2/1
 - 5 phases planned (6-10)
 - 24/24 requirements mapped
 - Focus: Landing page, UI polish, dark mode, dashboard cleanup
+- Phase 6 complete
 
 See: .planning/MILESTONES.md for full details
 
@@ -47,14 +48,12 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - Phase numbering starts at 6 (continues from v1.1)
 - Research-recommended 5-phase structure adopted without modification
 
-**v1.2 decisions (Phase 6 Plan 1):**
-- BRAND-IMG-01: Use Next.js ImageResponse API for dynamic OG/Twitter/Apple icon generation (vs static PNGs)
-- BRAND-LOGO-01: Text-based logo with underscore accent (vs graphic logo design)
+**v1.2 decisions (Phase 6):**
+- BRAND-IMG-01: Use Next.js ImageResponse API for dynamic OG/Twitter/Apple icon generation
+- BRAND-LOGO-01: Text-based logo with underscore accent
 - BRAND-COLOR-01: Primary-600 (#2563eb blue) as brand accent color
-
-**v1.2 decisions (Phase 6 Plan 2):**
-- LAND-COMP-01: Extract landing sections into separate Server Components for maintainability and code splitting
-- LAND-TRUST-01: Position TrustSignals between Features and HowItWorks for natural flow
+- LAND-DARK-01: Landing page uses dark theme by default (gray-900 backgrounds)
+- LAND-SIMPLE-01: Simplified copy — removed verbose descriptions, false trust claims
 
 ### Pending Todos
 
@@ -82,7 +81,7 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 
 ## Session Continuity
 
-Last session: 2026-01-27 10:21 UTC
-Stopped at: Completed Phase 6 Plan 2 (Landing Page Component Architecture)
+Last session: 2026-01-27
+Stopped at: Completed Phase 6 (Branding & Landing Page)
 Resume file: None
-Next: Continue Phase 6 (Plans 3 and 4 remaining)
+Next: `/gsd:plan-phase 7`
