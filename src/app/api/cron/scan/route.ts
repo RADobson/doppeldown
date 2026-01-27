@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { randomInt } from 'crypto'
 import { createServiceClient } from '@/lib/supabase/server'
-
-// Scan frequency per subscription tier
-const SCAN_FREQUENCIES: Record<string, number> = {
-  starter: 7,       // Weekly (7 days)
-  professional: 1,  // Daily (1 day)
-  enterprise: 0,    // Continuous (always scan)
-}
+import { getEffectiveTier, getTierLimits, getScanFrequencyHours } from '@/lib/tier-limits'
 
 export async function GET(request: NextRequest) {
   // Verify cron secret to prevent unauthorized access
@@ -32,6 +27,7 @@ export async function GET(request: NextRequest) {
         )
       `)
       .eq('status', 'active')
+      .eq('auto_scan_enabled', true)
 
     if (brandsError) throw brandsError
 
@@ -43,23 +39,25 @@ export async function GET(request: NextRequest) {
 
     for (const brand of brands || []) {
       try {
-        const subscriptionStatus = brand.users?.subscription_status || 'free'
-        const subscriptionTier = brand.users?.subscription_tier || 'free'
+        const effectiveTier = getEffectiveTier(
+          brand.users?.subscription_status,
+          brand.users?.subscription_tier
+        )
 
-        if (subscriptionStatus !== 'active' || subscriptionTier === 'free') {
+        // Skip free tier users (no automated scans)
+        const scanFrequencyHours = getScanFrequencyHours(effectiveTier)
+        if (scanFrequencyHours === null) {
           results.skipped++
           continue
         }
 
-        const scanFrequency = SCAN_FREQUENCIES[subscriptionTier] ?? 1
-
-        // Check if brand needs scanning based on frequency
+        // Check if brand needs scanning based on hours-based frequency
         const lastScan = brand.last_scan_at ? new Date(brand.last_scan_at) : null
-        const daysSinceLastScan = lastScan
-          ? Math.floor((now.getTime() - lastScan.getTime()) / (1000 * 60 * 60 * 24))
+        const hoursSinceLastScan = lastScan
+          ? Math.floor((now.getTime() - lastScan.getTime()) / (1000 * 60 * 60))
           : Infinity
 
-        if (scanFrequency > 0 && daysSinceLastScan < scanFrequency) {
+        if (hoursSinceLastScan < scanFrequencyHours) {
           results.skipped++
           continue
         }
@@ -94,7 +92,14 @@ export async function GET(request: NextRequest) {
 
         if (scanError) throw scanError
 
-        // Create scan job
+        // Build job payload with tier-specific limits
+        const enabledPlatforms = Array.isArray(brand.enabled_social_platforms)
+          ? brand.enabled_social_platforms
+          : undefined
+
+        // Create scan job with jitter to spread load
+        const jitterMs = randomInt(0, 5 * 60 * 1000)  // 0-5 minutes
+        const tierLimits = getTierLimits(effectiveTier)
         const { error: jobError } = await supabase
           .from('scan_jobs')
           .insert({
@@ -103,8 +108,11 @@ export async function GET(request: NextRequest) {
             scan_type: 'automated',
             status: 'queued',
             priority: 1,
-            scheduled_at: new Date().toISOString(),
-            payload: {}
+            scheduled_at: new Date(Date.now() + jitterMs).toISOString(),
+            payload: {
+              variationLimit: tierLimits.variationLimit,
+              platforms: enabledPlatforms,
+            }
           })
 
         if (jobError) {
