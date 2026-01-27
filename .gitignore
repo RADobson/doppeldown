@@ -46,3 +46,4 @@ coverage/
 *.log
 *.pid
 *.seed
+supabase/.temp/
