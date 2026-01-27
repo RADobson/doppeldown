@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** Phase 2 - Scanning Hardening
+**Current focus:** Phase 3 - Manual Scan Limits (COMPLETE)
 
 ## Current Position
 
-Phase: 3 of 5 (Manual Scan Limits)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-27 — Completed 03-01-PLAN.md
+Phase: 3 of 5 (Manual Scan Limits) - COMPLETE
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-27 — Completed 03-02-PLAN.md
 
-Progress: [██████████░░] 50%
+Progress: [██████████████░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 169s (2m 49s)
-- Total execution time: 0.24 hours
+- Total plans completed: 6
+- Average duration: 156s (2m 36s)
+- Total execution time: 0.26 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [██████████░░] 50%
 |-------|-------|-------|----------|
 | 01 - Admin Foundation | 1 | 111s | 111s |
 | 02 - Scanning Hardening | 3 | 616s | 205s |
-| 03 - Manual Scan Limits | 1 | 118s | 118s |
+| 03 - Manual Scan Limits | 2 | 228s | 114s |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (111s), 02-01 (152s), 02-02 (274s), 02-03 (190s), 03-01 (118s)
-- Trend: Fast execution on focused plan
+- Last 5 plans: 02-01 (152s), 02-02 (274s), 02-03 (190s), 03-01 (118s), 03-02 (110s)
+- Trend: Fast execution on focused plans
 
 *Updated after each plan completion*
 
@@ -61,6 +61,8 @@ Recent decisions affecting current work:
 - 03-01: Rolling 7-day window from first scan (not calendar week)
 - 03-01: Cached quota count in users table for performance
 - 03-01: 429 with QUOTA_EXCEEDED code and quota object for frontend
+- 03-02: useQuotaStatus hook with refetch for post-scan refresh
+- 03-02: Blue upgrade banner for helpful upsell tone
 
 ### Pending Todos
 
@@ -74,6 +76,7 @@ None yet.
 - ~~Rate limiting not integrated in scan-runner~~ - INTEGRATED in 02-02 (dnsQueue used for domain checks)
 - ~~ScanProgress UI missing~~ - CREATED in 02-03 (percentage, step labels, retry badge, cancel)
 - ~~Queue integration incomplete~~ - COMPLETED in 02-03 (dnsQueue, screenshotQueue, externalQueue all wired)
+- ~~Manual scan quota not enforced~~ - COMPLETED in 03-01/03-02 (backend + UI)
 
 **Remaining:**
 - Migration not auto-applied - need to run `supabase db push` before testing admin and progress functionality
@@ -84,6 +87,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 03-01-PLAN.md (quota backend)
+Stopped at: Completed 03-02-PLAN.md (quota UI)
 Resume file: None
-Next: 03-02-PLAN.md (quota UI)
+Next: Phase 4 (NRD Monitoring Hardening)
