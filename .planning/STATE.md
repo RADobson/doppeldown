@@ -9,29 +9,29 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 
 ## Current Position
 
-Phase: 2 of 5 (Scanning Hardening)
-Plan: 2 of 4 complete
-Status: In progress
-Last activity: 2026-01-25 — Completed 02-02-PLAN.md (Progress Schema & Hardened Scan Runner)
+Phase: 2 of 5 (Scanning Hardening) — COMPLETE
+Plan: 3 of 3 complete
+Status: Phase complete, ready for Phase 3
+Last activity: 2026-01-27 — Completed Phase 2 (Scanning Hardening)
 
-Progress: [████░░░░░░] 36%
+Progress: [████████░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 179s (2m 59s)
-- Total execution time: 0.15 hours
+- Total plans completed: 4
+- Average duration: 182s (3m 2s)
+- Total execution time: 0.20 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 - Admin Foundation | 1 | 111s | 111s |
-| 02 - Scanning Hardening | 2 | 426s | 213s |
+| 02 - Scanning Hardening | 3 | 616s | 205s |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (111s), 02-01 (152s), 02-02 (274s)
+- Last 5 plans: 01-01 (111s), 02-01 (152s), 02-02 (274s), 02-03 (190s)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -55,6 +55,8 @@ Recent decisions affecting current work:
 - 02-02: Weighted step progress (domains 40%, web 25%, logo 15%, social 20%)
 - 02-02: Error aggregation to partialErrors array instead of throwing
 - 02-02: retry_count synced from scan_jobs.attempts to scans table for UI visibility
+- 02-03: ScanProgress polling at 4s interval (matches existing pattern)
+- 02-03: Cancel button red color scheme for clear affordance
 
 ### Pending Todos
 
@@ -66,17 +68,18 @@ None yet.
 - ~~Free tier currently bypasses all limits (TIER-01)~~ - FIXED in 01-01 (brand limits corrected, effectiveTier fallback working)
 - ~~No rate limiting implemented~~ - ADDRESSED in 02-01 (queues created, ready for integration)
 - ~~Rate limiting not integrated in scan-runner~~ - INTEGRATED in 02-02 (dnsQueue used for domain checks)
+- ~~ScanProgress UI missing~~ - CREATED in 02-03 (percentage, step labels, retry badge, cancel)
+- ~~Queue integration incomplete~~ - COMPLETED in 02-03 (dnsQueue, screenshotQueue, externalQueue all wired)
 
 **Remaining:**
 - Migration not auto-applied - need to run `supabase db push` before testing admin and progress functionality
 - Pre-existing TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) - not blocking, but should be addressed
-- OpenAI Vision endpoint uses wrong API path - may need fixing during hardening
-- Scan cancellation not fully tested - may surface issues during hardening
-- Local Scan interface in dashboard page missing pages_scanned - type mismatch
+- OpenAI Vision endpoint uses wrong API path - may need fixing in future phase
+- api-client.ts not yet wired to all scanners (optional enhancement)
 
 ## Session Continuity
 
-Last session: 2026-01-25
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-01-27
+Stopped at: Completed Phase 2 (Scanning Hardening)
 Resume file: None
-Next: 02-03-PLAN.md (Scan Resilience)
+Next: Phase 3 (Manual Scan Limits)

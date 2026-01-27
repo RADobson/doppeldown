@@ -26,10 +26,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Scanning Hardening
 
-- [ ] **HARD-01**: Scans fail gracefully when external APIs timeout/error
-- [ ] **HARD-02**: System respects external API rate limits with queuing
-- [ ] **HARD-03**: Failed scans auto-retry with exponential backoff
-- [ ] **HARD-04**: User can see scan progress and cancel in-progress scans
+- [x] **HARD-01**: Scans fail gracefully when external APIs timeout/error
+- [x] **HARD-02**: System respects external API rate limits with queuing
+- [x] **HARD-03**: Failed scans auto-retry with exponential backoff
+- [x] **HARD-04**: User can see scan progress and cancel in-progress scans
 
 ### Tier Enforcement
 
@@ -91,10 +91,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCAN-02 | Phase 4 | Pending |
 | SCAN-03 | Phase 3 | Pending |
 | SCAN-04 | Phase 3 | Pending |
-| HARD-01 | Phase 2 | Pending |
-| HARD-02 | Phase 2 | Pending |
-| HARD-03 | Phase 2 | Pending |
-| HARD-04 | Phase 2 | Pending |
+| HARD-01 | Phase 2 | Complete |
+| HARD-02 | Phase 2 | Complete |
+| HARD-03 | Phase 2 | Complete |
+| HARD-04 | Phase 2 | Complete |
 | TIER-01 | Phase 1 | Complete |
 | TIER-02 | Phase 1 | Complete |
 | TIER-03 | Phase 3 | Pending |
@@ -108,4 +108,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-25 after Phase 1 completion*
+*Last updated: 2026-01-27 after Phase 2 completion*
