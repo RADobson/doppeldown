@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 6 of 10 (Branding & Landing Page)
-Plan: —
-Status: Ready to plan
-Last activity: 2026-01-27 — v1.2 roadmap created
+Plan: 1 of ~2 complete
+Status: In progress
+Last activity: 2026-01-27 — Completed 06-01-PLAN.md
 
-Progress: [░░░░░░░░░░░░░░░░░░] 0% v1.2 (0/10 plans estimated)
+Progress: [██░░░░░░░░░░░░░░░░] 10% v1.2 (1/10 plans estimated)
 
 ## Milestone Summary
 
@@ -47,6 +47,11 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - Phase numbering starts at 6 (continues from v1.1)
 - Research-recommended 5-phase structure adopted without modification
 
+**v1.2 decisions (Phase 6 Plan 1):**
+- BRAND-IMG-01: Use Next.js ImageResponse API for dynamic OG/Twitter/Apple icon generation (vs static PNGs)
+- BRAND-LOGO-01: Text-based logo with underscore accent (vs graphic logo design)
+- BRAND-COLOR-01: Primary-600 (#2563eb blue) as brand accent color
+
 ### Pending Todos
 
 **Future milestones:**
@@ -74,6 +79,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: v1.2 roadmap created, ready to plan Phase 6
+Stopped at: Completed Phase 6 Plan 1 (Brand Identity & Favicon Suite)
 Resume file: None
-Next: `/gsd:plan-phase 6`
+Next: Continue Phase 6 (Landing Page Implementation - Plan 2)
