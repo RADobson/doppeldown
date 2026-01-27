@@ -117,11 +117,13 @@ Plans:
   2. All UI components use semantic color tokens (bg-card not bg-white, text-foreground not text-gray-900)
   3. No visual regressions in light mode after refactor (pixel-perfect match)
   4. Codebase grep for "bg-white", "text-gray-", "bg-gray-" returns zero results in components
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 08-01: TBD
-- [ ] 08-02: TBD
+- [ ] 08-01-PLAN.md — CSS variables foundation + Tailwind config
+- [ ] 08-02-PLAN.md — UI components migration
+- [ ] 08-03-PLAN.md — Dashboard pages migration
+- [ ] 08-04-PLAN.md — Auth + landing + remaining + visual verification
 
 #### Phase 9: Dark Mode Implementation
 **Goal**: Fully functional dark mode with system preference support
@@ -168,6 +170,6 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 5. Alert System | v1.0 | 3/3 | Complete | 2026-01-27 |
 | 6. Branding & Landing Page | v1.2 | 4/4 | Complete | 2026-01-27 |
 | 7. UI Polish | v1.2 | 3/3 | Complete | 2026-01-27 |
-| 8. Semantic Colors Refactor | v1.2 | 0/2 | Not started | - |
+| 8. Semantic Colors Refactor | v1.2 | 0/4 | Not started | - |
 | 9. Dark Mode | v1.2 | 0/2 | Not started | - |
 | 10. Dashboard Cleanup | v1.2 | 0/2 | Not started | - |
