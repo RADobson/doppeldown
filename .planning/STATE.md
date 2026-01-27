@@ -5,27 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** v1.2 Polish for Launch
+**Current focus:** v1.2 Polish for Launch - Phase 6 (Branding & Landing Page)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 6 of 10 (Branding & Landing Page)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-01-27 — Milestone v1.2 started
+Status: Ready to plan
+Last activity: 2026-01-27 — v1.2 roadmap created
 
-Progress: [░░░░░░░░░░░░░░░░░░] 0% v1.2
+Progress: [░░░░░░░░░░░░░░░░░░] 0% v1.2 (0/10 plans estimated)
 
 ## Milestone Summary
 
 **v1.0 Production-Ready Platform** shipped 2026-01-27
-- 5 phases, 11 plans, ~65 tasks
+- 5 phases, 14 plans, ~65 tasks
 - 16/16 requirements satisfied
 - 63 files modified, 8,659 lines added
 - Tagged: v1.0
 
 **v1.1 Features** shipped 2026-01-28
 - In-app notifications, social platform selection, NRD monitoring
+- 3/3 requirements satisfied
+
+**v1.2 Polish for Launch** started 2026-01-27
+- 5 phases planned (6-10)
+- 24/24 requirements mapped
+- Focus: Landing page, UI polish, dark mode, dashboard cleanup
 
 See: .planning/MILESTONES.md for full details
 
@@ -34,7 +40,12 @@ See: .planning/MILESTONES.md for full details
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-v1.0 decisions archived to milestones/v1.0-ROADMAP.md.
+v1.0 and v1.1 decisions archived to milestone documentation.
+
+**v1.2 decisions (roadmap phase):**
+- Phase 8 included as architectural prerequisite for dark mode (separates refactoring from feature implementation)
+- Phase numbering starts at 6 (continues from v1.1)
+- Research-recommended 5-phase structure adopted without modification
 
 ### Pending Todos
 
@@ -46,24 +57,23 @@ v1.0 decisions archived to milestones/v1.0-ROADMAP.md.
 - White-labeling
 - Referral programs
 - Alert resolution workflow (resolve, dismiss, archive threats)
-- Mobile responsiveness
+- Mobile responsiveness beyond landing page
 - Onboarding flow improvements
 
 ### Blockers/Concerns
 
-**Resolved (v1.0):**
-- ~~Free tier bypassing all limits~~ — FIXED
-- ~~No rate limiting~~ — p-queue implemented
-- ~~Manual scan quota not enforced~~ — Backend + UI complete
-- ~~Alert settings not wired~~ — Gap closure complete
-
-**Remaining:**
-- Pre-existing TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) — not blocking
+**Pre-existing (not blocking v1.2):**
+- TypeScript errors (pages_scanned, screenshot_url, downlevelIteration) — technical debt
 - OpenAI Vision endpoint uses wrong API path — may need fixing
+
+**v1.2 scope risks (from research):**
+- Scope creep during polish work (prevention: hard boundaries, anti-scope list)
+- Breaking existing workflows (prevention: preserve functional anchors, test with power users)
+- Over-polishing/perfectionism (prevention: time-box work, "good enough" criteria)
 
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Milestone v1.2 initialized
+Stopped at: v1.2 roadmap created, ready to plan Phase 6
 Resume file: None
-Next: Define requirements, create roadmap
+Next: `/gsd:plan-phase 6`

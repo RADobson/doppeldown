@@ -101,42 +101,44 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRAND-01 | TBD | Pending |
-| BRAND-02 | TBD | Pending |
-| BRAND-03 | TBD | Pending |
-| BRAND-04 | TBD | Pending |
-| BRAND-05 | TBD | Pending |
-| LAND-01 | TBD | Pending |
-| LAND-02 | TBD | Pending |
-| LAND-03 | TBD | Pending |
-| LAND-04 | TBD | Pending |
-| LAND-05 | TBD | Pending |
-| LAND-06 | TBD | Pending |
-| LAND-07 | TBD | Pending |
-| LAND-08 | TBD | Pending |
-| UIPOL-01 | TBD | Pending |
-| UIPOL-02 | TBD | Pending |
-| UIPOL-03 | TBD | Pending |
-| UIPOL-04 | TBD | Pending |
-| UIPOL-05 | TBD | Pending |
-| UIPOL-06 | TBD | Pending |
-| UIPOL-07 | TBD | Pending |
-| DARK-01 | TBD | Pending |
-| DARK-02 | TBD | Pending |
-| DARK-03 | TBD | Pending |
-| DARK-04 | TBD | Pending |
-| DARK-05 | TBD | Pending |
-| DARK-06 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| DASH-04 | TBD | Pending |
+| BRAND-01 | Phase 6 | Pending |
+| BRAND-02 | Phase 6 | Pending |
+| BRAND-03 | Phase 6 | Pending |
+| BRAND-04 | Phase 6 | Pending |
+| BRAND-05 | Phase 6 | Pending |
+| LAND-01 | Phase 6 | Pending |
+| LAND-02 | Phase 6 | Pending |
+| LAND-03 | Phase 6 | Pending |
+| LAND-04 | Phase 6 | Pending |
+| LAND-05 | Phase 6 | Pending |
+| LAND-06 | Phase 6 | Pending |
+| LAND-07 | Phase 6 | Pending |
+| LAND-08 | Phase 6 | Pending |
+| UIPOL-01 | Phase 7 | Pending |
+| UIPOL-02 | Phase 7 | Pending |
+| UIPOL-03 | Phase 7 | Pending |
+| UIPOL-04 | Phase 7 | Pending |
+| UIPOL-05 | Phase 7 | Pending |
+| UIPOL-06 | Phase 7 | Pending |
+| UIPOL-07 | Phase 7 | Pending |
+| DARK-01 | Phase 9 | Pending |
+| DARK-02 | Phase 9 | Pending |
+| DARK-03 | Phase 9 | Pending |
+| DARK-04 | Phase 9 | Pending |
+| DARK-05 | Phase 9 | Pending |
+| DARK-06 | Phase 9 | Pending |
+| DASH-01 | Phase 10 | Pending |
+| DASH-02 | Phase 10 | Pending |
+| DASH-03 | Phase 10 | Pending |
+| DASH-04 | Phase 10 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 24 total
-- Mapped to phases: 0
-- Unmapped: 24
+- Mapped to phases: 24 (100%)
+- Unmapped: 0
+
+**Note:** Phase 8 (Semantic Colors Refactor) has no explicit requirements but is architectural prerequisite for Phase 9 (Dark Mode). Research identified this as critical work to prevent refactoring dark mode twice.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after initial definition*
+*Last updated: 2026-01-27 after roadmap creation*
