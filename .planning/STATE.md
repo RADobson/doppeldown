@@ -5,13 +5,13 @@
 See: .planning/PROJECT.md (updated 2026-01-24)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** Phase 4 - Automated Scanning (IN PROGRESS)
+**Current focus:** Phase 4 - Automated Scanning (COMPLETE)
 
 ## Current Position
 
-Phase: 4 of 5 (Automated Scanning)
-Plan: 2 of 3 complete
-Status: In progress
+Phase: 4 of 5 (Automated Scanning) - COMPLETE
+Plan: 2 of 2 complete
+Status: Phase complete
 Last activity: 2026-01-27 — Completed 04-02-PLAN.md
 
 Progress: [████████████████░] 80%
@@ -92,6 +92,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 04-02-PLAN.md (cron scheduling)
+Stopped at: Completed Phase 4 (Automated Scanning)
 Resume file: None
-Next: 04-03-PLAN.md (pause/resume UI)
+Next: Phase 5 (Alert Settings)

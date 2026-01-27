@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Admin Foundation** - Core infrastructure fixes enabling proper tier enforcement
 - [x] **Phase 2: Scanning Hardening** - Fix reliability issues in existing scan flows
 - [x] **Phase 3: Manual Scan Limits** - Enforce tier-based manual scan quotas
-- [ ] **Phase 4: Automated Scanning** - Background scan scheduler with tier schedules
+- [x] **Phase 4: Automated Scanning** - Background scan scheduler with tier schedules
 - [ ] **Phase 5: Alert Settings** - User-configurable email notification preferences
 
 ## Phase Details
@@ -78,8 +78,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Add auto_scan_enabled column, update tier-limits with hours-based frequency
-- [ ] 04-02-PLAN.md — Update cron endpoint with hours-based scheduling, jitter, and pause filtering
+- [x] 04-01-PLAN.md — Add auto_scan_enabled column, update tier-limits with hours-based frequency
+- [x] 04-02-PLAN.md — Update cron endpoint with hours-based scheduling, jitter, and pause filtering
 
 ### Phase 5: Alert Settings
 **Goal**: Users control email notification preferences per threat severity
@@ -106,5 +106,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Admin Foundation | 1/1 | Complete | 2026-01-25 |
 | 2. Scanning Hardening | 3/3 | Complete | 2026-01-27 |
 | 3. Manual Scan Limits | 2/2 | Complete | 2026-01-27 |
-| 4. Automated Scanning | 0/2 | Not started | - |
+| 4. Automated Scanning | 2/2 | Complete | 2026-01-27 |
 | 5. Alert Settings | 0/TBD | Not started | - |

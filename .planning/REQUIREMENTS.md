@@ -16,8 +16,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Background Scanning
 
-- [ ] **SCAN-01**: System runs automated scans per tier schedule (Starter=daily, Pro=6hr, Enterprise=hourly)
-- [ ] **SCAN-02**: Free tier gets no automated scans (upgrade hook)
+- [x] **SCAN-01**: System runs automated scans per tier schedule (Starter=daily, Pro=6hr, Enterprise=hourly)
+- [x] **SCAN-02**: Free tier gets no automated scans (upgrade hook)
 
 ### Manual Scanning
 
@@ -87,8 +87,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ALRT-02 | Phase 5 | Pending |
 | ALRT-03 | Phase 5 | Pending |
 | ALRT-04 | Phase 5 | Pending |
-| SCAN-01 | Phase 4 | Pending |
-| SCAN-02 | Phase 4 | Pending |
+| SCAN-01 | Phase 4 | Complete |
+| SCAN-02 | Phase 4 | Complete |
 | SCAN-03 | Phase 3 | Complete |
 | SCAN-04 | Phase 3 | Complete |
 | HARD-01 | Phase 2 | Complete |
@@ -108,4 +108,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-24*
-*Last updated: 2026-01-27 after Phase 3 completion*
+*Last updated: 2026-01-27 after Phase 4 completion*
