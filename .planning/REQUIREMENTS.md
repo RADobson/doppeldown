@@ -9,32 +9,32 @@ Requirements for v1.2 Polish for Launch milestone. Each maps to roadmap phases.
 
 ### Branding
 
-- [ ] **BRAND-01**: Text-based logo using "doppel_down" with clean typography
-- [ ] **BRAND-02**: Logo variation for dark mode (light text)
-- [ ] **BRAND-03**: Logo variation for light mode (dark text)
-- [ ] **BRAND-04**: Favicon (multiple sizes: 16x16, 32x32, 180x180)
-- [ ] **BRAND-05**: Social sharing images (OG image, Twitter card)
+- [x] **BRAND-01**: Text-based logo using "doppel_down" with clean typography
+- [x] **BRAND-02**: Logo variation for dark mode (light text)
+- [x] **BRAND-03**: Logo variation for light mode (dark text)
+- [x] **BRAND-04**: Favicon (multiple sizes: 16x16, 32x32, 180x180)
+- [x] **BRAND-05**: Social sharing images (OG image, Twitter card)
 
 ### Landing Page
 
-- [ ] **LAND-01**: Hero section with clear value proposition (passes 5-second test)
-- [ ] **LAND-02**: Concise copy throughout (no wall of text)
-- [ ] **LAND-03**: Single clear CTA above the fold
-- [ ] **LAND-04**: Trust signals section (logos, testimonials, or security badges)
-- [ ] **LAND-05**: Mobile responsive layout
-- [ ] **LAND-06**: Page load under 2 seconds
-- [ ] **LAND-07**: Signup form with 3 or fewer fields
-- [ ] **LAND-08**: Interactive threat scan preview / live demo section
+- [x] **LAND-01**: Hero section with clear value proposition (passes 5-second test)
+- [x] **LAND-02**: Concise copy throughout (no wall of text)
+- [x] **LAND-03**: Single clear CTA above the fold
+- [x] **LAND-04**: Trust signals section (logos, testimonials, or security badges)
+- [x] **LAND-05**: Mobile responsive layout
+- [x] **LAND-06**: Page load under 2 seconds
+- [x] **LAND-07**: Signup form with 3 or fewer fields
+- [x] **LAND-08**: Interactive threat scan preview / live demo section
 
 ### UI Polish
 
-- [ ] **UIPOL-01**: Consistent spacing using 8pt grid system
-- [ ] **UIPOL-02**: Consistent typography (1-2 fonts max)
-- [ ] **UIPOL-03**: Loading states for async operations
-- [ ] **UIPOL-04**: Empty states for lists with no data
-- [ ] **UIPOL-05**: Focus and hover states for accessibility
-- [ ] **UIPOL-06**: Clear, helpful error messages
-- [ ] **UIPOL-07**: Subtle micro-interactions and animations
+- [x] **UIPOL-01**: Consistent spacing using 8pt grid system
+- [x] **UIPOL-02**: Consistent typography (1-2 fonts max)
+- [x] **UIPOL-03**: Loading states for async operations
+- [x] **UIPOL-04**: Empty states for lists with no data
+- [x] **UIPOL-05**: Focus and hover states for accessibility
+- [x] **UIPOL-06**: Clear, helpful error messages
+- [x] **UIPOL-07**: Subtle micro-interactions and animations
 
 ### Dark Mode
 
@@ -101,26 +101,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| BRAND-01 | Phase 6 | Pending |
-| BRAND-02 | Phase 6 | Pending |
-| BRAND-03 | Phase 6 | Pending |
-| BRAND-04 | Phase 6 | Pending |
-| BRAND-05 | Phase 6 | Pending |
-| LAND-01 | Phase 6 | Pending |
-| LAND-02 | Phase 6 | Pending |
-| LAND-03 | Phase 6 | Pending |
-| LAND-04 | Phase 6 | Pending |
-| LAND-05 | Phase 6 | Pending |
-| LAND-06 | Phase 6 | Pending |
-| LAND-07 | Phase 6 | Pending |
-| LAND-08 | Phase 6 | Pending |
-| UIPOL-01 | Phase 7 | Pending |
-| UIPOL-02 | Phase 7 | Pending |
-| UIPOL-03 | Phase 7 | Pending |
-| UIPOL-04 | Phase 7 | Pending |
-| UIPOL-05 | Phase 7 | Pending |
-| UIPOL-06 | Phase 7 | Pending |
-| UIPOL-07 | Phase 7 | Pending |
+| BRAND-01 | Phase 6 | Complete |
+| BRAND-02 | Phase 6 | Complete |
+| BRAND-03 | Phase 6 | Complete |
+| BRAND-04 | Phase 6 | Complete |
+| BRAND-05 | Phase 6 | Complete |
+| LAND-01 | Phase 6 | Complete |
+| LAND-02 | Phase 6 | Complete |
+| LAND-03 | Phase 6 | Complete |
+| LAND-04 | Phase 6 | Complete |
+| LAND-05 | Phase 6 | Complete |
+| LAND-06 | Phase 6 | Complete |
+| LAND-07 | Phase 6 | Complete |
+| LAND-08 | Phase 6 | Complete |
+| UIPOL-01 | Phase 7 | Complete |
+| UIPOL-02 | Phase 7 | Complete |
+| UIPOL-03 | Phase 7 | Complete |
+| UIPOL-04 | Phase 7 | Complete |
+| UIPOL-05 | Phase 7 | Complete |
+| UIPOL-06 | Phase 7 | Complete |
+| UIPOL-07 | Phase 7 | Complete |
 | DARK-01 | Phase 9 | Pending |
 | DARK-02 | Phase 9 | Pending |
 | DARK-03 | Phase 9 | Pending |
