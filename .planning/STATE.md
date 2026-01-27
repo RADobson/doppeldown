@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-24)
 ## Current Position
 
 Phase: 5 of 5 (Alert Settings)
-Plan: 1 of 2 complete
-Status: In progress
-Last activity: 2026-01-27 — Completed 05-01-PLAN.md
+Plan: 2 of 2 complete
+Status: Phase complete
+Last activity: 2026-01-27 — Completed 05-02-PLAN.md
 
-Progress: [█████████████████░] 90%
+Progress: [██████████████████] 100%
 
 ## Performance Metrics
 
@@ -71,6 +71,9 @@ Recent decisions affecting current work:
 - 05-01: severity_threshold 'high_critical' as default (matches existing alert_on_severity behavior)
 - 05-01: Additive columns only in migration (safe rollback, backward compat)
 - 05-01: Keep alert_on_severity with @deprecated (existing code may reference it)
+- 05-02: Radio buttons for severity threshold (clearer than chip toggles)
+- 05-02: Sync daily_digest = weekly_digest on save (backward compat)
+- 05-02: Weekly digest cron Monday 9am UTC (start of business week)
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Completed 05-01-PLAN.md
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
-Next: 05-02-PLAN.md (Settings UI)
+Next: All phases complete
