@@ -660,7 +660,7 @@ export default function BrandDetailPage() {
         </div>
       )}
 
-      {activeScan && (activeScan.status === 'running' || activeScan.status === 'queued') && (
+      {activeScan && (activeScan.status === 'running' || activeScan.status === 'queued' || activeScan.status === 'pending') && (
         <ScanProgress
           scanId={activeScan.id}
           onComplete={() => {

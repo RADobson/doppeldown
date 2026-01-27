@@ -115,7 +115,7 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
   const progress = scan.overall_progress ?? 0;
   const step = (scan.current_step as ScanStep) || 'domains';
   const stepLabel = STEP_LABELS[step] || 'Scanning...';
-  const isRunning = scan.status === 'running' || scan.status === 'queued';
+  const isRunning = scan.status === 'running' || scan.status === 'queued' || scan.status === 'pending';
   const retryCount = scan.retry_count || 0;
 
   return (
@@ -124,7 +124,7 @@ export function ScanProgress({ scanId, onComplete, onError, onCancel }: ScanProg
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">
-            {scan.status === 'running' ? stepLabel : scan.status === 'completed' ? 'Scan Complete' : scan.status === 'queued' ? 'Queued...' : 'Scan Failed'}
+            {scan.status === 'running' ? stepLabel : scan.status === 'completed' ? 'Scan Complete' : scan.status === 'queued' || scan.status === 'pending' ? 'Queued...' : 'Scan Failed'}
           </span>
           {/* Retry indicator (HARD-03 visibility) */}
           {retryCount > 0 && isRunning && (
