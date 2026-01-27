@@ -43,6 +43,9 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Full-width header border line - spans both sidebar and content */}
+      <div className="fixed top-16 left-0 right-0 h-px bg-border z-40 hidden lg:block" />
+
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -60,7 +63,7 @@ export default function DashboardLayout({
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-border">
+          <div className="flex items-center justify-between h-16 px-4">
             <Link href="/dashboard" className="flex items-center">
               <Logo mode="dark" size="lg" />
             </Link>
@@ -110,7 +113,7 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-card border-b border-border">
+        <header className="sticky top-0 z-30 bg-card">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
