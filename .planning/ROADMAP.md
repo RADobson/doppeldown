@@ -81,11 +81,13 @@ Quick feature additions:
   3. User can sign up from landing page using 3-or-fewer-field form
   4. Landing page loads in under 2 seconds on standard connection
   5. Landing page displays correctly on mobile devices (responsive layout)
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 06-01: TBD
-- [ ] 06-02: TBD
+- [ ] 06-01-PLAN.md — Logo component + favicon suite + OG images
+- [ ] 06-02-PLAN.md — Landing page component extraction + trust signals
+- [ ] 06-03-PLAN.md — Interactive threat scan demo
+- [ ] 06-04-PLAN.md — Visual verification checkpoint
 
 #### Phase 7: UI Polish
 **Goal**: Consistent, professional design system applied across application
@@ -161,7 +163,7 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 3. Scanning & Evidence | v1.0 | 3/3 | Complete | 2026-01-27 |
 | 4. AI Analysis | v1.0 | 2/2 | Complete | 2026-01-27 |
 | 5. Alert System | v1.0 | 3/3 | Complete | 2026-01-27 |
-| 6. Branding & Landing Page | v1.2 | 0/2 | Not started | - |
+| 6. Branding & Landing Page | v1.2 | 0/4 | Planned | - |
 | 7. UI Polish | v1.2 | 0/2 | Not started | - |
 | 8. Semantic Colors Refactor | v1.2 | 0/2 | Not started | - |
 | 9. Dark Mode | v1.2 | 0/2 | Not started | - |
