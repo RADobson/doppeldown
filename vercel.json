@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/digest",
       "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/api/cron/nrd",
+      "schedule": "0 3 * * *"
     }
   ]
 }

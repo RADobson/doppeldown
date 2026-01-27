@@ -1,24 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { getEffectiveTier, getBrandLimit, getSocialPlatformLimit, ALL_SOCIAL_PLATFORMS } from '@/lib/tier-limits'
 
-// Brand limits per subscription tier
-const BRAND_LIMITS: Record<string, number> = {
-  free: 1,
-  starter: 3,
-  professional: 10,
-  enterprise: Number.MAX_SAFE_INTEGER,
-}
-
-const ALLOWED_SOCIAL_PLATFORMS = new Set([
-  'twitter',
-  'facebook',
-  'instagram',
-  'linkedin',
-  'tiktok',
-  'youtube',
-  'telegram',
-  'discord'
-])
+const ALLOWED_SOCIAL_PLATFORMS = new Set<string>(ALL_SOCIAL_PLATFORMS)
 
 const normalizeDomain = (value: string) => value
   .toLowerCase()
@@ -52,6 +36,16 @@ function sanitizeSocialHandles(input: unknown): Record<string, string[]> | null 
     }
   }
   return result
+}
+
+function sanitizeEnabledPlatforms(input: unknown): string[] | null {
+  if (input === undefined) return null // undefined means no change
+  if (input === null || !Array.isArray(input)) return []
+  const cleaned = input
+    .filter((item): item is string => typeof item === 'string')
+    .map(item => item.trim().toLowerCase())
+    .filter(item => ALLOWED_SOCIAL_PLATFORMS.has(item))
+  return Array.from(new Set(cleaned))
 }
 
 async function getOrCreateUserRecord(user: { id: string; email?: string; user_metadata?: { full_name?: string } }) {
@@ -119,10 +113,11 @@ export async function POST(request: NextRequest) {
 
     // Check user's subscription and brand limit
     const userData = await getOrCreateUserRecord(user)
-    const subscriptionStatus = userData?.subscription_status || 'free'
-    const subscriptionTier = userData?.subscription_tier || 'free'
-    const effectiveTier = subscriptionStatus === 'active' ? subscriptionTier : 'free'
-    const brandLimit = BRAND_LIMITS[effectiveTier] ?? BRAND_LIMITS.free
+    const effectiveTier = getEffectiveTier(
+      userData?.subscription_status,
+      userData?.subscription_tier
+    )
+    const brandLimit = getBrandLimit(effectiveTier)
 
     // Count existing brands
     const { count: existingBrands } = await supabase
@@ -142,12 +137,25 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, domain, keywords, social_handles } = body
+    const { name, domain, keywords, social_handles, enabled_social_platforms } = body
 
     if (!name || !domain || typeof name !== 'string' || typeof domain !== 'string') {
       return NextResponse.json(
         { error: 'Name and domain are required' },
         { status: 400 }
+      )
+    }
+
+    // Validate enabled social platforms against tier limit
+    const platformLimit = getSocialPlatformLimit(effectiveTier)
+    const sanitizedPlatforms = sanitizeEnabledPlatforms(enabled_social_platforms) || []
+    if (sanitizedPlatforms.length > platformLimit) {
+      return NextResponse.json(
+        {
+          error: `Platform limit exceeded. Your ${effectiveTier} plan allows ${platformLimit} platform${platformLimit !== 1 ? 's' : ''}. Please upgrade to select more.`,
+          code: 'PLATFORM_LIMIT_EXCEEDED'
+        },
+        { status: 403 }
       )
     }
 
@@ -183,6 +191,7 @@ export async function POST(request: NextRequest) {
         domain: normalizedDomain,
         keywords: sanitizedKeywords || [],
         social_handles: sanitizedHandles || {},
+        enabled_social_platforms: sanitizedPlatforms,
         status: 'active',
         threat_count: 0
       })
@@ -211,11 +220,23 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { brandId, name, domain, keywords, social_handles, mode = 'merge' } = body
+    const { brandId, name, domain, keywords, social_handles, enabled_social_platforms, mode = 'merge' } = body
 
     if (!brandId || typeof brandId !== 'string') {
       return NextResponse.json({ error: 'Brand ID is required' }, { status: 400 })
     }
+
+    // Get user tier for platform limit validation
+    const { data: userData } = await supabase
+      .from('users')
+      .select('subscription_status, subscription_tier')
+      .eq('id', user.id)
+      .single()
+
+    const effectiveTier = getEffectiveTier(
+      userData?.subscription_status,
+      userData?.subscription_tier
+    )
 
     const { data: brand, error: brandError } = await supabase
       .from('brands')
@@ -264,6 +285,20 @@ export async function PATCH(request: NextRequest) {
         ? sanitizedHandles
         : { ...(brand.social_handles || {}), ...sanitizedHandles }
       updateData.social_handles = nextHandles
+    }
+    if (enabled_social_platforms !== undefined) {
+      const platformLimit = getSocialPlatformLimit(effectiveTier)
+      const sanitizedPlatforms = sanitizeEnabledPlatforms(enabled_social_platforms) || []
+      if (sanitizedPlatforms.length > platformLimit) {
+        return NextResponse.json(
+          {
+            error: `Platform limit exceeded. Your ${effectiveTier} plan allows ${platformLimit} platform${platformLimit !== 1 ? 's' : ''}. Please upgrade to select more.`,
+            code: 'PLATFORM_LIMIT_EXCEEDED'
+          },
+          { status: 403 }
+        )
+      }
+      updateData.enabled_social_platforms = sanitizedPlatforms
     }
 
     if (Object.keys(updateData).length === 0) {

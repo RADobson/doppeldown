@@ -1,20 +1,28 @@
 import Stripe from 'stripe'
+import { getTierLimits } from './tier-limits'
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-02-24.acacia',
   typescript: true,
 })
 
+// Get tier limits for plan configuration
+const starterLimits = getTierLimits('starter')
+const professionalLimits = getTierLimits('professional')
+const enterpriseLimits = getTierLimits('enterprise')
+
 export const PLANS = {
   starter: {
     name: 'Starter',
     price: 4900, // $49/month
     priceId: process.env.STRIPE_STARTER_PRICE_ID || '',
-    brandLimit: 1,
+    brandLimit: starterLimits.brands,
     scanFrequency: 'weekly' as const,
     features: [
-      '1 brand to monitor',
+      `${starterLimits.brands} brands to monitor`,
       'Weekly automated scans',
+      `${starterLimits.variationLimit} domain variations checked`,
+      `${starterLimits.socialPlatforms} social platform${starterLimits.socialPlatforms > 1 ? 's' : ''} (your choice)`,
       'Email alerts',
       'Basic reports',
       'Domain monitoring',
@@ -24,11 +32,13 @@ export const PLANS = {
     name: 'Professional',
     price: 9900, // $99/month
     priceId: process.env.STRIPE_PRO_PRICE_ID || '',
-    brandLimit: 3,
+    brandLimit: professionalLimits.brands,
     scanFrequency: 'daily' as const,
     features: [
-      '3 brands to monitor',
+      `${professionalLimits.brands} brands to monitor`,
       'Daily automated scans',
+      `${professionalLimits.variationLimit} domain variations checked`,
+      `${professionalLimits.socialPlatforms} social platforms (your choice)`,
       'Priority email alerts',
       'Detailed takedown reports',
       'Domain + web monitoring',
@@ -40,12 +50,15 @@ export const PLANS = {
     name: 'Enterprise',
     price: 24900, // $249/month
     priceId: process.env.STRIPE_ENTERPRISE_PRICE_ID || '',
-    brandLimit: 10,
-    scanFrequency: 'daily' as const,
+    brandLimit: enterpriseLimits.brands === Infinity ? Number.MAX_SAFE_INTEGER : enterpriseLimits.brands,
+    scanFrequency: 'continuous' as const,
     features: [
-      '10 brands to monitor',
+      'Unlimited brands to monitor',
       'Continuous monitoring',
-      'Instant alerts',
+      `${enterpriseLimits.variationLimit.toLocaleString()} domain variations checked`,
+      'All 8 social platforms',
+      'NRD (Newly Registered Domains) feed',
+      'Instant alerts + webhooks',
       'Legal-ready reports',
       'Full evidence packages',
       'API access',

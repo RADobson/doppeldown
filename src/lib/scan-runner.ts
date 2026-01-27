@@ -7,6 +7,7 @@ import { sendThreatAlert, sendScanSummary } from './email'
 import { sendThreatDetectedWebhook } from './webhooks'
 import { buildThreatAnalysis } from './threat-analysis'
 import { dnsQueue, clearAllQueues } from './scan-queue'
+import { createThreatNotification, createScanCompletedNotification } from './notifications'
 import type { Threat, ThreatSeverity, ThreatType, VariationType, ScanError } from '../types'
 
 const DEFAULT_SOCIAL_PLATFORMS = ['facebook', 'instagram', 'twitter', 'linkedin', 'tiktok', 'youtube', 'telegram', 'discord']
@@ -845,6 +846,28 @@ export async function runScanForBrand(options: {
         partial_errors: partialErrors
       })
       .eq('id', scanId)
+
+    // 5b. Create in-app notifications
+    if (brand.user_id) {
+      // Threat notification (batched per scan)
+      if (threats.length > 0) {
+        try {
+          await createThreatNotification(brand.user_id, brand, threats, scanId)
+        } catch (notifError) {
+          console.error('Failed to create threat notification:', notifError)
+        }
+      }
+
+      // Scan completed notification
+      try {
+        await createScanCompletedNotification(brand.user_id, brand, scanId, {
+          domainsChecked,
+          threatsFound
+        })
+      } catch (notifError) {
+        console.error('Failed to create scan completed notification:', notifError)
+      }
+    }
 
     // 6. Update brand threat count and last scan time
     const { count } = await supabase

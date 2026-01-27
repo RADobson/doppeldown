@@ -253,3 +253,24 @@ export interface SubscriptionPlan {
   features: string[];
   stripe_price_id: string;
 }
+
+export type NotificationType = 'threat_detected' | 'scan_completed' | 'scan_failed';
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  body?: string;
+  severity?: ThreatSeverity;
+  read: boolean;
+  metadata: {
+    brand_id?: string;
+    brand_name?: string;
+    scan_id?: string;
+    threat_count?: number;
+    [key: string]: unknown;
+  };
+  created_at: string;
+  updated_at: string;
+}

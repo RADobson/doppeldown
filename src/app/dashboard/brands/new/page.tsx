@@ -7,6 +7,9 @@ import { ArrowLeft, Plus, X, Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PlatformSelector } from '@/components/PlatformSelector'
+import { createClient } from '@/lib/supabase/client'
+import { getEffectiveTier, getSocialPlatformLimit, type SocialPlatform } from '@/lib/tier-limits'
 
 const SOCIAL_PLATFORMS = [
   { key: 'twitter', label: 'Twitter/X', placeholder: '@yourbrand' },
@@ -26,6 +29,9 @@ export default function NewBrandPage() {
   const [error, setError] = useState('')
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [logoPreview, setLogoPreview] = useState<string | null>(null)
+  const [tierLoading, setTierLoading] = useState(true)
+  const [maxPlatforms, setMaxPlatforms] = useState(1)
+  const [enabledSocialPlatforms, setEnabledSocialPlatforms] = useState<SocialPlatform[]>([])
 
   const [formData, setFormData] = useState({
     name: '',
@@ -36,6 +42,38 @@ export default function NewBrandPage() {
       SOCIAL_PLATFORMS.map(platform => [platform.key, ['']])
     ) as Record<string, string[]>
   })
+
+  // Fetch user tier on mount
+  useEffect(() => {
+    async function fetchUserTier() {
+      try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth/login')
+          return
+        }
+
+        const { data: userData } = await supabase
+          .from('users')
+          .select('subscription_status, subscription_tier')
+          .eq('id', user.id)
+          .single()
+
+        const effectiveTier = getEffectiveTier(
+          userData?.subscription_status,
+          userData?.subscription_tier
+        )
+        setMaxPlatforms(getSocialPlatformLimit(effectiveTier))
+      } catch (error) {
+        console.error('Error fetching user tier:', error)
+      } finally {
+        setTierLoading(false)
+      }
+    }
+
+    fetchUserTier()
+  }, [router])
 
   useEffect(() => {
     return () => {
@@ -109,7 +147,6 @@ export default function NewBrandPage() {
         }).filter(([_, handles]) => (handles as string[]).length > 0)
       )
 
-      // In production, this would call your API
       const response = await fetch('/api/brands', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -117,7 +154,8 @@ export default function NewBrandPage() {
           name: formData.name,
           domain: formData.domain,
           keywords: formData.keywords,
-          social_handles
+          social_handles,
+          enabled_social_platforms: enabledSocialPlatforms
         })
       })
 
@@ -287,6 +325,27 @@ export default function NewBrandPage() {
                   </span>
                 ))}
               </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Platform Selection */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Social Platform Selection</CardTitle>
+            <CardDescription>Choose which social platforms to scan for impersonators</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {tierLoading ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+              </div>
+            ) : (
+              <PlatformSelector
+                value={enabledSocialPlatforms}
+                onChange={setEnabledSocialPlatforms}
+                maxPlatforms={maxPlatforms}
+              />
             )}
           </CardContent>
         </Card>

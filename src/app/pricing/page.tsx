@@ -14,11 +14,12 @@ const PLANS = [
     priceAmount: 4900,
     description: 'For small businesses and startups',
     features: [
-      '1 brand to monitor',
+      '3 brands to monitor',
       'Weekly automated scans',
+      '100 domain variations checked',
+      '3 social platforms (your choice)',
       'Email alerts',
       'Basic takedown reports',
-      'Domain monitoring',
       '30-day evidence storage'
     ],
     popular: false
@@ -30,11 +31,12 @@ const PLANS = [
     priceAmount: 9900,
     description: 'For growing companies',
     features: [
-      '3 brands to monitor',
+      '10 brands to monitor',
       'Daily automated scans',
+      '500 domain variations checked',
+      '6 social platforms (your choice)',
       'Priority email alerts',
       'Detailed takedown reports',
-      'Domain + web monitoring',
       'WHOIS tracking',
       '90-day evidence storage',
       'API access'
@@ -48,15 +50,16 @@ const PLANS = [
     priceAmount: 24900,
     description: 'For large organizations',
     features: [
-      '10 brands to monitor',
+      'Unlimited brands',
       'Continuous monitoring',
+      '2,500 domain variations checked',
+      'All 8 social platforms',
+      'NRD (Newly Registered Domains) feed',
       'Instant alerts + webhooks',
       'Legal-ready reports',
       'Full evidence packages',
       'Unlimited storage',
-      'Priority support',
-      'Custom integrations',
-      'Dedicated account manager'
+      'Priority support'
     ],
     popular: false
   }
