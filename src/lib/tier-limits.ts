@@ -9,7 +9,8 @@ export interface TierLimits {
   brands: number
   variationLimit: number
   socialPlatforms: number
-  scanFrequencyDays: number | null  // null = manual only, 0 = continuous
+  scanFrequencyDays: number | null  // null = manual only, 0 = continuous (deprecated, use scanFrequencyHours)
+  scanFrequencyHours: number | null  // null = manual only, hours between automated scans
   nrdMonitoring: boolean
 }
 
@@ -18,28 +19,32 @@ export const TIER_LIMITS: Record<TierName, TierLimits> = {
     brands: 1,
     variationLimit: 25,
     socialPlatforms: 1,
-    scanFrequencyDays: null,  // Manual only
+    scanFrequencyDays: null,  // Manual only (deprecated)
+    scanFrequencyHours: null,  // Manual only
     nrdMonitoring: false,
   },
   starter: {
     brands: 3,
     variationLimit: 100,
     socialPlatforms: 3,
-    scanFrequencyDays: 7,  // Weekly
+    scanFrequencyDays: 7,  // Weekly (deprecated)
+    scanFrequencyHours: 24,  // Daily
     nrdMonitoring: false,
   },
   professional: {
     brands: 10,
     variationLimit: 500,
     socialPlatforms: 6,
-    scanFrequencyDays: 1,  // Daily
+    scanFrequencyDays: 1,  // Daily (deprecated)
+    scanFrequencyHours: 6,  // Every 6 hours
     nrdMonitoring: false,
   },
   enterprise: {
     brands: Infinity,
     variationLimit: 2500,
     socialPlatforms: 8,  // All platforms
-    scanFrequencyDays: 0,  // Continuous
+    scanFrequencyDays: 0,  // Continuous (deprecated)
+    scanFrequencyHours: 1,  // Hourly
     nrdMonitoring: true,
   },
 }
@@ -109,7 +114,15 @@ export function getSocialPlatformLimit(tier: string): number {
  */
 export function hasAutomatedScans(tier: string): boolean {
   const limits = getTierLimits(tier)
-  return limits.scanFrequencyDays !== null
+  return limits.scanFrequencyHours !== null
+}
+
+/**
+ * Get the scan frequency in hours for a tier.
+ * Returns null for tiers without automated scanning (manual only).
+ */
+export function getScanFrequencyHours(tier: string): number | null {
+  return getTierLimits(tier).scanFrequencyHours
 }
 
 /**
