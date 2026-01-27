@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getEffectiveTier, getTierLimits, getManualScanLimit, MANUAL_SCAN_PERIOD_MS } from '@/lib/tier-limits'
 
 const ALLOWED_SCAN_TYPES = new Set(['full', 'quick', 'domain_only', 'web_only', 'social_only'])
 
@@ -30,6 +31,60 @@ export async function POST(request: NextRequest) {
 
     if (brandError || !brand) {
       return NextResponse.json({ error: 'Brand not found' }, { status: 404 })
+    }
+
+    // Lookup user tier for scan limits and quota tracking
+    const { data: userData } = await supabase
+      .from('users')
+      .select('subscription_status, subscription_tier, is_admin, manual_scans_period_start, manual_scans_count')
+      .eq('id', user.id)
+      .single()
+
+    const effectiveTier = getEffectiveTier(
+      userData?.subscription_status,
+      userData?.subscription_tier
+    )
+    const tierLimits = getTierLimits(effectiveTier)
+
+    // Manual scan quota enforcement (admin bypass pattern from Phase 1)
+    const manualScanLimit = getManualScanLimit(effectiveTier)
+    if (!userData?.is_admin && manualScanLimit !== null) {
+      const now = new Date()
+      const periodStart = userData?.manual_scans_period_start
+
+      // Check if period expired (7 days)
+      const periodExpired = !periodStart ||
+        (now.getTime() - new Date(periodStart).getTime() > MANUAL_SCAN_PERIOD_MS)
+
+      if (periodExpired) {
+        // Reset period atomically with first scan of new period
+        await supabase
+          .from('users')
+          .update({
+            manual_scans_period_start: now.toISOString(),
+            manual_scans_count: 1  // Count this scan
+          })
+          .eq('id', user.id)
+      } else {
+        // Check quota
+        const scansUsed = userData?.manual_scans_count || 0
+        if (scansUsed >= manualScanLimit) {
+          const resetsAt = new Date(periodStart).getTime() + MANUAL_SCAN_PERIOD_MS
+          return NextResponse.json(
+            {
+              error: 'Manual scan quota exceeded',
+              code: 'QUOTA_EXCEEDED',
+              quota: { limit: manualScanLimit, used: scansUsed, resetsAt }
+            },
+            { status: 429 }
+          )
+        }
+        // Increment count for this scan
+        await supabase
+          .from('users')
+          .update({ manual_scans_count: scansUsed + 1 })
+          .eq('id', user.id)
+      }
     }
 
     // Prevent duplicate queued/running scans for the same brand
@@ -64,6 +119,11 @@ export async function POST(request: NextRequest) {
 
     if (scanError) throw scanError
 
+    // Build job payload with tier-specific limits
+    const enabledPlatforms = Array.isArray(brand.enabled_social_platforms)
+      ? brand.enabled_social_platforms
+      : undefined
+
     // Create scan job
     const { data: job, error: jobError } = await supabase
       .from('scan_jobs')
@@ -74,7 +134,10 @@ export async function POST(request: NextRequest) {
         status: 'queued',
         priority: 0,
         scheduled_at: new Date().toISOString(),
-        payload: {}
+        payload: {
+          variationLimit: tierLimits.variationLimit,
+          platforms: enabledPlatforms,
+        }
       })
       .select()
       .single()
