@@ -216,11 +216,30 @@ export type VariationType =
   | 'added_letter'
   | 'keyboard_proximity';
 
+/**
+ * Alert settings for user notification preferences.
+ *
+ * Note on severity fields:
+ * - `severity_threshold` is the new simplified threshold for the UI ('all', 'high_critical', 'critical')
+ * - `alert_on_severity` is kept for backward compatibility with existing code
+ *
+ * Note on digest fields:
+ * - `weekly_digest` is the canonical field for digest preferences
+ * - `daily_digest` is deprecated and kept only for migration compatibility
+ */
 export interface AlertSettings {
   email_alerts: boolean;
   alert_email: string;
+  /** @deprecated Use severity_threshold for new UI */
   alert_on_severity: ThreatSeverity[];
+  /** Simplified severity threshold: 'all' (low+), 'high_critical' (high/critical), 'critical' (critical only) */
+  severity_threshold: 'all' | 'high_critical' | 'critical';
+  /** Whether to send email summary after each scan completes */
+  scan_summary_emails: boolean;
+  /** @deprecated Use weekly_digest instead */
   daily_digest: boolean;
+  /** Whether to send weekly digest emails */
+  weekly_digest: boolean;
   instant_critical: boolean;
 }
 
