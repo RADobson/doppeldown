@@ -153,11 +153,11 @@ Plans:
   2. Dashboard displays only essential information by default (advanced features hidden)
   3. User can access advanced features via progressive disclosure (expand/reveal patterns)
   4. Dashboard works effectively in both light and dark themes
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 10-01: TBD
-- [ ] 10-02: TBD
+- [ ] 10-01-PLAN.md — MetricCard + Collapsible components + F-pattern dashboard refactor
+- [ ] 10-02-PLAN.md — Visual verification checkpoint
 
 ## Progress
 
