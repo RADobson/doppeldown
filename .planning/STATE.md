@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 
 ## Current Position
 
-Phase: 12 of 13 (Delete Operations Backend)
-Plan: 1 of 1 complete
-Status: Phase 12 complete
-Last activity: 2026-01-29 — Completed 12-01-PLAN.md (delete operations backend)
+Phase: 13 of 13 (Delete UI)
+Plan: 1 of 3 complete
+Status: In progress
+Last activity: 2026-01-29 — Completed 13-01-PLAN.md (threats delete UI)
 
-Progress: [████████████████░░░░] 86% (32/37 plans complete)
+Progress: [████████████████░░░░] 89% (33/37 plans complete)
 
 ## Milestone Summary
 
@@ -60,6 +60,11 @@ Recent v1.3 execution decisions (Phase 12):
 - Manual threat cascade before scan deletion - FK is SET NULL not CASCADE
 - Best-effort storage cleanup - orphaned files acceptable, blocking deletion on storage errors creates worse UX
 
+Recent v1.3 execution decisions (Phase 13):
+- Swipe threshold 40px - balances accidental swipes vs deliberate gestures
+- Optimistic delete with rollback - instant feedback for responsive UX
+- Left swipe only - consistent with iOS/Android patterns
+
 ### Pending Todos
 
 **Future milestones:**
@@ -85,6 +90,6 @@ Recent v1.3 execution decisions (Phase 12):
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: Completed 12-01-PLAN.md (Phase 12 complete)
+Stopped at: Completed 13-01-PLAN.md (threats delete UI)
 Resume file: None
-Next: `/gsd:plan-phase 13` for delete UI
+Next: `/gsd:plan 13-02` for scans delete UI
