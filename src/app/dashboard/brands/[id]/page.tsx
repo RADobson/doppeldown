@@ -19,7 +19,9 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Youtube
+  Youtube,
+  MoreVertical,
+  Trash2
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -31,6 +33,7 @@ import { createClient } from '@/lib/supabase/client'
 import { ScanProgress } from '@/components/ScanProgress'
 import { getEffectiveTier, getSocialPlatformLimit, type SocialPlatform } from '@/lib/tier-limits'
 import { useQuotaStatus } from '@/hooks/useQuotaStatus'
+import { SwipeableListItem } from '@/components/ui/swipeable-list-item'
 
 interface Brand {
   id: string
@@ -146,6 +149,13 @@ export default function BrandDetailPage() {
   const [aiStatus, setAiStatus] = useState<AiStatusSummary | null>(null)
   const [aiStatusLoading, setAiStatusLoading] = useState(false)
   const { quota, loading: quotaLoading, refetch: refetchQuota } = useQuotaStatus()
+  const [showScanMenu, setShowScanMenu] = useState<string | null>(null)
+  const [deletingScan, setDeletingScan] = useState<string | null>(null)
+  const scanMenuRef = useRef<HTMLDivElement>(null)
+  const [showThreatMenu, setShowThreatMenu] = useState<string | null>(null)
+  const [deletingThreat, setDeletingThreat] = useState<string | null>(null)
+  const threatMenuRef = useRef<HTMLDivElement>(null)
+
   const getThreatScore = (threat: Threat) => {
     if (typeof threat.threat_score === 'number') return Math.round(threat.threat_score)
     if (typeof threat.analysis?.compositeScore === 'number') return Math.round(threat.analysis.compositeScore)
@@ -247,6 +257,30 @@ export default function BrandDetailPage() {
       }
     }
   }, [logoPreview])
+
+  // Click-outside handler for scan menu
+  useEffect(() => {
+    if (!showScanMenu) return
+    const handleClickOutside = (event: MouseEvent) => {
+      if (scanMenuRef.current && !scanMenuRef.current.contains(event.target as Node)) {
+        setShowScanMenu(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showScanMenu])
+
+  // Click-outside handler for threat menu
+  useEffect(() => {
+    if (!showThreatMenu) return
+    const handleClickOutside = (event: MouseEvent) => {
+      if (threatMenuRef.current && !threatMenuRef.current.contains(event.target as Node)) {
+        setShowThreatMenu(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showThreatMenu])
 
   const fetchAiStatus = async (scanId: string) => {
     setAiStatusLoading(true)
@@ -570,6 +604,77 @@ export default function BrandDetailPage() {
     }
   }
 
+  async function handleDeleteScan(scanId: string) {
+    if (deletingScan) return
+    setDeletingScan(scanId)
+    setShowScanMenu(null)
+
+    // Optimistic delete - backup and remove immediately
+    const scanBackup = scans.find(s => s.id === scanId)
+    if (!scanBackup) return
+
+    setScans(prev => prev.filter(s => s.id !== scanId))
+
+    try {
+      const response = await fetch(`/api/scans/${scanId}`, {
+        method: 'DELETE'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete scan')
+      }
+
+      // Refresh data to update threat counts (scan delete cascades threats)
+      await fetchData()
+    } catch (error) {
+      console.error('Error deleting scan:', error)
+      // Rollback - restore scan and re-sort
+      setScans(prev => [...prev, scanBackup].sort((a, b) =>
+        new Date(b.started_at).getTime() - new Date(a.started_at).getTime()
+      ))
+      alert('Failed to delete scan. Please try again.')
+    } finally {
+      setDeletingScan(null)
+    }
+  }
+
+  async function handleDeleteThreat(threatId: string) {
+    if (deletingThreat) return
+    setDeletingThreat(threatId)
+    setShowThreatMenu(null)
+
+    // Optimistic delete - backup and remove immediately
+    const threatBackup = threats.find(t => t.id === threatId)
+    if (!threatBackup) return
+
+    setThreats(prev => prev.filter(t => t.id !== threatId))
+
+    // Recalculate critical count
+    const newCriticalCount = threats.filter(t => t.id !== threatId && t.severity === 'critical').length
+    setCriticalCount(newCriticalCount)
+
+    try {
+      const response = await fetch(`/api/threats/${threatId}`, {
+        method: 'DELETE'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete threat')
+      }
+    } catch (error) {
+      console.error('Error deleting threat:', error)
+      // Rollback - restore threat and re-sort
+      setThreats(prev => [...prev, threatBackup].sort((a, b) =>
+        new Date(b.detected_at).getTime() - new Date(a.detected_at).getTime()
+      ))
+      // Recalculate critical count
+      setCriticalCount(threats.filter(t => t.severity === 'critical').length)
+      alert('Failed to delete threat. Please try again.')
+    } finally {
+      setDeletingThreat(null)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -759,31 +864,63 @@ export default function BrandDetailPage() {
                   {threats.map((threat) => {
                     const score = getThreatScore(threat)
                     return (
-                      <Link
+                      <SwipeableListItem
                         key={threat.id}
-                        href={`/dashboard/threats/${threat.id}`}
-                        className="flex items-center justify-between py-3 hover:bg-muted -mx-4 px-4 transition-colors"
+                        onDelete={() => handleDeleteThreat(threat.id)}
+                        disabled={deletingThreat === threat.id}
                       >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <SeverityBadge severity={threat.severity} />
-                            <span className="text-xs text-muted-foreground">
-                              {threatTypeLabels[threat.type] || threat.type}
-                            </span>
-                            {score !== null && (
-                              <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
-                                Score {score}
+                        <div
+                          onClick={() => router.push(`/dashboard/threats/${threat.id}`)}
+                          className="flex items-center justify-between py-3 hover:bg-muted -mx-4 px-4 transition-colors cursor-pointer"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <SeverityBadge severity={threat.severity} />
+                              <span className="text-xs text-muted-foreground">
+                                {threatTypeLabels[threat.type] || threat.type}
                               </span>
-                            )}
+                              {score !== null && (
+                                <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
+                                  Score {score}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-sm font-mono text-foreground truncate">
+                              {truncateUrl(threat.url, 45)}
+                            </p>
                           </div>
-                          <p className="text-sm font-mono text-foreground truncate">
-                            {truncateUrl(threat.url, 45)}
-                          </p>
+                          <div className="ml-4 flex items-center gap-2">
+                            <StatusBadge status={threat.status} />
+                            <div ref={threatMenuRef} className="relative">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setShowThreatMenu(showThreatMenu === threat.id ? null : threat.id)
+                                }}
+                                disabled={deletingThreat === threat.id}
+                                className="p-1 text-muted-foreground hover:text-foreground rounded disabled:opacity-50"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </button>
+                              {showThreatMenu === threat.id && (
+                                <div className="absolute right-0 mt-1 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-20">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleDeleteThreat(threat.id)
+                                    }}
+                                    disabled={deletingThreat === threat.id}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete Threat
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="ml-4">
-                          <StatusBadge status={threat.status} />
-                        </div>
-                      </Link>
+                      </SwipeableListItem>
                     )
                   })}
                 </div>
@@ -807,28 +944,68 @@ export default function BrandDetailPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {scans.map((scan) => (
-                    <div key={scan.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                      <div>
-                        <p className="font-medium text-foreground capitalize">{scan.scan_type} Scan</p>
-                        <p className="text-sm text-muted-foreground">
-                          {formatDateTime(scan.started_at)} • {scan.domains_checked} domains checked
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium text-foreground">{scan.threats_found} threats found</p>
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                          scan.status === 'completed' ? 'bg-green-100 text-green-700' :
-                          scan.status === 'running' ? 'bg-blue-100 text-blue-700' :
-                          scan.status === 'failed' ? 'bg-red-100 text-red-700' :
-                          'bg-accent text-foreground'
-                        }`}>
-                          {scan.status === 'running' && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
-                          {scan.status.charAt(0).toUpperCase() + scan.status.slice(1)}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+                  {scans.map((scan) => {
+                    const canDelete = scan.status !== 'running' && scan.status !== 'pending'
+                    return (
+                      <SwipeableListItem
+                        key={scan.id}
+                        onDelete={() => handleDeleteScan(scan.id)}
+                        disabled={!canDelete || deletingScan === scan.id}
+                      >
+                        <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                          <div className="flex-1">
+                            <p className="font-medium text-foreground capitalize">{scan.scan_type} Scan</p>
+                            <p className="text-sm text-muted-foreground">
+                              {formatDateTime(scan.started_at)} • {scan.domains_checked} domains checked
+                            </p>
+                          </div>
+                          <div className="text-right flex items-center gap-2">
+                            <div>
+                              <p className="font-medium text-foreground">{scan.threats_found} threats found</p>
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                                scan.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                scan.status === 'running' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                scan.status === 'failed' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                                'bg-accent text-foreground'
+                              }`}>
+                                {scan.status === 'running' && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
+                                {scan.status.charAt(0).toUpperCase() + scan.status.slice(1)}
+                              </span>
+                            </div>
+                            {canDelete && (
+                              <div ref={scanMenuRef} className="relative">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setShowScanMenu(showScanMenu === scan.id ? null : scan.id)
+                                  }}
+                                  disabled={deletingScan === scan.id}
+                                  className="p-1 text-muted-foreground hover:text-foreground rounded disabled:opacity-50"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </button>
+                                {showScanMenu === scan.id && (
+                                  <div className="absolute right-0 mt-1 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-20">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleDeleteScan(scan.id)
+                                      }}
+                                      disabled={deletingScan === scan.id}
+                                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                      Delete Scan
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </SwipeableListItem>
+                    )
+                  })}
                 </div>
               )}
             </CardContent>
