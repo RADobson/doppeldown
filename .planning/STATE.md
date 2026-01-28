@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 9 of 10 (Dark Mode Implementation)
-Plan: 1 of 4 complete
+Plan: 2 of 4 complete
 Status: In progress
-Last activity: 2026-01-28 — Completed 09-01-PLAN.md
+Last activity: 2026-01-28 — Completed 09-02-PLAN.md
 
-Progress: [███████████░░░░░░░] 60% v1.2 (12/~20 plans estimated)
+Progress: [████████████░░░░░░] 65% v1.2 (13/~20 plans estimated)
 
 ## Milestone Summary
 
@@ -80,6 +80,8 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - DARK-INFRA-02: defaultTheme=system respects OS preference on first visit
 - DARK-INFRA-03: disableTransitionOnChange prevents staggered animations during toggle
 - DARK-INFRA-04: Global transition-colors utility for smooth theme changes
+- DARK-UI-01: ThemeToggle placed before NotificationDropdown in header (theme less frequently used)
+- DARK-UI-02: Show resolved theme icon (Sun/Moon) not selected theme for immediate visual feedback
 
 ### Pending Todos
 
@@ -109,6 +111,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-28
-Stopped at: Completed 09-01-PLAN.md (Theme Infrastructure)
+Stopped at: Completed 09-02-PLAN.md (Theme Toggle UI)
 Resume file: None
-Next: Execute 09-02-PLAN.md (Theme Toggle UI)
+Next: Execute 09-03-PLAN.md (Component Dark Mode Styling)
