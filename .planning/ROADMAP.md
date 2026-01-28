@@ -150,7 +150,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 12-01-PLAN.md — DELETE RLS policies and API endpoints for scans, threats, reports
+- [x] 12-01-PLAN.md — DELETE RLS policies and API endpoints for scans, threats, reports
 
 #### Phase 13: Delete UI
 **Goal**: Intuitive delete gestures available in dashboard
@@ -184,5 +184,5 @@ Phases execute in numeric order: 11 → 12 → 13
 | 9. Branding and Landing | v1.2 | 6/6 | Complete | 2026-01-28 |
 | 10. Dashboard Polish | v1.2 | 2/2 | Complete | 2026-01-28 |
 | 11. Audit Logging | v1.3 | 1/1 | Complete | 2026-01-29 |
-| 12. Delete Backend | v1.3 | 0/? | Not started | - |
+| 12. Delete Backend | v1.3 | 1/1 | Complete | 2026-01-29 |
 | 13. Delete UI | v1.3 | 0/? | Not started | - |

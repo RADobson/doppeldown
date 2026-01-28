@@ -9,9 +9,9 @@ Requirements for Delete Operations with Audit Logging milestone.
 
 ### Delete Operations
 
-- [ ] **DEL-01**: User can delete a scan (removes scan and associated data from DB)
-- [ ] **DEL-02**: User can delete a threat (removes threat record from DB)
-- [ ] **DEL-03**: User can delete a report (removes report from DB)
+- [x] **DEL-01**: User can delete a scan (removes scan and associated data from DB)
+- [x] **DEL-02**: User can delete a threat (removes threat record from DB)
+- [x] **DEL-03**: User can delete a report (removes report from DB)
 
 ### User Interface
 
@@ -63,9 +63,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | AUDIT-01 | Phase 11 | Complete |
-| DEL-01 | Phase 12 | Pending |
-| DEL-02 | Phase 12 | Pending |
-| DEL-03 | Phase 12 | Pending |
+| DEL-01 | Phase 12 | Complete |
+| DEL-02 | Phase 12 | Complete |
+| DEL-03 | Phase 12 | Complete |
 | UI-01 | Phase 13 | Pending |
 | UI-02 | Phase 13 | Pending |
 
@@ -77,4 +77,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-28*
-*Last updated: 2026-01-29 after Phase 11 completion*
+*Last updated: 2026-01-29 after Phase 12 completion*
