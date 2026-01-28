@@ -132,10 +132,10 @@ Plans:
   1. Delete actions logged with user, entity type, entity ID, and timestamp
   2. Audit log queryable by admin for compliance purposes
   3. Audit log persists independently of deleted entities
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 11-01: TBD (audit logging system)
+- [ ] 11-01-PLAN.md — Audit logging table, service function, and admin query endpoint
 
 #### Phase 12: Delete Operations Backend
 **Goal**: Users can delete scans, threats, and reports via API
