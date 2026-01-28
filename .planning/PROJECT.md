@@ -46,7 +46,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 
 ### Active
 
-**v1.3 — TBD** (based on user feedback after launch)
+**v1.3 — Delete Operations with Audit Logging**
+
+- [ ] Delete scans from UI (swipe-to-delete + 3-dots menu)
+- [ ] Delete threats from UI (swipe-to-delete + 3-dots menu)
+- [ ] Delete reports from UI (swipe-to-delete + 3-dots menu)
+- [ ] Audit logging for all delete actions (accountability trail)
 
 **Future milestones (captured):**
 - Slack/Teams notification integrations
@@ -105,4 +110,4 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | Progressive disclosure for dashboard | Reduces cognitive load, shows advanced features on demand | ✓ Good |
 
 ---
-*Last updated: 2026-01-28 after v1.2 milestone complete*
+*Last updated: 2026-01-28 after v1.3 milestone started*
