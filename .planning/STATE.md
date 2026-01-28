@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 
 ## Current Position
 
-Phase: 8 of 10 (Semantic Colors Refactor) - COMPLETE
-Plan: 4 of 4 complete
-Status: Verified
-Last activity: 2026-01-28 — Phase 8 complete
+Phase: 9 of 10 (Dark Mode Implementation)
+Plan: 1 of 4 complete
+Status: In progress
+Last activity: 2026-01-28 — Completed 09-01-PLAN.md
 
-Progress: [██████████░░░░░░░░] 55% v1.2 (11/~20 plans estimated)
+Progress: [███████████░░░░░░░] 60% v1.2 (12/~20 plans estimated)
 
 ## Milestone Summary
 
@@ -75,6 +75,12 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - THEME-LANDING-01: Landing pages use dedicated --landing-* tokens to preserve dark aesthetic
 - THEME-LANDING-02: Cards within landing sections use standard bg-card tokens for contrast
 
+**v1.2 decisions (Phase 9):**
+- DARK-INFRA-01: Use attribute=class for Tailwind .dark selector integration
+- DARK-INFRA-02: defaultTheme=system respects OS preference on first visit
+- DARK-INFRA-03: disableTransitionOnChange prevents staggered animations during toggle
+- DARK-INFRA-04: Global transition-colors utility for smooth theme changes
+
 ### Pending Todos
 
 **Future milestones:**
@@ -103,6 +109,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-28
-Stopped at: Phase 8 complete, verified
+Stopped at: Completed 09-01-PLAN.md (Theme Infrastructure)
 Resume file: None
-Next: Plan Phase 9 (Dark Mode Implementation)
+Next: Execute 09-02-PLAN.md (Theme Toggle UI)
