@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 ## Current Position
 
 Phase: 11 of 13 (Audit Logging Infrastructure)
-Plan: Ready to plan
-Status: Roadmap created, awaiting planning
-Last activity: 2026-01-28 — v1.3 roadmap created
+Plan: 1 of 1 complete
+Status: Phase 11 complete
+Last activity: 2026-01-29 — Completed 11-01-PLAN.md (audit logging infrastructure)
 
-Progress: [████████████████░░░░] 80% (30/33 plans from v1.0-v1.2 complete)
+Progress: [████████████████░░░░] 84% (31/37 plans complete)
 
 ## Milestone Summary
 
@@ -50,6 +50,11 @@ Recent v1.3 planning decisions:
 - No confirmation dialog: Instant delete per user request
 - No soft delete: Hard delete with audit log provides accountability
 
+Recent v1.3 execution decisions (Phase 11):
+- audit_logs.user_id uses ON DELETE SET NULL (not CASCADE) - audit records survive user deletion
+- logAudit() best-effort pattern - catches errors, logs but never throws (audit failure doesn't block deletes)
+- Service role for writes (bypasses RLS), user client for reads (respects admin-only policy)
+
 ### Pending Todos
 
 **Future milestones:**
@@ -74,7 +79,7 @@ Recent v1.3 planning decisions:
 
 ## Session Continuity
 
-Last session: 2026-01-28
-Stopped at: v1.3 roadmap created
+Last session: 2026-01-29
+Stopped at: Completed 11-01-PLAN.md (Phase 11 complete)
 Resume file: None
-Next: `/gsd:plan-phase 11` to begin audit logging infrastructure
+Next: `/gsd:plan-phase 12` for delete operations backend
