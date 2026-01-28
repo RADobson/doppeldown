@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-27)
 ## Current Position
 
 Phase: 8 of 10 (Semantic Colors Refactor) - IN PROGRESS
-Plan: 3 of 5 complete
+Plan: 4 of 5 complete
 Status: In progress
-Last activity: 2026-01-27 — Completed 08-03-PLAN.md (Dashboard Pages Migration)
+Last activity: 2026-01-28 — Completed 08-04-PLAN.md (Auth, Landing & Standalone Components)
 
-Progress: [████████░░░░░░░░░░] 45% v1.2 (10/~12 plans estimated)
+Progress: [█████████░░░░░░░░░] 50% v1.2 (11/~12 plans estimated)
 
 ## Milestone Summary
 
@@ -72,6 +72,8 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - THEME-DASH-01: Preserve brand colors for navigation (active states keep primary-50/primary-700)
 - THEME-STATUS-01: Preserve status colors for meaning (red/yellow/green/blue carry semantic information)
 - THEME-TOGGLE-01: Use semantic tokens for toggle switches (bg-muted inactive, bg-card for knobs)
+- THEME-LANDING-01: Landing pages use dedicated --landing-* tokens to preserve dark aesthetic
+- THEME-LANDING-02: Cards within landing sections use standard bg-card tokens for contrast
 
 ### Pending Todos
 
@@ -100,7 +102,7 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 
 ## Session Continuity
 
-Last session: 2026-01-27T11:58:57Z
-Stopped at: Completed 08-03-PLAN.md (Dashboard Pages Migration)
+Last session: 2026-01-28T09:18:11Z
+Stopped at: Completed 08-04-PLAN.md (Auth, Landing & Standalone Components)
 Resume file: None
-Next: Continue Phase 8 with plan 08-04 (Landing page migrations) or 08-05 (Auth page migrations)
+Next: Complete Phase 8 with plan 08-05 (Final verification and cleanup)
