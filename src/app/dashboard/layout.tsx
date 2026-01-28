@@ -16,6 +16,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { NotificationDropdown } from '@/components/NotificationDropdown'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { Logo } from '@/components/Logo'
 
 const navigation = [
@@ -125,6 +126,7 @@ export default function DashboardLayout({
             <div className="flex-1" />
 
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <NotificationDropdown />
             </div>
           </div>
