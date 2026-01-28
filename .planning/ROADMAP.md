@@ -164,9 +164,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 13-01-PLAN.md — Install react-swipeable, create SwipeableListItem component, add delete to threats page
-- [ ] 13-02-PLAN.md — Add swipe and menu delete to reports page
-- [ ] 13-03-PLAN.md — Add swipe and menu delete to brand detail page (scans + threats)
+- [x] 13-01-PLAN.md — Install react-swipeable, create SwipeableListItem component, add delete to threats page
+- [x] 13-02-PLAN.md — Add swipe and menu delete to reports page
+- [x] 13-03-PLAN.md — Add swipe and menu delete to brand detail page (scans + threats)
 
 ## Progress
 
@@ -187,4 +187,4 @@ Phases execute in numeric order: 11 → 12 → 13
 | 10. Dashboard Polish | v1.2 | 2/2 | Complete | 2026-01-28 |
 | 11. Audit Logging | v1.3 | 1/1 | Complete | 2026-01-29 |
 | 12. Delete Backend | v1.3 | 1/1 | Complete | 2026-01-29 |
-| 13. Delete UI | v1.3 | 0/? | Not started | - |
+| 13. Delete UI | v1.3 | 3/3 | Complete | 2026-01-29 |
