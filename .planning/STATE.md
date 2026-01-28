@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 
 ## Current Position
 
-Phase: 11 of 13 (Audit Logging Infrastructure)
+Phase: 12 of 13 (Delete Operations Backend)
 Plan: 1 of 1 complete
-Status: Phase 11 complete
-Last activity: 2026-01-29 — Completed 11-01-PLAN.md (audit logging infrastructure)
+Status: Phase 12 complete
+Last activity: 2026-01-29 — Completed 12-01-PLAN.md (delete operations backend)
 
-Progress: [████████████████░░░░] 84% (31/37 plans complete)
+Progress: [████████████████░░░░] 86% (32/37 plans complete)
 
 ## Milestone Summary
 
@@ -55,6 +55,11 @@ Recent v1.3 execution decisions (Phase 11):
 - logAudit() best-effort pattern - catches errors, logs but never throws (audit failure doesn't block deletes)
 - Service role for writes (bypasses RLS), user client for reads (respects admin-only policy)
 
+Recent v1.3 execution decisions (Phase 12):
+- Return 404 (not 403) for unauthorized deletes - prevents resource enumeration
+- Manual threat cascade before scan deletion - FK is SET NULL not CASCADE
+- Best-effort storage cleanup - orphaned files acceptable, blocking deletion on storage errors creates worse UX
+
 ### Pending Todos
 
 **Future milestones:**
@@ -80,6 +85,6 @@ Recent v1.3 execution decisions (Phase 11):
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: Completed 11-01-PLAN.md (Phase 11 complete)
+Stopped at: Completed 12-01-PLAN.md (Phase 12 complete)
 Resume file: None
-Next: `/gsd:plan-phase 12` for delete operations backend
+Next: `/gsd:plan-phase 13` for delete UI
