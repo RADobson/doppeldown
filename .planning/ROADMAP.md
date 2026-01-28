@@ -135,7 +135,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 11-01-PLAN.md — Audit logging table, service function, and admin query endpoint
+- [x] 11-01-PLAN.md — Audit logging table, service function, and admin query endpoint
 
 #### Phase 12: Delete Operations Backend
 **Goal**: Users can delete scans, threats, and reports via API
@@ -183,6 +183,6 @@ Phases execute in numeric order: 11 → 12 → 13
 | 8. NRD Monitoring | v1.1 | 2/2 | Complete | 2026-01-28 |
 | 9. Branding and Landing | v1.2 | 6/6 | Complete | 2026-01-28 |
 | 10. Dashboard Polish | v1.2 | 2/2 | Complete | 2026-01-28 |
-| 11. Audit Logging | v1.3 | 0/? | Not started | - |
+| 11. Audit Logging | v1.3 | 1/1 | Complete | 2026-01-29 |
 | 12. Delete Backend | v1.3 | 0/? | Not started | - |
 | 13. Delete UI | v1.3 | 0/? | Not started | - |
