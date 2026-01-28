@@ -19,6 +19,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Button } from '@/components/ui/button'
 import { SeverityBadge, StatusBadge } from '@/components/ui/badge'
+import { MetricCard } from '@/components/ui/metric-card'
+import { Collapsible } from '@/components/ui/collapsible'
 import { formatDateTime, truncateUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 
@@ -182,68 +184,31 @@ export default function DashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-primary-100 rounded-lg">
-                <Shield className="h-6 w-6 text-primary-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Brands Monitored</p>
-                <p className="text-2xl font-bold text-foreground">{brands.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <AlertTriangle className="h-6 w-6 text-red-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Active Threats</p>
-                <p className="text-2xl font-bold text-foreground">
-                  {stats.totalThreats}
-                  {stats.criticalThreats > 0 && (
-                    <span className="text-sm font-medium text-red-600 ml-2">
-                      ({stats.criticalThreats} critical)
-                    </span>
-                  )}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Globe className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Domains Scanned</p>
-                <p className="text-2xl font-bold text-foreground">{stats.domainsScanned.toLocaleString()}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <FileText className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-muted-foreground">Threats Resolved</p>
-                <p className="text-2xl font-bold text-foreground">{stats.resolvedThreats}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <MetricCard
+          icon={AlertTriangle}
+          label="Active Threats"
+          value={stats.totalThreats}
+          detail={stats.criticalThreats > 0 ? `${stats.criticalThreats} critical` : undefined}
+          variant={stats.criticalThreats > 0 ? 'critical' : 'default'}
+        />
+        <MetricCard
+          icon={Shield}
+          label="Brands Monitored"
+          value={brands.length}
+          variant="default"
+        />
+        <MetricCard
+          icon={Globe}
+          label="Domains Scanned"
+          value={stats.domainsScanned.toLocaleString()}
+          variant="default"
+        />
+        <MetricCard
+          icon={CheckCircle}
+          label="Threats Resolved"
+          value={stats.resolvedThreats}
+          variant="success"
+        />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
@@ -343,11 +308,8 @@ export default function DashboardPage() {
           </Card>
 
           {/* Quick Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
+          <Collapsible trigger="Quick Actions" defaultOpen={false}>
+            <div className="space-y-2">
               <Link href="/dashboard/brands/new">
                 <Button variant="outline" className="w-full justify-start">
                   <Plus className="h-4 w-4 mr-2" />
@@ -366,27 +328,25 @@ export default function DashboardPage() {
                   Generate Report
                 </Button>
               </Link>
-            </CardContent>
-          </Card>
+            </div>
+          </Collapsible>
 
           {/* Protection Score */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
-                  protectionScore >= 80 ? 'bg-green-100' : protectionScore >= 50 ? 'bg-yellow-100' : 'bg-red-100'
-                }`}>
-                  <span className={`text-2xl font-bold ${
-                    protectionScore >= 80 ? 'text-green-600' : protectionScore >= 50 ? 'text-yellow-600' : 'text-red-600'
-                  }`}>{protectionScore}%</span>
-                </div>
-                <p className="font-medium text-foreground">Protection Score</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {stats.resolvedThreats} of {stats.totalThreats + stats.resolvedThreats} threats resolved
-                </p>
+          <Collapsible trigger="Protection Score" defaultOpen={false}>
+            <div className="text-center">
+              <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
+                protectionScore >= 80 ? 'bg-green-100' : protectionScore >= 50 ? 'bg-yellow-100' : 'bg-red-100'
+              }`}>
+                <span className={`text-2xl font-bold ${
+                  protectionScore >= 80 ? 'text-green-600' : protectionScore >= 50 ? 'text-yellow-600' : 'text-red-600'
+                }`}>{protectionScore}%</span>
               </div>
-            </CardContent>
-          </Card>
+              <p className="font-medium text-foreground">Protection Score</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {stats.resolvedThreats} of {stats.totalThreats + stats.resolvedThreats} threats resolved
+              </p>
+            </div>
+          </Collapsible>
         </div>
       </div>
     </div>
