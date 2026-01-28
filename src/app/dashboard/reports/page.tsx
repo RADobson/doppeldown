@@ -1,14 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FileText, Download, Send, Plus, Search, Clock, CheckCircle, Loader2 } from 'lucide-react'
+import { FileText, Download, Send, Plus, Search, Clock, CheckCircle, Loader2, MoreVertical, Trash2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { formatDateTime } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { SwipeableListItem } from '@/components/ui/swipeable-list-item'
 
 interface Report {
   id: string
@@ -40,10 +41,29 @@ export default function ReportsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [downloading, setDownloading] = useState<string | null>(null)
+  const [showMenu, setShowMenu] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetchReports()
   }, [])
+
+  // Click outside handler for kebab menu
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(null)
+      }
+    }
+
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [showMenu])
 
   async function fetchReports() {
     try {
@@ -126,6 +146,42 @@ export default function ReportsPage() {
     } catch (error) {
       console.error('Error updating report:', error)
       alert('Failed to update report status')
+    }
+  }
+
+  async function handleDeleteReport(id: string) {
+    setDeleting(id)
+    setShowMenu(null)
+
+    // Backup the report for rollback
+    const reportToDelete = reports.find(r => r.id === id)
+    if (!reportToDelete) return
+
+    // Optimistically remove from state
+    setReports(reports.filter(r => r.id !== id))
+
+    try {
+      const response = await fetch(`/api/reports/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete report')
+      }
+    } catch (error) {
+      console.error('Error deleting report:', error)
+
+      // Rollback: restore report to state and re-sort
+      setReports(prevReports => {
+        const restored = [...prevReports, reportToDelete]
+        return restored.sort((a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        )
+      })
+
+      alert('Failed to delete report. Please try again.')
+    } finally {
+      setDeleting(null)
     }
   }
 
@@ -216,35 +272,60 @@ export default function ReportsPage() {
             const StatusIcon = statusInfo.icon
 
             return (
-              <Card key={report.id}>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-accent rounded-lg">
-                        <FileText className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-foreground">
-                            {reportTypeLabels[report.type] || report.type}
-                          </h3>
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
-                            <StatusIcon className={`h-3 w-3 ${report.status === 'generating' ? 'animate-spin' : ''}`} />
-                            {statusInfo.label}
-                          </span>
+              <SwipeableListItem
+                key={report.id}
+                onDelete={() => handleDeleteReport(report.id)}
+                disabled={deleting === report.id}
+              >
+                <Card className="relative">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 bg-accent rounded-lg">
+                          <FileText className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          {report.brands?.name} • {report.threat_ids?.length || 0} threats included
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Created {formatDateTime(report.created_at)}
-                          {report.sent_to && ` • Sent to ${report.sent_to}`}
-                        </p>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-foreground">
+                              {reportTypeLabels[report.type] || report.type}
+                            </h3>
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                              <StatusIcon className={`h-3 w-3 ${report.status === 'generating' ? 'animate-spin' : ''}`} />
+                              {statusInfo.label}
+                            </span>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {report.brands?.name} • {report.threat_ids?.length || 0} threats included
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Created {formatDateTime(report.created_at)}
+                            {report.sent_to && ` • Sent to ${report.sent_to}`}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex gap-2 ml-auto">
-                      {report.status === 'ready' && (
-                        <>
+                      <div className="flex gap-2 ml-auto items-center">
+                        {report.status === 'ready' && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDownload(report)}
+                              disabled={downloading === report.id}
+                            >
+                              {downloading === report.id ? (
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              ) : (
+                                <Download className="h-4 w-4 mr-2" />
+                              )}
+                              Download
+                            </Button>
+                            <Button size="sm" onClick={() => handleSend(report)}>
+                              <Send className="h-4 w-4 mr-2" />
+                              Send
+                            </Button>
+                          </>
+                        )}
+                        {report.status === 'sent' && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -258,37 +339,44 @@ export default function ReportsPage() {
                             )}
                             Download
                           </Button>
-                          <Button size="sm" onClick={() => handleSend(report)}>
-                            <Send className="h-4 w-4 mr-2" />
-                            Send
-                          </Button>
-                        </>
-                      )}
-                      {report.status === 'sent' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDownload(report)}
-                          disabled={downloading === report.id}
-                        >
-                          {downloading === report.id ? (
+                        )}
+                        {report.status === 'generating' && (
+                          <Button variant="outline" size="sm" disabled>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          ) : (
-                            <Download className="h-4 w-4 mr-2" />
+                            Generating...
+                          </Button>
+                        )}
+
+                        {/* Kebab menu */}
+                        <div ref={showMenu === report.id ? menuRef : null} className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setShowMenu(showMenu === report.id ? null : report.id)
+                            }}
+                            className="p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
+                            aria-label="More options"
+                          >
+                            <MoreVertical className="h-5 w-5" />
+                          </button>
+                          {showMenu === report.id && (
+                            <div className="absolute right-0 mt-1 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-20">
+                              <button
+                                onClick={() => handleDeleteReport(report.id)}
+                                disabled={deleting === report.id}
+                                className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete Report
+                              </button>
+                            </div>
                           )}
-                          Download
-                        </Button>
-                      )}
-                      {report.status === 'generating' && (
-                        <Button variant="outline" size="sm" disabled>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Generating...
-                        </Button>
-                      )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </SwipeableListItem>
             )
           })}
         </div>
