@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 Production-Ready Platform** - Phases 1-5 (shipped 2026-01-27)
 - ✅ **v1.1 Features** - Quick feature add (shipped 2026-01-28)
-- 🚧 **v1.2 Polish for Launch** - Phases 6-10 (in progress)
+- ✅ **v1.2 Polish for Launch** - Phases 6-10 (shipped 2026-01-28)
 
 ## Phases
 
@@ -67,7 +67,8 @@ Quick feature additions:
 
 </details>
 
-### 🚧 v1.2 Polish for Launch (In Progress)
+<details>
+<summary>✅ v1.2 Polish for Launch (Phases 6-10) - SHIPPED 2026-01-28</summary>
 
 **Milestone Goal:** Professional, launch-ready product with distinctive branding, conversion-optimized landing page, polished UI, and dark mode support.
 
@@ -144,7 +145,7 @@ Plans:
 - [x] 09-02-PLAN.md — ThemeToggle component + header integration
 - [x] 09-03-PLAN.md — Visual verification checkpoint
 
-#### Phase 10: Dashboard Cleanup
+#### Phase 10: Dashboard Cleanup ✓
 **Goal**: Dashboard optimized for scannability and reduced cognitive load
 **Depends on**: Phase 9 (dark mode complete, both themes available for testing)
 **Requirements**: DASH-01, DASH-02, DASH-03, DASH-04
@@ -154,10 +155,13 @@ Plans:
   3. User can access advanced features via progressive disclosure (expand/reveal patterns)
   4. Dashboard works effectively in both light and dark themes
 **Plans**: 2 plans
+**Completed**: 2026-01-28
 
 Plans:
-- [ ] 10-01-PLAN.md — MetricCard + Collapsible components + F-pattern dashboard refactor
-- [ ] 10-02-PLAN.md — Visual verification checkpoint
+- [x] 10-01-PLAN.md — MetricCard + Collapsible components + F-pattern dashboard refactor
+- [x] 10-02-PLAN.md — Visual verification checkpoint
+
+</details>
 
 ## Progress
 
@@ -175,4 +179,4 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 7. UI Polish | v1.2 | 3/3 | Complete | 2026-01-27 |
 | 8. Semantic Colors Refactor | v1.2 | 4/4 | Complete | 2026-01-28 |
 | 9. Dark Mode | v1.2 | 3/3 | Complete | 2026-01-28 |
-| 10. Dashboard Cleanup | v1.2 | 0/2 | Not started | - |
+| 10. Dashboard Cleanup | v1.2 | 2/2 | Complete | 2026-01-28 |

@@ -47,10 +47,10 @@ Requirements for v1.2 Polish for Launch milestone. Each maps to roadmap phases.
 
 ### Dashboard
 
-- [ ] **DASH-01**: Clear information hierarchy
-- [ ] **DASH-02**: Reduced visual clutter
-- [ ] **DASH-03**: Scannable at a glance
-- [ ] **DASH-04**: Progressive disclosure (details on demand)
+- [x] **DASH-01**: Clear information hierarchy
+- [x] **DASH-02**: Reduced visual clutter
+- [x] **DASH-03**: Scannable at a glance
+- [x] **DASH-04**: Progressive disclosure (details on demand)
 
 ## Future Requirements
 
@@ -127,10 +127,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DARK-04 | Phase 9 | Complete |
 | DARK-05 | Phase 9 | Complete |
 | DARK-06 | Phase 9 | Complete |
-| DASH-01 | Phase 10 | Pending |
-| DASH-02 | Phase 10 | Pending |
-| DASH-03 | Phase 10 | Pending |
-| DASH-04 | Phase 10 | Pending |
+| DASH-01 | Phase 10 | Complete |
+| DASH-02 | Phase 10 | Complete |
+| DASH-03 | Phase 10 | Complete |
+| DASH-04 | Phase 10 | Complete |
 
 **Coverage:**
 - v1.2 requirements: 24 total
@@ -141,4 +141,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-27*
-*Last updated: 2026-01-27 after roadmap creation*
+*Last updated: 2026-01-28 after Phase 10 completion*
