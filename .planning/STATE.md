@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-28)
 ## Current Position
 
 Phase: 13 of 13 (Delete UI)
-Plan: 1 of 3 complete
+Plan: 2 of 3 complete
 Status: In progress
-Last activity: 2026-01-29 — Completed 13-01-PLAN.md (threats delete UI)
+Last activity: 2026-01-29 — Completed 13-02-PLAN.md (reports delete UI)
 
-Progress: [████████████████░░░░] 89% (33/37 plans complete)
+Progress: [█████████████████░░░] 92% (34/37 plans complete)
 
 ## Milestone Summary
 
@@ -64,6 +64,8 @@ Recent v1.3 execution decisions (Phase 13):
 - Swipe threshold 40px - balances accidental swipes vs deliberate gestures
 - Optimistic delete with rollback - instant feedback for responsive UX
 - Left swipe only - consistent with iOS/Android patterns
+- Click-outside handler for kebab menus - closes menu when clicking elsewhere
+- Rollback re-sorts by created_at desc - maintains proper list order after failed delete
 
 ### Pending Todos
 
@@ -82,6 +84,7 @@ Recent v1.3 execution decisions (Phase 13):
 
 **Pre-existing (not blocking):**
 - /auth/reset-password prerendering warning (useSearchParams without Suspense)
+- /api/scan/quota static rendering error (cookies usage)
 - OpenAI Vision endpoint API path may need fixing
 
 **Tech debt from v1.2:**
@@ -90,6 +93,6 @@ Recent v1.3 execution decisions (Phase 13):
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: Completed 13-01-PLAN.md (threats delete UI)
+Stopped at: Completed 13-02-PLAN.md (reports delete UI)
 Resume file: None
-Next: `/gsd:plan 13-02` for scans delete UI
+Next: `/gsd:plan 13-03` for scans delete UI
