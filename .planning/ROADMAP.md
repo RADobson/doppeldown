@@ -136,11 +136,12 @@ Plans:
   3. User's theme preference persists across browser sessions
   4. All text in dark mode meets WCAG AA contrast ratio (4.5:1 minimum)
   5. Theme transitions smoothly without flicker on page load or toggle
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 09-01: TBD
-- [ ] 09-02: TBD
+- [ ] 09-01-PLAN.md — next-themes + ThemeProvider + dark CSS variables
+- [ ] 09-02-PLAN.md — ThemeToggle component + header integration
+- [ ] 09-03-PLAN.md — Visual verification checkpoint
 
 #### Phase 10: Dashboard Cleanup
 **Goal**: Dashboard optimized for scannability and reduced cognitive load
@@ -172,5 +173,5 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 6. Branding & Landing Page | v1.2 | 4/4 | Complete | 2026-01-27 |
 | 7. UI Polish | v1.2 | 3/3 | Complete | 2026-01-27 |
 | 8. Semantic Colors Refactor | v1.2 | 4/4 | Complete | 2026-01-28 |
-| 9. Dark Mode | v1.2 | 0/2 | Not started | - |
+| 9. Dark Mode | v1.2 | 0/3 | Not started | - |
 | 10. Dashboard Cleanup | v1.2 | 0/2 | Not started | - |
