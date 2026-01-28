@@ -126,7 +126,7 @@ Plans:
 - [x] 08-03-PLAN.md — Dashboard pages migration
 - [x] 08-04-PLAN.md — Auth + landing + remaining + visual verification
 
-#### Phase 9: Dark Mode Implementation
+#### Phase 9: Dark Mode Implementation ✓
 **Goal**: Fully functional dark mode with system preference support
 **Depends on**: Phase 8 (semantic colors ready)
 **Requirements**: DARK-01, DARK-02, DARK-03, DARK-04, DARK-05, DARK-06
@@ -137,11 +137,12 @@ Plans:
   4. All text in dark mode meets WCAG AA contrast ratio (4.5:1 minimum)
   5. Theme transitions smoothly without flicker on page load or toggle
 **Plans**: 3 plans
+**Completed**: 2026-01-28
 
 Plans:
-- [ ] 09-01-PLAN.md — next-themes + ThemeProvider + dark CSS variables
-- [ ] 09-02-PLAN.md — ThemeToggle component + header integration
-- [ ] 09-03-PLAN.md — Visual verification checkpoint
+- [x] 09-01-PLAN.md — next-themes + ThemeProvider + dark CSS variables
+- [x] 09-02-PLAN.md — ThemeToggle component + header integration
+- [x] 09-03-PLAN.md — Visual verification checkpoint
 
 #### Phase 10: Dashboard Cleanup
 **Goal**: Dashboard optimized for scannability and reduced cognitive load
@@ -173,5 +174,5 @@ Phases execute in numeric order: 6 → 7 → 8 → 9 → 10
 | 6. Branding & Landing Page | v1.2 | 4/4 | Complete | 2026-01-27 |
 | 7. UI Polish | v1.2 | 3/3 | Complete | 2026-01-27 |
 | 8. Semantic Colors Refactor | v1.2 | 4/4 | Complete | 2026-01-28 |
-| 9. Dark Mode | v1.2 | 0/3 | Not started | - |
+| 9. Dark Mode | v1.2 | 3/3 | Complete | 2026-01-28 |
 | 10. Dashboard Cleanup | v1.2 | 0/2 | Not started | - |

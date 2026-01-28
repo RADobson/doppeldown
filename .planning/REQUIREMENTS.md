@@ -38,12 +38,12 @@ Requirements for v1.2 Polish for Launch milestone. Each maps to roadmap phases.
 
 ### Dark Mode
 
-- [ ] **DARK-01**: Manual toggle in header/settings
-- [ ] **DARK-02**: Respects system preference on first visit
-- [ ] **DARK-03**: Proper dark palette (#121212 base, semantic colors)
-- [ ] **DARK-04**: WCAG contrast compliance (4.5:1 for text)
-- [ ] **DARK-05**: User preference persists across sessions
-- [ ] **DARK-06**: Smooth transition animation between modes
+- [x] **DARK-01**: Manual toggle in header/settings
+- [x] **DARK-02**: Respects system preference on first visit
+- [x] **DARK-03**: Proper dark palette (#121212 base, semantic colors)
+- [x] **DARK-04**: WCAG contrast compliance (4.5:1 for text)
+- [x] **DARK-05**: User preference persists across sessions
+- [x] **DARK-06**: Smooth transition animation between modes
 
 ### Dashboard
 
@@ -121,12 +121,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UIPOL-05 | Phase 7 | Complete |
 | UIPOL-06 | Phase 7 | Complete |
 | UIPOL-07 | Phase 7 | Complete |
-| DARK-01 | Phase 9 | Pending |
-| DARK-02 | Phase 9 | Pending |
-| DARK-03 | Phase 9 | Pending |
-| DARK-04 | Phase 9 | Pending |
-| DARK-05 | Phase 9 | Pending |
-| DARK-06 | Phase 9 | Pending |
+| DARK-01 | Phase 9 | Complete |
+| DARK-02 | Phase 9 | Complete |
+| DARK-03 | Phase 9 | Complete |
+| DARK-04 | Phase 9 | Complete |
+| DARK-05 | Phase 9 | Complete |
+| DARK-06 | Phase 9 | Complete |
 | DASH-01 | Phase 10 | Pending |
 | DASH-02 | Phase 10 | Pending |
 | DASH-03 | Phase 10 | Pending |
