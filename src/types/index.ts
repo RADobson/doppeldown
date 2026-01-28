@@ -274,3 +274,17 @@ export interface Notification {
   created_at: string;
   updated_at: string;
 }
+
+export type AuditAction = 'DELETE'
+export type AuditEntityType = 'scan' | 'threat' | 'report'
+
+export interface AuditLog {
+  id: string
+  user_id: string
+  user_email?: string
+  action: AuditAction
+  entity_type: AuditEntityType
+  entity_id: string
+  metadata: Record<string, unknown>
+  created_at: string
+}
