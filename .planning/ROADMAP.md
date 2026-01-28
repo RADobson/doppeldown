@@ -161,10 +161,12 @@ Plans:
   2. 3-dots context menu shows delete option on list items
   3. Delete action executes immediately (no confirmation dialog)
   4. List updates instantly after delete
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 13-01: TBD (swipe and menu delete UI)
+- [ ] 13-01-PLAN.md — Install react-swipeable, create SwipeableListItem component, add delete to threats page
+- [ ] 13-02-PLAN.md — Add swipe and menu delete to reports page
+- [ ] 13-03-PLAN.md — Add swipe and menu delete to brand detail page (scans + threats)
 
 ## Progress
 
