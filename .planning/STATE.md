@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-27)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** v1.2 Polish for Launch - Phase 9 (Dark Mode Implementation)
+**Current focus:** v1.2 Polish for Launch - Phase 10 (Dashboard Cleanup)
 
 ## Current Position
 
-Phase: 9 of 10 (Dark Mode Implementation) - COMPLETE
-Plan: 3 of 3 complete
-Status: Verified
-Last activity: 2026-01-28 — Phase 9 complete
+Phase: 10 of 10 (Dashboard Cleanup)
+Plan: 1 of 1 complete
+Status: In progress
+Last activity: 2026-01-28 — Completed 10-01-PLAN.md
 
-Progress: [██████████████░░░░] 70% v1.2 (14/~20 plans estimated)
+Progress: [███████████████░░░░] 75% v1.2 (15/~20 plans estimated)
 
 ## Milestone Summary
 
@@ -83,6 +83,11 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 - DARK-UI-01: ThemeToggle placed before NotificationDropdown in header (theme less frequently used)
 - DARK-UI-02: Show resolved theme icon (Sun/Moon) not selected theme for immediate visual feedback
 
+**v1.2 decisions (Phase 10):**
+- DASH-LAYOUT-01: F-pattern prioritizes Active Threats top-left as most critical metric
+- DASH-COLLAPSE-01: Quick Actions and Protection Score collapsed by default to reduce cognitive load
+- DASH-VISIBLE-01: Recent Threats and Your Brands remain visible as actionable content
+
 ### Pending Todos
 
 **Future milestones:**
@@ -111,6 +116,6 @@ v1.0 and v1.1 decisions archived to milestone documentation.
 ## Session Continuity
 
 Last session: 2026-01-28
-Stopped at: Phase 9 complete, verified
+Stopped at: Completed 10-01-PLAN.md
 Resume file: None
-Next: Plan Phase 10 (Dashboard Cleanup)
+Next: Continue Phase 10 (additional plans if needed)
