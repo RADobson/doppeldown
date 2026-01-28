@@ -147,10 +147,10 @@ Plans:
   3. User can delete a report (removes report file and DB record)
   4. Deleted entities return 404 when accessed
   5. All deletes trigger audit log entries
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 12-01: TBD (delete API endpoints)
+- [ ] 12-01-PLAN.md — DELETE RLS policies and API endpoints for scans, threats, reports
 
 #### Phase 13: Delete UI
 **Goal**: Intuitive delete gestures available in dashboard
