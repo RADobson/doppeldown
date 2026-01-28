@@ -40,6 +40,44 @@
     --landing-border: 217.2 32.6% 17.5%;       /* gray-800 equivalent - borders on dark */
 
   }
+
+  .dark {
+    /* Dark mode semantic tokens */
+    --background: 222.2 84% 4.9%;              /* dark gray base ~#0a0a0f */
+    --foreground: 210 40% 98%;                 /* near-white text */
+
+    --card: 217.2 32.6% 12%;                   /* elevated surface, slightly lighter than bg */
+    --card-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;               /* subtle backgrounds */
+    --muted-foreground: 215 20.2% 65.1%;      /* secondary text - 4.5:1 contrast */
+
+    --accent: 217.2 32.6% 17.5%;              /* hover states */
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 50.6%;             /* slightly muted red for dark mode */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 217.2 32.6% 20%;                /* visible but subtle borders */
+    --input: 217.2 32.6% 17.5%;
+
+    --ring: 212.7 26.8% 83.9%;                /* lighter ring for visibility */
+
+    --primary: 217.2 91.2% 59.8%;             /* slightly brighter blue for dark mode */
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    /* Scrollbar tokens - dark mode */
+    --scrollbar-track: 217.2 32.6% 12%;
+    --scrollbar-thumb: 215 20.2% 35%;
+    --scrollbar-thumb-hover: 215 20.2% 45%;
+
+    /* Landing page tokens stay the same (THEME-LANDING-01) */
+  }
+}
+
+/* Smooth color transitions for theme changes */
+* {
+  @apply transition-colors duration-200;
 }
 
 body {
