@@ -37,16 +37,16 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 - ✓ In-app notifications (threat detected, scan completed, scan failed) — v1.1
 - ✓ Social platform selection per brand (tier-based limits) — v1.1
 - ✓ NRD (Newly Registered Domains) monitoring for Enterprise tier — v1.1
+- ✓ Text-based "doppel_down" logo with favicon suite — v1.2
+- ✓ Dark-themed conversion-optimized landing page — v1.2
+- ✓ UI polish (loading states, empty states, focus accessibility) — v1.2
+- ✓ Semantic color system with CSS variables — v1.2
+- ✓ Dark mode with system preference and persistence — v1.2
+- ✓ Scannable dashboard with progressive disclosure — v1.2
 
 ### Active
 
-**v1.2 — Polish for Launch**
-
-- [ ] Landing page rewrite with clearer value proposition
-- [ ] Landing page visual redesign (distinctive, not template-y)
-- [ ] App-wide professional design pass (consistent styling)
-- [ ] Dark mode support
-- [ ] Dashboard cleanup (better hierarchy, less clutter)
+**v1.3 — TBD** (based on user feedback after launch)
 
 **Future milestones (captured):**
 - Slack/Teams notification integrations
@@ -69,11 +69,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 
 ## Context
 
-- **Current state**: v1.0 shipped with 15,152 LOC TypeScript
-- **Tech stack**: Next.js 14, Supabase, Stripe, p-queue for rate limiting
+- **Current state**: v1.2 shipped with ~182,874 LOC TypeScript
+- **Tech stack**: Next.js 14, Supabase, Stripe, p-queue for rate limiting, next-themes
 - **AI providers**: Claude and OpenAI Vision APIs for threat analysis
 - **Launch strategy**: Cold outreach to prospects, demo by scanning their brand live
 - **Codebase mapped**: `.planning/codebase/` contains architecture and stack analysis
+- **UI status**: Professional polish complete — dark mode, semantic colors, F-pattern dashboard
 
 ## Constraints
 
@@ -96,6 +97,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | Severity threshold with fallback chain | Backward compatible with existing alert_on_severity | ✓ Good |
 | OpenNRD as default NRD provider | Free, no API key required, daily updates | ✓ Good |
 | Levenshtein for typosquat detection | Simple, effective, no external dependencies | ✓ Good |
+| Text-based logo with underscore accent | Distinctive, memorable, no graphic design needed | ✓ Good |
+| Dark landing page theme | Stands out from template sites, professional feel | ✓ Good |
+| HSL CSS variables for theming | Enables Tailwind opacity modifiers (bg-background/50) | ✓ Good |
+| next-themes for dark mode | System preference detection, persistence, no flash | ✓ Good |
+| F-pattern dashboard layout | Prioritizes critical info (Active Threats) top-left | ✓ Good |
+| Progressive disclosure for dashboard | Reduces cognitive load, shows advanced features on demand | ✓ Good |
 
 ---
-*Last updated: 2026-01-27 after v1.2 milestone started*
+*Last updated: 2026-01-28 after v1.2 milestone complete*
