@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AlertTriangle, Search, Download, ExternalLink, Loader2 } from 'lucide-react'
+import { AlertTriangle, Search, Download, ExternalLink, Loader2, MoreVertical, Trash2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { SeverityBadge, StatusBadge } from '@/components/ui/badge'
 import { formatDateTime, truncateUrl } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import { SwipeableListItem } from '@/components/ui/swipeable-list-item'
 
 interface Threat {
   id: string
@@ -43,6 +44,9 @@ export default function ThreatsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [stats, setStats] = useState({ total: 0, critical: 0, high: 0, new: 0 })
+  const [showMenu, setShowMenu] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const getThreatScore = (threat: Threat) => {
     if (typeof threat.threat_score === 'number') return Math.round(threat.threat_score)
@@ -53,6 +57,19 @@ export default function ThreatsPage() {
   useEffect(() => {
     fetchThreats()
   }, [])
+
+  // Click outside handler for kebab menu
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(null)
+      }
+    }
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showMenu])
 
   async function fetchThreats() {
     try {
@@ -96,6 +113,58 @@ export default function ThreatsPage() {
     const matchesType = typeFilter === 'all' || threat.type === typeFilter
     return matchesSearch && matchesSeverity && matchesStatus && matchesType
   })
+
+  async function handleDeleteThreat(threatId: string) {
+    setDeleting(threatId)
+
+    // Backup the threat for rollback
+    const threatToDelete = threats.find(t => t.id === threatId)
+    if (!threatToDelete) return
+
+    try {
+      // Optimistic update: remove threat from list
+      const updatedThreats = threats.filter(t => t.id !== threatId)
+      setThreats(updatedThreats)
+
+      // Recalculate stats
+      setStats({
+        total: updatedThreats.length,
+        critical: updatedThreats.filter(t => t.severity === 'critical').length,
+        high: updatedThreats.filter(t => t.severity === 'high').length,
+        new: updatedThreats.filter(t => t.status === 'new').length
+      })
+
+      // Call delete endpoint
+      const response = await fetch(`/api/threats/${threatId}`, {
+        method: 'DELETE'
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to delete threat')
+      }
+    } catch (error) {
+      console.error('Error deleting threat:', error)
+
+      // Rollback: restore threat to list
+      const restoredThreats = [...threats, threatToDelete].sort((a, b) =>
+        new Date(b.detected_at).getTime() - new Date(a.detected_at).getTime()
+      )
+      setThreats(restoredThreats)
+
+      // Recalculate stats
+      setStats({
+        total: restoredThreats.length,
+        critical: restoredThreats.filter(t => t.severity === 'critical').length,
+        high: restoredThreats.filter(t => t.severity === 'high').length,
+        new: restoredThreats.filter(t => t.status === 'new').length
+      })
+
+      alert('Failed to delete threat. Please try again.')
+    } finally {
+      setDeleting(null)
+      setShowMenu(null)
+    }
+  }
 
   async function exportCsv() {
     const csvContent = [
@@ -229,37 +298,73 @@ export default function ThreatsPage() {
               {filteredThreats.map((threat) => {
                 const score = getThreatScore(threat)
                 return (
-                <Link
-                  key={threat.id}
-                  href={`/dashboard/threats/${threat.id}`}
-                  className="flex items-center justify-between p-4 hover:bg-muted transition-colors"
-                >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <SeverityBadge severity={threat.severity} />
-                      <span className="text-xs text-muted-foreground">
-                        {threatTypeLabels[threat.type] || threat.type}
-                      </span>
-                      {score !== null && (
-                        <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
-                          Score {score}
-                        </span>
-                      )}
-                      <span className="text-xs text-muted-foreground">•</span>
-                      <span className="text-xs text-muted-foreground">{threat.brands?.name}</span>
+                  <SwipeableListItem
+                    key={threat.id}
+                    onDelete={() => handleDeleteThreat(threat.id)}
+                    disabled={deleting === threat.id}
+                  >
+                    <div className="flex items-center justify-between p-4 hover:bg-muted transition-colors bg-background">
+                      {/* Main content - clickable area */}
+                      <div
+                        className="flex-1 min-w-0 cursor-pointer"
+                        onClick={() => router.push(`/dashboard/threats/${threat.id}`)}
+                      >
+                        <div className="flex items-center gap-2 mb-1">
+                          <SeverityBadge severity={threat.severity} />
+                          <span className="text-xs text-muted-foreground">
+                            {threatTypeLabels[threat.type] || threat.type}
+                          </span>
+                          {score !== null && (
+                            <span className="text-xs font-medium text-muted-foreground bg-accent border border-border rounded-full px-2 py-0.5">
+                              Score {score}
+                            </span>
+                          )}
+                          <span className="text-xs text-muted-foreground">•</span>
+                          <span className="text-xs text-muted-foreground">{threat.brands?.name}</span>
+                        </div>
+                        <p className="text-sm font-mono text-foreground truncate">
+                          {truncateUrl(threat.url, 60)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Detected: {formatDateTime(threat.detected_at)}
+                        </p>
+                      </div>
+
+                      {/* Right side: kebab menu and status */}
+                      <div className="flex items-center gap-3 ml-4">
+                        {/* Kebab menu */}
+                        <div className="relative" ref={showMenu === threat.id ? menuRef : null}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setShowMenu(showMenu === threat.id ? null : threat.id)
+                            }}
+                            className="p-1 text-muted-foreground hover:text-foreground rounded"
+                          >
+                            <MoreVertical className="h-5 w-5" />
+                          </button>
+                          {showMenu === threat.id && (
+                            <div className="absolute right-0 mt-1 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-20">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleDeleteThreat(threat.id)
+                                }}
+                                disabled={deleting === threat.id}
+                                className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete Threat
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        <StatusBadge status={threat.status} />
+                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                      </div>
                     </div>
-                    <p className="text-sm font-mono text-foreground truncate">
-                      {truncateUrl(threat.url, 60)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Detected: {formatDateTime(threat.detected_at)}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3 ml-4">
-                    <StatusBadge status={threat.status} />
-                    <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                </Link>
+                  </SwipeableListItem>
                 )
               })}
             </div>
