@@ -2,19 +2,19 @@
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-01-28)
+See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** Detect real threats, not noise — AI analysis distinguishes actually-dangerous impersonation sites from benign domain registrations.
-**Current focus:** v1.3 Delete Operations with Audit Logging — COMPLETE
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 13 of 13 (Delete UI)
-Plan: 3 of 3 complete
-Status: Milestone complete
-Last activity: 2026-01-29 — Phase 13 complete, all v1.3 phases verified
+Phase: 13 of 13 (all milestones through v1.3 complete)
+Plan: N/A — between milestones
+Status: Ready to plan
+Last activity: 2026-01-29 — v1.3 milestone complete
 
-Progress: [████████████████████] 100% (35/35 plans complete)
+Progress: [████████████████████] 100% (35/35 plans complete across v1.0-v1.3)
 
 ## Milestone Summary
 
@@ -35,6 +35,7 @@ Progress: [████████████████████] 100% (3
 **v1.3 Delete Operations with Audit Logging** shipped 2026-01-29
 - 3 phases (11-13), 5 plans
 - Audit logging, delete operations backend, delete UI
+- Tagged: v1.3
 
 See: .planning/MILESTONES.md for full details
 
@@ -43,29 +44,7 @@ See: .planning/MILESTONES.md for full details
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-v1.0, v1.1, and v1.2 decisions archived to milestone documentation.
-
-Recent v1.3 planning decisions:
-- Phase 11 before 12: Audit logging is foundation for accountability
-- No confirmation dialog: Instant delete per user request
-- No soft delete: Hard delete with audit log provides accountability
-
-Recent v1.3 execution decisions (Phase 11):
-- audit_logs.user_id uses ON DELETE SET NULL (not CASCADE) - audit records survive user deletion
-- logAudit() best-effort pattern - catches errors, logs but never throws (audit failure doesn't block deletes)
-- Service role for writes (bypasses RLS), user client for reads (respects admin-only policy)
-
-Recent v1.3 execution decisions (Phase 12):
-- Return 404 (not 403) for unauthorized deletes - prevents resource enumeration
-- Manual threat cascade before scan deletion - FK is SET NULL not CASCADE
-- Best-effort storage cleanup - orphaned files acceptable, blocking deletion on storage errors creates worse UX
-
-Recent v1.3 execution decisions (Phase 13):
-- Swipe threshold 40px - balances accidental swipes vs deliberate gestures
-- Optimistic delete with rollback - instant feedback for responsive UX
-- Left swipe only - consistent with iOS/Android patterns
-- Click-outside handler for kebab menus - closes menu when clicking elsewhere
-- Rollback re-sorts by created_at desc - maintains proper list order after failed delete
+v1.0, v1.1, v1.2, and v1.3 decisions archived to milestone documentation.
 
 ### Pending Todos
 
@@ -90,9 +69,15 @@ Recent v1.3 execution decisions (Phase 13):
 **Tech debt from v1.2:**
 - ErrorMessage component orphaned (ready but unused)
 
+**Tech debt from v1.3:**
+- No automated test coverage for delete endpoints or UI
+- Storage cleanup is best-effort (orphaned files possible)
+- Uses alert() for error feedback instead of toast notifications
+- No undo after successful delete
+
 ## Session Continuity
 
 Last session: 2026-01-29
-Stopped at: v1.3 milestone complete — all phases verified
+Stopped at: v1.3 milestone archived and tagged
 Resume file: None
-Next: `/gsd:audit-milestone` or `/gsd:complete-milestone`
+Next: `/gsd:new-milestone`

@@ -120,58 +120,37 @@ Plans:
 
 </details>
 
-### ✅ v1.3 Delete Operations with Audit Logging (Shipped 2026-01-29)
+<details>
+<summary>✅ v1.3 Delete Operations with Audit Logging (Phases 11-13) - SHIPPED 2026-01-29</summary>
 
-**Milestone Goal:** Enable users to delete scans, threats, and reports with full accountability via audit logging.
+Audit logging infrastructure, DELETE API endpoints, and swipe-to-delete UI.
 
-#### Phase 11: Audit Logging Infrastructure
+### Phase 11: Audit Logging Infrastructure
 **Goal**: Accountability trail for all delete actions
-**Depends on**: Phase 10
-**Requirements**: AUDIT-01
-**Success Criteria** (what must be TRUE):
-  1. Delete actions logged with user, entity type, entity ID, and timestamp
-  2. Audit log queryable by admin for compliance purposes
-  3. Audit log persists independently of deleted entities
 **Plans**: 1 plan
 
 Plans:
-- [x] 11-01-PLAN.md — Audit logging table, service function, and admin query endpoint
+- [x] 11-01: Audit logging table, service function, and admin query endpoint
 
-#### Phase 12: Delete Operations Backend
+### Phase 12: Delete Operations Backend
 **Goal**: Users can delete scans, threats, and reports via API
-**Depends on**: Phase 11
-**Requirements**: DEL-01, DEL-02, DEL-03
-**Success Criteria** (what must be TRUE):
-  1. User can delete a scan (removes scan and associated threats/evidence from DB)
-  2. User can delete a threat (removes threat record and evidence from DB)
-  3. User can delete a report (removes report file and DB record)
-  4. Deleted entities return 404 when accessed
-  5. All deletes trigger audit log entries
 **Plans**: 1 plan
 
 Plans:
-- [x] 12-01-PLAN.md — DELETE RLS policies and API endpoints for scans, threats, reports
+- [x] 12-01: DELETE RLS policies and API endpoints for scans, threats, reports
 
-#### Phase 13: Delete UI
+### Phase 13: Delete UI
 **Goal**: Intuitive delete gestures available in dashboard
-**Depends on**: Phase 12
-**Requirements**: UI-01, UI-02
-**Success Criteria** (what must be TRUE):
-  1. Swipe-to-delete gesture works on scan, threat, and report list items
-  2. 3-dots context menu shows delete option on list items
-  3. Delete action executes immediately (no confirmation dialog)
-  4. List updates instantly after delete
 **Plans**: 3 plans
 
 Plans:
-- [x] 13-01-PLAN.md — Install react-swipeable, create SwipeableListItem component, add delete to threats page
-- [x] 13-02-PLAN.md — Add swipe and menu delete to reports page
-- [x] 13-03-PLAN.md — Add swipe and menu delete to brand detail page (scans + threats)
+- [x] 13-01: Install react-swipeable, create SwipeableListItem component, add delete to threats page
+- [x] 13-02: Add swipe and menu delete to reports page
+- [x] 13-03: Add swipe and menu delete to brand detail page (scans + threats)
+
+</details>
 
 ## Progress
-
-**Execution Order:**
-Phases execute in numeric order: 11 → 12 → 13
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|

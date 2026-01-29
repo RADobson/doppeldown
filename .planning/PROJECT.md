@@ -43,15 +43,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 - ✓ Semantic color system with CSS variables — v1.2
 - ✓ Dark mode with system preference and persistence — v1.2
 - ✓ Scannable dashboard with progressive disclosure — v1.2
+- ✓ Delete scans from UI (swipe-to-delete + 3-dots menu) — v1.3
+- ✓ Delete threats from UI (swipe-to-delete + 3-dots menu) — v1.3
+- ✓ Delete reports from UI (swipe-to-delete + 3-dots menu) — v1.3
+- ✓ Audit logging for all delete actions (accountability trail) — v1.3
 
 ### Active
-
-**v1.3 — Delete Operations with Audit Logging**
-
-- [ ] Delete scans from UI (swipe-to-delete + 3-dots menu)
-- [ ] Delete threats from UI (swipe-to-delete + 3-dots menu)
-- [ ] Delete reports from UI (swipe-to-delete + 3-dots menu)
-- [ ] Audit logging for all delete actions (accountability trail)
 
 **Future milestones (captured):**
 - Slack/Teams notification integrations
@@ -74,12 +71,13 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 
 ## Context
 
-- **Current state**: v1.2 shipped with ~182,874 LOC TypeScript
-- **Tech stack**: Next.js 14, Supabase, Stripe, p-queue for rate limiting, next-themes
+- **Current state**: v1.3 shipped with ~188,000 LOC TypeScript (+5,551 from v1.3)
+- **Tech stack**: Next.js 14, Supabase, Stripe, p-queue for rate limiting, next-themes, react-swipeable
 - **AI providers**: Claude and OpenAI Vision APIs for threat analysis
 - **Launch strategy**: Cold outreach to prospects, demo by scanning their brand live
 - **Codebase mapped**: `.planning/codebase/` contains architecture and stack analysis
-- **UI status**: Professional polish complete — dark mode, semantic colors, F-pattern dashboard
+- **UI status**: Professional polish complete — dark mode, semantic colors, F-pattern dashboard, swipe-to-delete
+- **Delete operations**: Full CRUD with audit logging, RLS-enforced ownership, optimistic UI
 
 ## Constraints
 
@@ -108,6 +106,12 @@ Brand protection SaaS that detects typosquatting domains, lookalike websites, an
 | next-themes for dark mode | System preference detection, persistence, no flash | ✓ Good |
 | F-pattern dashboard layout | Prioritizes critical info (Active Threats) top-left | ✓ Good |
 | Progressive disclosure for dashboard | Reduces cognitive load, shows advanced features on demand | ✓ Good |
+| ON DELETE SET NULL for audit user_id | Audit records survive user deletion | ✓ Good |
+| Best-effort audit logging | Audit failure doesn't block deletes — deletes are critical UX | ✓ Good |
+| 404 for unauthorized deletes | Prevents resource enumeration (vs 403 which leaks existence) | ✓ Good |
+| Manual threat cascade on scan delete | FK is SET NULL not CASCADE — explicit > implicit | ✓ Good |
+| Optimistic delete with rollback | Instant feedback, graceful error recovery | ✓ Good |
+| No confirmation dialog for delete | Instant delete per user preference, audit log for accountability | ✓ Good |
 
 ---
-*Last updated: 2026-01-28 after v1.3 milestone started*
+*Last updated: 2026-01-29 after v1.3 milestone*

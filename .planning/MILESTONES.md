@@ -1,5 +1,31 @@
 # Project Milestones: DoppelDown
 
+## v1.3 Delete Operations with Audit Logging (Shipped: 2026-01-29)
+
+**Delivered:** Delete operations for scans, threats, and reports with swipe-to-delete gestures, kebab menus, and full audit logging accountability trail.
+
+**Phases completed:** 11-13 (5 plans total)
+
+**Key accomplishments:**
+- Audit logging infrastructure with best-effort writes and admin query endpoint
+- DELETE API endpoints for scans, threats, and reports with ownership verification
+- RLS DELETE policies enforcing user-scoped deletions at database level
+- Reusable SwipeableListItem component for swipe-to-delete gestures
+- Optimistic delete with rollback across threats, reports, and brand detail pages
+- Security hardening: 404 for unauthorized (prevents enumeration), manual threat cascade
+
+**Stats:**
+- 33 files changed
+- +5,551 / -143 lines changed
+- 3 phases, 5 plans, ~11 tasks
+- 1 day from start to ship
+
+**Git range:** `feat(11-01)` → `feat(13-03)`
+
+**What's next:** Integrations (Slack/Teams), team features, or alert resolution workflow
+
+---
+
 ## v1.2 Polish for Launch (Shipped: 2026-01-28)
 
 **Delivered:** Launch-ready product with distinctive branding, dark-themed landing page, professional UI polish, semantic color system, fully functional dark mode, and scannable dashboard.
