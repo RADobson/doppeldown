@@ -81,7 +81,9 @@ export async function DELETE(
     })
 
     // 6. Delete threat from database
-    const { error: deleteError } = await supabase
+    // Use service client for delete to bypass RLS (ownership already verified above)
+    const serviceClient = await createServiceClient()
+    const { error: deleteError } = await serviceClient
       .from('threats')
       .delete()
       .eq('id', id)

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { logAudit } from '@/lib/audit-logger'
 
 export async function DELETE(
@@ -48,7 +48,9 @@ export async function DELETE(
 
     // 4. Delete report from database
     // No storage cleanup needed - reports generated on-demand
-    const { error: deleteError } = await supabase
+    // Use service client for delete to bypass RLS (ownership already verified above)
+    const serviceClient = await createServiceClient()
+    const { error: deleteError } = await serviceClient
       .from('reports')
       .delete()
       .eq('id', id)

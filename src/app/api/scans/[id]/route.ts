@@ -95,7 +95,10 @@ export async function DELETE(
     // 7. Delete associated threats BEFORE scan deletion
     // CRITICAL: threats.scan_id FK is ON DELETE SET NULL, not CASCADE
     // So we must manually delete threats to fully clean up
-    const { error: threatsDeleteError } = await supabase
+    // Use service client for delete to bypass RLS (ownership already verified above)
+    const serviceClient = await createServiceClient()
+
+    const { error: threatsDeleteError } = await serviceClient
       .from('threats')
       .delete()
       .eq('scan_id', id)
@@ -106,7 +109,7 @@ export async function DELETE(
     }
 
     // 8. Delete the scan
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await serviceClient
       .from('scans')
       .delete()
       .eq('id', id)

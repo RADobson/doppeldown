@@ -60,8 +60,9 @@ export function SwipeableListItem({ children, onDelete, disabled = false }: Swip
 
   return (
     <div {...handlers} className="relative overflow-hidden">
-      {/* Content with swipe transform */}
+      {/* Content with swipe transform - z-10 ensures it covers the delete button when not swiped */}
       <div
+        className="relative z-10 bg-card"
         style={{
           transform: `translateX(${swipeOffset}px)`,
           transition: isSwiping ? 'none' : 'transform 0.2s ease-out',
@@ -75,7 +76,7 @@ export function SwipeableListItem({ children, onDelete, disabled = false }: Swip
         onClick={handleDeleteClick}
         disabled={disabled}
         aria-label="Delete"
-        className="absolute right-0 top-0 bottom-0 w-20 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute right-0 top-0 bottom-0 w-20 z-0 bg-red-500 hover:bg-red-600 text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Trash2 className="h-5 w-5" />
       </button>
