@@ -18,7 +18,8 @@ import {
   FileText,
   Camera,
   Code,
-  Loader2
+  Loader2,
+  Trash2
 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -99,6 +100,7 @@ export default function ThreatDetailPage() {
   const [htmlSnapshotLoading, setHtmlSnapshotLoading] = useState(false)
   const [htmlSnapshotError, setHtmlSnapshotError] = useState<string | null>(null)
   const [showHtmlFrame, setShowHtmlFrame] = useState(false)
+  const [deleting, setDeleting] = useState(false)
   const [screenshotCopied, setScreenshotCopied] = useState(false)
   const [htmlCopied, setHtmlCopied] = useState(false)
   const screenshotCopyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -365,6 +367,22 @@ export default function ThreatDetailPage() {
       alert('Failed to save changes')
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!threat || deleting) return
+    if (!confirm('Are you sure you want to delete this threat? This action cannot be undone.')) return
+
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/threats/${threat.id}`, { method: 'DELETE' })
+      if (!response.ok) throw new Error('Failed to delete threat')
+      router.push(`/dashboard/brands/${threat.brand_id}`)
+    } catch (error) {
+      console.error('Error deleting threat:', error)
+      alert('Failed to delete threat. Please try again.')
+      setDeleting(false)
     }
   }
 
@@ -863,6 +881,19 @@ export default function ThreatDetailPage() {
                   Open in New Tab
                 </Button>
               </a>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-red-600 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/30"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4 mr-2" />
+                )}
+                {deleting ? 'Deleting...' : 'Delete Threat'}
+              </Button>
             </CardContent>
           </Card>
         </div>

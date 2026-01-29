@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSwipeable } from 'react-swipeable'
 import { Trash2 } from 'lucide-react'
 
@@ -13,6 +13,7 @@ interface SwipeableListItemProps {
 export function SwipeableListItem({ children, onDelete, disabled = false }: SwipeableListItemProps) {
   const [swipeOffset, setSwipeOffset] = useState(0)
   const [isSwiping, setIsSwiping] = useState(false)
+  const didSwipeRef = useRef(false)
 
   // Reset swipeOffset when disabled changes to true (cleanup after delete)
   useEffect(() => {
@@ -31,6 +32,7 @@ export function SwipeableListItem({ children, onDelete, disabled = false }: Swip
         const offset = Math.max(eventData.deltaX, -80)
         setSwipeOffset(offset)
         setIsSwiping(true)
+        didSwipeRef.current = true
       }
     },
     onSwipedLeft: (eventData) => {
@@ -58,11 +60,21 @@ export function SwipeableListItem({ children, onDelete, disabled = false }: Swip
     onDelete()
   }
 
+  // Suppress click events on children after a swipe gesture
+  const handleContentClick = (e: React.MouseEvent) => {
+    if (didSwipeRef.current) {
+      e.stopPropagation()
+      e.preventDefault()
+      didSwipeRef.current = false
+    }
+  }
+
   return (
     <div {...handlers} className="relative overflow-hidden">
       {/* Content with swipe transform - z-10 ensures it covers the delete button when not swiped */}
       <div
         className="relative z-10 bg-card"
+        onClickCapture={handleContentClick}
         style={{
           transform: `translateX(${swipeOffset}px)`,
           transition: isSwiping ? 'none' : 'transform 0.2s ease-out',
