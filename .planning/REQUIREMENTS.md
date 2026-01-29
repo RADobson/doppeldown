@@ -15,8 +15,8 @@ Requirements for Delete Operations with Audit Logging milestone.
 
 ### User Interface
 
-- [ ] **UI-01**: Swipe-to-delete gesture available on list items (scans, threats, reports)
-- [ ] **UI-02**: 3-dots context menu includes delete option on list items
+- [x] **UI-01**: Swipe-to-delete gesture available on list items (scans, threats, reports)
+- [x] **UI-02**: 3-dots context menu includes delete option on list items
 
 ### Audit Logging
 
@@ -66,8 +66,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEL-01 | Phase 12 | Complete |
 | DEL-02 | Phase 12 | Complete |
 | DEL-03 | Phase 12 | Complete |
-| UI-01 | Phase 13 | Pending |
-| UI-02 | Phase 13 | Pending |
+| UI-01 | Phase 13 | Complete |
+| UI-02 | Phase 13 | Complete |
 
 **Coverage:**
 - v1.3 requirements: 6 total
@@ -77,4 +77,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-01-28*
-*Last updated: 2026-01-29 after Phase 12 completion*
+*Last updated: 2026-01-29 after Phase 13 completion*
