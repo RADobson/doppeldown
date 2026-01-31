@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Analytics } from '@/components/analytics'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -42,6 +43,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Analytics />
           {children}
         </ThemeProvider>
       </body>
