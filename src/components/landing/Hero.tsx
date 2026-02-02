@@ -31,19 +31,23 @@ export default function Hero() {
       {/* Hero Section */}
       <section className="pt-28 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-block bg-primary-600/10 text-primary-400 text-sm font-medium px-3 py-1 rounded-full mb-6">
+            Brand protection that doesn&apos;t cost $15K/year
+          </div>
           <h1 className="text-4xl md:text-5xl font-bold text-landing-foreground mb-4">
-            Find Brand Impostors
+            Find Who&apos;s Impersonating Your Brand
           </h1>
-          <p className="text-lg text-landing-muted mb-8">
-            Detect fake domains and phishing sites targeting your brand.
+          <p className="text-lg text-landing-muted mb-8 max-w-2xl mx-auto">
+            Automated detection of fake domains, phishing sites, and social media impostors. 
+            AI-powered threat scoring tells you what&apos;s actually dangerous. Results in minutes, not weeks.
           </p>
           <Link
             href="/auth/signup"
             className="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-primary-700 transition"
           >
-            Start Free
+            Start Free — No Credit Card
           </Link>
-          <p className="text-sm text-landing-muted mt-3">No credit card required</p>
+          <p className="text-sm text-landing-muted mt-3">Free tier included forever · Paid plans from $49/mo</p>
         </div>
       </section>
     </>
