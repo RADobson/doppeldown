@@ -546,7 +546,7 @@ function OnboardingFlow() {
 
             <div className="pt-4 border-t">
               <p className="text-sm font-medium text-foreground mb-3">Social Media Handles (optional)</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input
                   type="text"
                   value={brandData.twitter}

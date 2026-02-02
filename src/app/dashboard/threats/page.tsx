@@ -229,11 +229,11 @@ export default function ThreatsPage() {
                 />
               </div>
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap w-full md:w-auto">
               <select
                 value={severityFilter}
                 onChange={(e) => setSeverityFilter(e.target.value)}
-                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="flex-1 md:flex-none px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background"
               >
                 <option value="all">All Severities</option>
                 <option value="critical">Critical</option>
@@ -244,7 +244,7 @@ export default function ThreatsPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="flex-1 md:flex-none px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background"
               >
                 <option value="all">All Statuses</option>
                 <option value="new">New</option>
@@ -257,7 +257,7 @@ export default function ThreatsPage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="flex-1 md:flex-none px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background"
               >
                 <option value="all">All Types</option>
                 <option value="phishing_page">Phishing Page</option>
@@ -309,7 +309,7 @@ export default function ThreatsPage() {
                         className="flex-1 min-w-0 cursor-pointer"
                         onClick={() => router.push(`/dashboard/threats/${threat.id}`)}
                       >
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <SeverityBadge severity={threat.severity} />
                           <span className="text-xs text-muted-foreground">
                             {threatTypeLabels[threat.type] || threat.type}
@@ -319,7 +319,7 @@ export default function ThreatsPage() {
                               Score {score}
                             </span>
                           )}
-                          <span className="text-xs text-muted-foreground">•</span>
+                          <span className="text-xs text-muted-foreground hidden sm:inline">•</span>
                           <span className="text-xs text-muted-foreground">{threat.brands?.name}</span>
                         </div>
                         <p className="text-sm font-mono text-foreground truncate">

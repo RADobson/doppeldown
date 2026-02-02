@@ -479,17 +479,19 @@ export default function ThreatDetailPage() {
             Detected {formatDateTime(threat.detected_at)} • {threat.brands?.name}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <a href={threat.url} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline">
+            <Button variant="outline" size="sm" className="sm:size-default">
               <ExternalLink className="h-4 w-4 mr-2" />
-              Visit URL
+              <span className="hidden sm:inline">Visit URL</span>
+              <span className="sm:hidden">Visit</span>
             </Button>
           </a>
           <Link href={`/dashboard/reports/new?threat=${threat.id}`}>
-            <Button>
+            <Button size="sm" className="sm:size-default">
               <FileText className="h-4 w-4 mr-2" />
-              Generate Report
+              <span className="hidden sm:inline">Generate Report</span>
+              <span className="sm:hidden">Report</span>
             </Button>
           </Link>
         </div>
@@ -508,7 +510,7 @@ export default function ThreatDetailPage() {
                 {threat.description || `This ${threatTypeLabels[threat.type]?.toLowerCase() || 'threat'} was detected targeting ${threat.brands?.name}. The domain ${threat.domain || new URL(threat.url).hostname} may be attempting to impersonate the legitimate brand.`}
               </p>
 
-              <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-4 border-t">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-foreground">{analysisResults.brandMentions}</p>
                   <p className="text-xs text-muted-foreground">Brand Mentions</p>
@@ -680,9 +682,9 @@ export default function ThreatDetailPage() {
               </div>
 
               <div className="mt-6 rounded-lg border border-border bg-muted p-4">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <p className="text-sm font-medium text-foreground">Latest Screenshot</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {screenshotError && (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                         {screenshotError}
@@ -724,9 +726,9 @@ export default function ThreatDetailPage() {
               </div>
 
               <div className="mt-6 rounded-lg border border-border bg-muted p-4">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <p className="text-sm font-medium text-foreground">HTML Snapshot</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {htmlSnapshotError && (
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                         {htmlSnapshotError}

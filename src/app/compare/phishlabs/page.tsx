@@ -94,8 +94,8 @@ export default function PhishLabsComparisonPage() {
 
         {/* Comparison Table */}
         <h2 className="text-2xl font-bold text-foreground mb-6">Feature-by-Feature Comparison</h2>
-        <div className="overflow-x-auto mb-14">
-          <table className="w-full border-collapse">
+        <div className="overflow-x-auto mb-14 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <table className="w-full border-collapse min-w-[600px]">
             <thead>
               <tr className="border-b-2 border-border">
                 <th className="text-left py-3 px-4 text-muted-foreground font-medium">Feature</th>

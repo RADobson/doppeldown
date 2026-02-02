@@ -183,17 +183,17 @@ export default function PricingPage() {
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
               {isLoggedIn ? 'Upgrade Your Plan' : 'Simple, Transparent Pricing'}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               {isLoggedIn
                 ? 'Choose a plan to unlock more features and protect more brands'
                 : 'Choose the plan that fits your needs. All plans include a 14-day free trial.'}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-2 sm:px-0">
             {PLANS.map((plan) => {
               const isCurrentPlan = currentPlan === plan.id
               const isSubscribing = subscribing === plan.id
@@ -202,7 +202,7 @@ export default function PricingPage() {
                 <div
                   key={plan.id}
                   className={`relative bg-card rounded-2xl shadow-sm ${
-                    plan.popular ? 'ring-2 ring-primary-600 scale-105' : 'border border-border'
+                    plan.popular ? 'ring-2 ring-primary-600 md:scale-105' : 'border border-border'
                   }`}
                 >
                   {plan.popular && (

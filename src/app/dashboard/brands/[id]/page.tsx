@@ -716,11 +716,12 @@ export default function BrandDetailPage() {
           </div>
           <p className="text-muted-foreground">{brand.domain}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
             onClick={handleScan}
             disabled={scanning || (!!quota && !quota.isUnlimited && quota.remaining === 0)}
+            className="w-full sm:w-auto"
           >
             {scanning ? (
               <>
@@ -952,16 +953,16 @@ export default function BrandDetailPage() {
                         onDelete={() => handleDeleteScan(scan.id)}
                         disabled={!canDelete || deletingScan === scan.id}
                       >
-                        <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                          <div className="flex-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-muted rounded-lg gap-2">
+                          <div className="flex-1 min-w-0">
                             <p className="font-medium text-foreground capitalize">{scan.scan_type} Scan</p>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-sm text-muted-foreground truncate">
                               {formatDateTime(scan.started_at)} • {scan.domains_checked} domains checked
                             </p>
                           </div>
-                          <div className="text-right flex items-center gap-2">
+                          <div className="text-left sm:text-right flex items-center gap-2">
                             <div>
-                              <p className="font-medium text-foreground">{scan.threats_found} threats found</p>
+                              <p className="font-medium text-foreground text-sm sm:text-base">{scan.threats_found} threats found</p>
                               <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                                 scan.status === 'completed' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
                                 scan.status === 'running' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :

@@ -13,13 +13,13 @@ export default function Hero() {
               <a href="#features" className="text-landing-muted hover:text-landing-foreground">Features</a>
               <a href="#pricing" className="text-landing-muted hover:text-landing-foreground">Pricing</a>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/auth/login" className="text-landing-muted hover:text-landing-foreground">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Link href="/auth/login" className="text-landing-muted hover:text-landing-foreground text-sm sm:text-base">
                 Log In
               </Link>
               <Link
                 href="/auth/signup"
-                className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition"
+                className="bg-primary-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-primary-700 transition text-sm sm:text-base"
               >
                 Sign Up Free
               </Link>

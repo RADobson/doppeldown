@@ -303,7 +303,7 @@ export default function ReportsPage() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex gap-2 ml-auto items-center">
+                      <div className="flex gap-2 ml-0 md:ml-auto items-center flex-wrap">
                         {report.status === 'ready' && (
                           <>
                             <Button
