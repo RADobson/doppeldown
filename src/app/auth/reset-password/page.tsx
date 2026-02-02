@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Logo } from '@/components/Logo'
@@ -11,6 +11,18 @@ import { Input } from '@/components/ui/input'
 type ResetStatus = 'loading' | 'ready' | 'error' | 'success'
 
 export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground">Loading...</div>
+      </div>
+    }>
+      <ResetPasswordContent />
+    </Suspense>
+  )
+}
+
+function ResetPasswordContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<ResetStatus>('loading')
   const [error, setError] = useState('')

@@ -1,9 +1,27 @@
 import Stripe from 'stripe'
 import { getTierLimits } from './tier-limits'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-02-24.acacia',
-  typescript: true,
+let _stripe: Stripe | null = null
+
+function getStripeInstance(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) {
+      throw new Error('STRIPE_SECRET_KEY is not configured')
+    }
+    _stripe = new Stripe(key, {
+      apiVersion: '2025-02-24.acacia',
+      typescript: true,
+    })
+  }
+  return _stripe
+}
+
+// Lazy proxy — avoids crash during Next.js build when env vars aren't set
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    return (getStripeInstance() as any)[prop]
+  },
 })
 
 // Get tier limits for plan configuration
