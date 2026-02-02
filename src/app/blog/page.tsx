@@ -1,0 +1,117 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import BlogLayout from '@/components/blog/BlogLayout'
+
+export const metadata: Metadata = {
+  title: 'Blog - Brand Protection Tips & Insights',
+  description: 'Expert insights on brand protection, phishing prevention, domain monitoring, and defending your business from online impersonation. Practical guides for SMBs.',
+  keywords: [
+    'brand protection blog',
+    'phishing prevention tips',
+    'domain monitoring guide',
+    'brand impersonation prevention',
+    'cybersecurity for small business',
+  ],
+  alternates: {
+    canonical: 'https://doppeldown.com/blog',
+  },
+  openGraph: {
+    title: 'Blog - Brand Protection Tips & Insights | DoppelDown',
+    description: 'Expert insights on brand protection, phishing prevention, and defending your business from online impersonation.',
+    url: 'https://doppeldown.com/blog',
+    siteName: 'DoppelDown',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog - Brand Protection Tips & Insights | DoppelDown',
+    description: 'Expert insights on brand protection, phishing prevention, and defending your business from online impersonation.',
+  },
+}
+
+const posts = [
+  {
+    title: 'How to Protect Your Brand from Domain Squatting and Phishing in 2026',
+    slug: 'how-to-protect-your-brand-from-domain-squatting-and-phishing-2026',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Domain squatting and phishing have evolved from fringe nuisances into mainstream threats. This guide walks you through practical, actionable strategies to protect your brand — without needing an enterprise security budget.',
+  },
+  {
+    title: '5 Signs Your Brand Is Being Targeted by Phishing Attacks',
+    slug: '5-signs-your-brand-is-being-targeted-by-phishing-attacks',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Brand-targeted phishing often happens entirely outside your infrastructure. The fraudulent emails, fake websites, and spoofed accounts all exist on someone else\'s servers. Here are five warning signs to watch for.',
+  },
+  {
+    title: 'The True Cost of Brand Impersonation: Why SMBs Can\'t Afford to Ignore It',
+    slug: 'true-cost-of-brand-impersonation-why-smbs-cant-ignore-it',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Brand impersonation isn\'t just an enterprise problem. SMBs often pay a steeper price — relative to their size — when attackers hijack their identity. Let\'s break down the true cost.',
+  },
+]
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+export default function BlogIndexPage() {
+  return (
+    <BlogLayout>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold text-landing-foreground mb-4">
+            Brand Protection Blog
+          </h1>
+          <p className="text-lg text-landing-muted max-w-2xl mx-auto">
+            Expert insights, practical guides, and the latest strategies to protect your brand from phishing, domain squatting, and online impersonation.
+          </p>
+        </div>
+
+        {/* Posts */}
+        <div className="space-y-8">
+          {posts.map((post) => (
+            <article
+              key={post.slug}
+              className="bg-landing-elevated border border-landing-border rounded-xl p-6 sm:p-8 hover:border-primary-600/50 transition-colors"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-xs font-medium text-primary-400 bg-primary-600/10 px-2.5 py-1 rounded-full">
+                  {post.category}
+                </span>
+                <time className="text-sm text-landing-muted" dateTime={post.date}>
+                  {formatDate(post.date)}
+                </time>
+              </div>
+              <Link href={`/blog/${post.slug}`}>
+                <h2 className="text-xl sm:text-2xl font-bold text-landing-foreground mb-3 hover:text-primary-400 transition-colors">
+                  {post.title}
+                </h2>
+              </Link>
+              <p className="text-landing-muted mb-4 leading-relaxed">
+                {post.excerpt}
+              </p>
+              <Link
+                href={`/blog/${post.slug}`}
+                className="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium text-sm transition-colors"
+              >
+                Read more
+                <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </div>
+    </BlogLayout>
+  )
+}

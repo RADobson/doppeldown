@@ -1,0 +1,38 @@
+# DoppelDown
+
+> AI-powered brand protection for SMBs. Detect fake domains, phishing sites, and brand impostors.
+
+## About
+
+DoppelDown is a B2B SaaS platform that provides automated brand protection at a fraction of the cost of traditional enterprise solutions. While competitors charge $15,000–$250,000+/year, DoppelDown starts at $0/month.
+
+## Key Features
+
+- **Domain Monitoring**: Automated typosquatting and lookalike domain detection
+- **AI Threat Scoring**: Prioritizes real dangers vs benign domain registrations
+- **Evidence Collection**: Screenshots, DNS records, WHOIS data for takedowns
+- **NRD Monitoring**: New domain registration monitoring catches threats early
+- **Social Media Detection**: Finds fake social media accounts impersonating your brand
+- **Takedown Reports**: Professional reports for registrars and law enforcement
+
+## Pricing
+
+- Free: $0/month - 1 brand, 25 domains, 1 scan/week
+- Starter: $49/month - 3 brands, 100 domains, daily scans
+- Pro: $99/month - 10 brands, 500 domains, scans every 6 hours
+- Enterprise: $249/month - Unlimited brands, 2500 domains, hourly scans
+
+## Company
+
+Built by Dobson Development Pty Ltd, an Australian SaaS company.
+
+## Links
+
+- Website: https://doppeldown.com
+- Signup: https://doppeldown.com/auth/signup
+- Pricing: https://doppeldown.com/pricing
+- Compare vs BrandShield: https://doppeldown.com/compare/brandshield
+- Compare vs Red Points: https://doppeldown.com/compare/red-points
+- Compare vs PhishLabs: https://doppeldown.com/compare/phishlabs
+- Terms: https://doppeldown.com/terms
+- Privacy: https://doppeldown.com/privacy

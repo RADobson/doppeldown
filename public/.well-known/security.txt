@@ -1,0 +1,3 @@
+Contact: mailto:security@doppeldown.com
+Preferred-Languages: en
+Canonical: https://doppeldown.com/.well-known/security.txt
