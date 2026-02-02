@@ -26,7 +26,7 @@ export default function Footer() {
             <h4 className="text-landing-foreground font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-landing-foreground">About</a></li>
-              <li><a href="#" className="hover:text-landing-foreground">Blog</a></li>
+              <li><Link href="/blog" className="hover:text-landing-foreground">Blog</Link></li>
               <li><a href="#" className="hover:text-landing-foreground">Contact</a></li>
             </ul>
           </div>

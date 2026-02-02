@@ -12,6 +12,7 @@ export default function Hero() {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-landing-muted hover:text-landing-foreground">Features</a>
               <a href="#pricing" className="text-landing-muted hover:text-landing-foreground">Pricing</a>
+              <Link href="/blog" className="text-landing-muted hover:text-landing-foreground">Blog</Link>
             </div>
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/auth/login" className="text-landing-muted hover:text-landing-foreground text-sm sm:text-base">
