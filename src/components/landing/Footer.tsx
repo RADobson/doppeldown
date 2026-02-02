@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Logo } from '@/components/Logo'
 
 export default function Footer() {
@@ -32,13 +33,13 @@ export default function Footer() {
           <div>
             <h4 className="text-landing-foreground font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-landing-foreground">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-landing-foreground">Terms of Service</a></li>
+              <li><Link href="/privacy" className="hover:text-landing-foreground">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-landing-foreground">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-landing-border mt-8 pt-8 text-sm text-center">
-          <p>&copy; {new Date().getFullYear()} DoppelDown. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Dobson Development Pty Ltd. All rights reserved.</p>
         </div>
       </div>
     </footer>
