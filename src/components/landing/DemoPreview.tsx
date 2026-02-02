@@ -40,7 +40,7 @@ export default function DemoPreview() {
           Enter your domain to preview potential threats
         </p>
 
-        <div className="flex gap-4 max-w-md mx-auto mb-8">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto mb-8">
           <label htmlFor="demo-domain-input" className="sr-only">
             Domain name
           </label>
@@ -57,7 +57,7 @@ export default function DemoPreview() {
           <button
             onClick={simulateScan}
             disabled={scanning || !domain.trim()}
-            className="px-6 py-3 bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-white"
+            className="px-6 py-3 bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-white sm:w-auto w-full"
           >
             {scanning ? 'Scanning...' : 'Scan'}
           </button>

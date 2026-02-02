@@ -83,6 +83,11 @@
 body {
   color: hsl(var(--foreground));
   background-color: hsl(var(--background));
+  overflow-x: hidden;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 @layer utilities {

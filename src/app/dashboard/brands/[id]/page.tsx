@@ -832,9 +832,9 @@ export default function BrandDetailPage() {
               <div className="p-2 bg-green-100 rounded-lg">
                 <Clock className="h-6 w-6 text-green-600" />
               </div>
-              <div className="ml-4">
+              <div className="ml-4 min-w-0">
                 <p className="text-sm font-medium text-muted-foreground">Last Scan</p>
-                <p className="text-sm font-bold text-foreground">
+                <p className="text-xs sm:text-sm font-bold text-foreground truncate">
                   {brand.last_scan_at ? formatDateTime(brand.last_scan_at) : 'Never'}
                 </p>
               </div>
