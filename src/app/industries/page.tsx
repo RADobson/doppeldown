@@ -1,17 +1,20 @@
 import Link from 'next/link'
-import { Shield, Store, Landmark, Heart, ArrowRight } from 'lucide-react'
+import { Shield, Store, Landmark, Heart, Cloud, Scale, Home, ArrowRight } from 'lucide-react'
 import Footer from '@/components/landing/Footer'
 
 export const metadata = {
-  title: 'Brand Protection by Industry — E-Commerce, Financial Services, Healthcare | DoppelDown',
+  title: 'Brand Protection by Industry — E-Commerce, Financial Services, Healthcare, SaaS, Legal, Real Estate | DoppelDown',
   description:
-    'Industry-specific brand protection solutions from DoppelDown. Protect your e-commerce store, financial services firm, or healthcare organization from phishing, domain squatting, and brand impersonation. Starting free.',
+    'Industry-specific brand protection solutions from DoppelDown. Protect your e-commerce store, financial services firm, healthcare organization, SaaS company, law firm, or real estate agency from phishing, domain squatting, and brand impersonation. Starting free.',
   keywords: [
     'brand protection by industry',
     'industry brand protection',
     'ecommerce brand protection',
     'financial services brand protection',
     'healthcare brand protection',
+    'SaaS brand protection',
+    'legal brand protection',
+    'real estate brand protection',
     'domain monitoring by industry',
     'phishing protection for business',
   ],
@@ -21,7 +24,7 @@ export const metadata = {
   openGraph: {
     title: 'Brand Protection by Industry | DoppelDown',
     description:
-      'Industry-specific brand protection for e-commerce, financial services, and healthcare. AI-powered threat detection starting at $0/month.',
+      'Industry-specific brand protection for e-commerce, financial services, healthcare, SaaS, legal, and real estate. AI-powered threat detection starting at $0/month.',
     url: 'https://doppeldown.com/industries',
   },
 }
@@ -57,6 +60,36 @@ const industries = [
     stat: '$10.9M',
     statLabel: 'average cost of a healthcare data breach',
   },
+  {
+    icon: Cloud,
+    title: 'SaaS & Software',
+    slug: '/industries/saas-software',
+    description:
+      'SaaS companies face growing threats from fake apps, credential harvesting pages, and API impersonation attacks. DoppelDown monitors for lookalike domains and brand impersonation targeting your users and developers.',
+    threats: ['Fake app downloads', 'Credential harvesting pages', 'API impersonation'],
+    stat: '49%',
+    statLabel: 'of SaaS companies experienced brand impersonation last year',
+  },
+  {
+    icon: Scale,
+    title: 'Legal & Law Firms',
+    slug: '/industries/legal',
+    description:
+      'Law firms are prime targets for impersonation scams, fake attorney profiles, and client wire fraud. Protect your reputation and client trust with automated monitoring for brand threats targeting your practice.',
+    threats: ['Fake attorney profiles', 'Client wire fraud scams', 'Reputation damage'],
+    stat: '$3.1B',
+    statLabel: 'lost to business email compromise in legal sector',
+  },
+  {
+    icon: Home,
+    title: 'Real Estate',
+    slug: '/industries/real-estate',
+    description:
+      'Real estate agencies face wire fraud scams, domain spoofing, and agent impersonation attacks that cost clients millions. DoppelDown detects these threats before they target your transactions.',
+    threats: ['Wire fraud & transaction scams', 'Domain spoofing on listings', 'Agent impersonation'],
+    stat: '$2.7B',
+    statLabel: 'lost to real estate wire fraud in 2023',
+  },
 ]
 
 export default function IndustriesIndexPage() {
@@ -65,7 +98,7 @@ export default function IndustriesIndexPage() {
     '@type': 'CollectionPage',
     name: 'Brand Protection by Industry',
     description:
-      'Industry-specific brand protection solutions from DoppelDown for e-commerce, financial services, and healthcare organizations.',
+      'Industry-specific brand protection solutions from DoppelDown for e-commerce, financial services, healthcare, SaaS, legal, and real estate organizations.',
     url: 'https://doppeldown.com/industries',
     publisher: {
       '@type': 'Organization',

@@ -215,6 +215,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/industries/saas-software`,
+      lastModified: new Date('2026-02-03'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/industries/legal`,
+      lastModified: new Date('2026-02-03'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/industries/real-estate`,
+      lastModified: new Date('2026-02-03'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/api-docs`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
