@@ -3,6 +3,7 @@ import puppeteer from 'puppeteer-core'
 import * as crypto from 'crypto'
 import { screenshotQueue, externalQueue } from './scan-queue'
 import { EVIDENCE_CONFIG, SCAN_CONFIG } from './constants'
+import { safeFetch, validateDomainForSsrf, validateUrlForSsrf } from './security'
 
 /**
  * Options for collecting evidence
@@ -144,7 +145,7 @@ async function uploadEvidenceFile(params: {
 }
 
 /**
- * Fetch with timeout and automatic retry logic
+ * Fetch with timeout, automatic retry logic, and SSRF protection
  */
 async function fetchWithRetry(
   url: string,
@@ -152,6 +153,12 @@ async function fetchWithRetry(
   timeout: number,
   maxRetries: number = 1
 ): Promise<Response> {
+  // Validate URL for SSRF protection before attempting fetch
+  const validation = validateUrlForSsrf(url)
+  if (!validation.isValid) {
+    throw new Error(`SSRF protection: ${validation.reason}`)
+  }
+
   let lastError: Error | undefined
   
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -358,6 +365,17 @@ function parseRdapData(data: unknown, domain: string): WhoisData {
  * @returns WHOIS data or null if lookup fails
  */
 export async function getWhoisData(domain: string): Promise<WhoisData | null> {
+  // Validate domain for SSRF protection
+  const domainValidation = validateDomainForSsrf(domain)
+  if (!domainValidation.isValid) {
+    console.warn(`WHOIS lookup blocked for domain '${domain}': ${domainValidation.reason}`)
+    return {
+      domain,
+      raw: `WHOIS lookup blocked: ${domainValidation.reason}`,
+      retrieved_at: new Date().toISOString()
+    }
+  }
+
   return externalQueue.add(async () => {
     const errors: string[] = []
     
@@ -433,6 +451,15 @@ export async function captureScreenshot(url: string): Promise<{
 }> {
   if (!EVIDENCE_CONFIG.SCREENSHOTS_ENABLED) {
     return { success: false, error: 'Screenshots disabled' }
+  }
+
+  // Validate URL for SSRF protection
+  const urlValidation = validateUrlForSsrf(url)
+  if (!urlValidation.isValid) {
+    return { 
+      success: false, 
+      error: `SSRF protection: ${urlValidation.reason}` 
+    }
   }
 
   return screenshotQueue.add(async () => {
@@ -532,7 +559,7 @@ export async function captureScreenshot(url: string): Promise<{
 }
 
 /**
- * Capture HTML content from a URL with size limits
+ * Capture HTML content from a URL with size limits and SSRF protection
  * 
  * @param url - URL to fetch
  * @returns HTML capture result
@@ -544,6 +571,15 @@ export async function captureHtml(url: string): Promise<{
   originalSize?: number
   error?: string
 }> {
+  // Validate URL for SSRF protection
+  const urlValidation = validateUrlForSsrf(url)
+  if (!urlValidation.isValid) {
+    return { 
+      success: false, 
+      error: `SSRF protection: ${urlValidation.reason}` 
+    }
+  }
+
   try {
     const response = await fetchWithRetry(
       url,
