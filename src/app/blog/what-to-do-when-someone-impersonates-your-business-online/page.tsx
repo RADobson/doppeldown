@@ -4,21 +4,21 @@ import BlogLayout from '@/components/blog/BlogLayout'
 
 export const metadata: Metadata = {
   title: 'What to Do When Someone Impersonates Your Business Online',
-  description: 'Found someone impersonating your brand online? Here is your emergency response playbook — document, report, protect customers, and prevent future attacks.',
+  description: 'Emergency response playbook for brand impersonation attacks. Learn how to document evidence, report to platforms, file DMCA takedowns, contact registrars, notify customers, and set up monitoring to prevent future attacks.',
   keywords: [
     'someone impersonating my business',
     'brand impersonation what to do',
     'fake website using my brand',
-    'business impersonation online',
-    'brand impersonation response',
-    'someone using my company name',
+    'business impersonation response',
+    'fake website takedown',
+    'brand protection emergency',
   ],
   alternates: {
     canonical: 'https://doppeldown.com/blog/what-to-do-when-someone-impersonates-your-business-online',
   },
   openGraph: {
     title: 'What to Do When Someone Impersonates Your Business Online',
-    description: 'Emergency response playbook for brand impersonation — report, protect customers, and prevent future attacks.',
+    description: 'Emergency response playbook for brand impersonation attacks. Learn how to document evidence, report to platforms, file DMCA takedowns, and notify customers.',
     url: 'https://doppeldown.com/blog/what-to-do-when-someone-impersonates-your-business-online',
     siteName: 'DoppelDown',
     locale: 'en_US',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'What to Do When Someone Impersonates Your Business Online',
-    description: 'Emergency response playbook for brand impersonation online.',
+    description: 'Emergency response playbook for brand impersonation attacks.',
   },
 }
 
@@ -38,7 +38,7 @@ function ArticleSchema() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'What to Do When Someone Impersonates Your Business Online',
-    description: 'Emergency response playbook for brand impersonation — report, protect customers, and prevent future attacks.',
+    description: 'Emergency response playbook for brand impersonation attacks. Learn how to document evidence, report to platforms, file DMCA takedowns, contact registrars, notify customers, and set up monitoring to prevent future attacks.',
     datePublished: '2026-02-03T00:00:00Z',
     dateModified: '2026-02-03T00:00:00Z',
     author: {
@@ -55,7 +55,9 @@ function ArticleSchema() {
       '@type': 'WebPage',
       '@id': 'https://doppeldown.com/blog/what-to-do-when-someone-impersonates-your-business-online',
     },
+    keywords: ['someone impersonating my business', 'brand impersonation what to do', 'fake website using my brand', 'business impersonation response', 'brand protection emergency'],
   }
+
   return (
     <script
       type="application/ld+json"
@@ -64,228 +66,348 @@ function ArticleSchema() {
   )
 }
 
-export default function BrandImpersonationResponsePage() {
+export default function BlogPost() {
   return (
     <BlogLayout>
       <ArticleSchema />
-      <article className="prose prose-lg max-w-none">
-        <header className="mb-8 not-prose">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-            <time dateTime="2026-02-03">February 3, 2026</time>
-            <span>•</span>
-            <span>11 min read</span>
+      <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Back link */}
+        <Link
+          href="/blog"
+          className="inline-flex items-center text-landing-muted hover:text-landing-foreground text-sm mb-8 transition-colors"
+        >
+          <svg className="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Blog
+        </Link>
+
+        {/* Header */}
+        <header className="mb-10">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-xs font-medium text-primary-400 bg-primary-600/10 px-2.5 py-1 rounded-full">
+              Brand Protection
+            </span>
+            <time className="text-sm text-landing-muted" dateTime="2026-02-03">
+              February 3, 2026
+            </time>
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-landing-foreground leading-tight mb-4">
             What to Do When Someone Impersonates Your Business Online
           </h1>
-          <p className="text-xl text-muted-foreground">
-            You just discovered a fake website, social media account, or email campaign using your brand. Here&apos;s your emergency response playbook.
+          <p className="text-lg text-landing-muted">
+            By DoppelDown Team
           </p>
         </header>
 
-        <p>
-          Brand impersonation is one of the fastest-growing threats to businesses of all sizes. In 2025, the FBI&apos;s Internet Crime Complaint Center reported over $2.7 billion in losses from business impersonation scams. And small businesses are disproportionately targeted — they often lack the resources to detect impersonation early.
-        </p>
-        <p>
-          If you&apos;ve just discovered that someone is impersonating your business, don&apos;t panic — but act fast. Here&apos;s your step-by-step response plan.
-        </p>
-
-        <h2>Phase 1: Assess the Threat (First 30 Minutes)</h2>
-        <h3>Identify what type of impersonation you&apos;re dealing with</h3>
-        <ul>
-          <li><strong>Fake website:</strong> A domain that mimics your site to steal customer data or money</li>
-          <li><strong>Lookalike domain:</strong> A registered domain similar to yours (typosquatting, homoglyph attacks)</li>
-          <li><strong>Fake social media account:</strong> An account using your brand name, logo, and content</li>
-          <li><strong>Email spoofing:</strong> Emails sent from addresses that appear to be your domain</li>
-          <li><strong>Marketplace fraud:</strong> Fake product listings using your brand name and images</li>
-          <li><strong>Google Ads hijacking:</strong> Ads that use your brand name to redirect traffic</li>
-        </ul>
-
-        <h3>Gauge the severity</h3>
-        <p>Ask yourself:</p>
-        <ul>
-          <li>Are customers actively being defrauded right now?</li>
-          <li>Is the fake site collecting login credentials or payment information?</li>
-          <li>Has anyone contacted you about suspicious communications &quot;from&quot; your company?</li>
-          <li>How long has this been active? (Check domain registration date, social account creation date)</li>
-        </ul>
-        <p>
-          If customers are actively losing money, this is a <strong>critical emergency</strong> — skip to Phase 2 immediately while documenting in parallel.
-        </p>
-
-        <h2>Phase 2: Document Everything (First Hour)</h2>
-        <p>
-          Evidence disappears. Phishing sites go offline and pop up elsewhere. Fake social accounts get deleted and recreated. Capture everything now.
-        </p>
-        <p><strong>For fake websites:</strong></p>
-        <ul>
-          <li>Full-page screenshots (use a tool like GoFullPage browser extension)</li>
-          <li>Save the complete URL including path and parameters</li>
-          <li>Save the page source (View Source in browser)</li>
-          <li>WHOIS lookup — capture registrar, registration date, and registrant info</li>
-          <li>IP lookup — identify the hosting provider</li>
-          <li>Wayback Machine snapshot request at web.archive.org</li>
-        </ul>
-        <p><strong>For fake social accounts:</strong></p>
-        <ul>
-          <li>Screenshots of the profile, including username, bio, follower count</li>
-          <li>Screenshots of posts and messages (if you can see them)</li>
-          <li>Note the account creation date if visible</li>
-          <li>Document any direct messages or comments from the fake account</li>
-        </ul>
-        <p><strong>For all types:</strong></p>
-        <ul>
-          <li>Timestamp everything</li>
-          <li>Keep copies in multiple locations (cloud storage + local)</li>
-          <li>Record any customer complaints received about the impersonation</li>
-        </ul>
-
-        <h2>Phase 3: Report and Request Takedowns (Hours 1–4)</h2>
-        <p>
-          File reports with multiple parties simultaneously. Don&apos;t wait for one response before filing the next.
-        </p>
-
-        <h3>For fake websites</h3>
-        <ol>
-          <li><strong>Google Safe Browsing:</strong> Report at safebrowsing.google.com to get the site flagged in browsers</li>
-          <li><strong>Hosting provider:</strong> Look up the host via WHOIS/IP and email their abuse team</li>
-          <li><strong>Domain registrar:</strong> File an abuse complaint citing phishing/impersonation</li>
-          <li><strong>APWG:</strong> Report to reportphishing@apwg.org</li>
-        </ol>
-
-        <h3>For fake social accounts</h3>
-        <ul>
-          <li><strong>Facebook/Instagram:</strong> Use the &quot;Report&quot; function → &quot;Pretending to be someone&quot; → select &quot;A business&quot;</li>
-          <li><strong>X/Twitter:</strong> Report → &quot;They&apos;re pretending to be me or someone else&quot; → provide your real account</li>
-          <li><strong>LinkedIn:</strong> Report → &quot;Impersonation&quot; from the three-dot menu</li>
-          <li><strong>TikTok:</strong> Long-press the account → Report → &quot;Impersonation&quot;</li>
-        </ul>
-        <p>
-          Social media platforms typically respond to impersonation reports within 24–72 hours. Having a verified account significantly speeds up the process.
-        </p>
-
-        <h3>For email spoofing</h3>
-        <ul>
-          <li>If you don&apos;t have DMARC/SPF/DKIM set up, do it now (see our <Link href="/blog/dmarc-spf-dkim-explained-email-authentication-small-business">DMARC guide</Link>)</li>
-          <li>Report to the email provider the spam is sent through</li>
-          <li>Forward examples to reportphishing@apwg.org</li>
-        </ul>
-
-        <h2>Phase 4: Protect Your Customers (Hours 2–6)</h2>
-        <p>
-          While takedowns are processing, your priority shifts to damage control.
-        </p>
-        <ul>
-          <li><strong>Email blast:</strong> Send a clear, calm communication to your customer base warning them about the impersonation. Include specific details about what the fake looks like and how to identify your real communications.</li>
-          <li><strong>Social media posts:</strong> Post warnings on all your official channels with screenshots of the fake.</li>
-          <li><strong>Website banner:</strong> Add a prominent alert to your homepage: &quot;We&apos;re aware of a fake website/account impersonating our brand. Our only official domain is [yourdomain.com].&quot;</li>
-          <li><strong>Customer support:</strong> Brief your team with talking points and a FAQ for handling customer inquiries.</li>
-          <li><strong>Password resets:</strong> If customers may have entered credentials on a fake login page, encourage them to change their passwords immediately.</li>
-        </ul>
-
-        <h2>Phase 5: Escalate if Necessary (Days 1–7)</h2>
-        <h3>DMCA takedown notices</h3>
-        <p>
-          If the impersonator is using your copyrighted content (logos, images, copy), file a DMCA takedown notice with:
-        </p>
-        <ul>
-          <li>The hosting provider</li>
-          <li>Google (to deindex the page from search results)</li>
-          <li>Cloudflare (if used as CDN/DNS)</li>
-        </ul>
-
-        <h3>Trademark complaints</h3>
-        <p>
-          If you have a registered trademark, you have stronger legal standing:
-        </p>
-        <ul>
-          <li>Most social platforms have specific trademark violation report forms</li>
-          <li>UDRP (Uniform Domain-Name Dispute-Resolution Policy) proceedings can force transfer of a domain — though this takes 45–60 days</li>
-          <li>Google Ads has a trademark complaint form for ads misusing your brand</li>
-        </ul>
-
-        <h3>Law enforcement</h3>
-        <p>
-          File reports with relevant authorities, especially if financial fraud has occurred:
-        </p>
-        <ul>
-          <li>FBI IC3 (ic3.gov) — United States</li>
-          <li>Action Fraud (actionfraud.police.uk) — United Kingdom</li>
-          <li>ACSC (cyber.gov.au/report) — Australia</li>
-          <li>Local police — if customers in your area have been defrauded</li>
-        </ul>
-
-        <h2>Phase 6: Prevent Future Attacks</h2>
-        <p>
-          Once the immediate crisis is resolved, take steps to prevent it from happening again:
-        </p>
-        <h3>Technical protections</h3>
-        <ul>
-          <li><strong>DMARC/SPF/DKIM:</strong> Ensure email authentication is fully deployed with a <code>p=reject</code> policy</li>
-          <li><strong>Domain monitoring:</strong> Set up automated scanning for newly registered domains similar to yours</li>
-          <li><strong>Defensive domain registrations:</strong> Register common misspellings and alternative TLDs of your domain</li>
-          <li><strong>SSL certificate monitoring:</strong> Watch for SSL certificates issued to domains mimicking yours (Certificate Transparency logs)</li>
-        </ul>
-        <h3>Brand protections</h3>
-        <ul>
-          <li><strong>Trademark registration:</strong> If you haven&apos;t already, register your brand name and logo as trademarks</li>
-          <li><strong>Social media verification:</strong> Get verified badges on all major platforms</li>
-          <li><strong>Google Search Console:</strong> Monitor for impersonation sites appearing in search results for your brand name</li>
-        </ul>
-        <h3>Organizational readiness</h3>
-        <ul>
-          <li><strong>Incident response plan:</strong> Document your response process so your team can act faster next time</li>
-          <li><strong>Customer communication templates:</strong> Have pre-drafted alert messages ready to customize and send</li>
-          <li><strong>Vendor relationships:</strong> Know your hosting provider and registrar abuse contacts in advance</li>
-        </ul>
-
-        <div className="not-prose my-12 p-8 bg-primary-50 dark:bg-primary-950/20 rounded-xl border border-primary-200 dark:border-primary-800">
-          <h3 className="text-2xl font-bold text-foreground mb-3">
-            Detect Impersonation Before Your Customers Do
-          </h3>
-          <p className="text-muted-foreground mb-6">
-            DoppelDown monitors for lookalike domains and brand impersonation around the clock. Get alerted to threats while they&apos;re still being set up — before they reach your customers.
+        {/* Content */}
+        <div className="prose prose-lg prose-invert max-w-none text-landing-muted leading-relaxed space-y-6">
+          <p>
+            Someone is pretending to be your business online. Maybe they cloned your website. Maybe they created a fake social media account with your logo. Maybe they are sending emails that look like they came from you. Whatever the form, brand impersonation is an attack on your reputation, your customers, and your revenue.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="https://app.doppeldown.com/auth/signup"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Start Free Monitoring →
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center px-6 py-3 border border-border text-foreground font-medium rounded-lg hover:bg-accent transition-colors"
-            >
-              View Pricing
-            </Link>
+          <p>
+            Your response in the first 24 hours matters. Move quickly and methodically, and you can often shut down impersonators before they do serious damage. Move slowly or miss a step, and the attack can spread, confuse your customers, and cause lasting harm.
+          </p>
+          <p>
+            This guide is your emergency response playbook. Follow these steps in order to contain the threat, gather evidence, initiate takedowns, protect your customers, and prevent future attacks.
+          </p>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Phase 1: Immediate Assessment (First Hour)</h2>
+          <p>
+            Before you start firing off takedown requests, you need to understand the scope of the attack. Panic leads to mistakes, and mistakes waste precious time.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 1: Document the Impersonation</h3>
+          <p>
+            Open an incident folder on your computer or cloud storage. Name it clearly with the date and nature of the attack (e.g., &quot;2026-02-03 Website Impersonation Incident&quot;).
+          </p>
+          <p>
+            <strong className="text-landing-foreground">Capture everything:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Full-page screenshots of the impersonating website or profile</li>
+            <li>The exact URL or username being used</li>
+            <li>Any emails, messages, or ads promoting the fake presence</li>
+            <li> WHOIS data for fake domains (use who.is or lookup.icann.org)</li>
+            <li>IP addresses (ping the domain or use online lookup tools)</li>
+            <li>Date and time you discovered the impersonation</li>
+            <li>How you discovered it (customer report, monitoring tool, etc.)</li>
+          </ul>
+          <p>
+            Use tools like the Wayback Machine to see if the fake site has been active for a while. Check for variations — attackers often register multiple similar domains at once.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 2: Assess the Threat Level</h3>
+          <p>
+            Not all impersonation is equally dangerous. Rate the threat to prioritise your response:
+          </p>
+          <p>
+            <strong className="text-landing-foreground">Critical (Immediate action required):</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Active phishing (collecting credentials or payments)</li>
+            <li>Customer data being harvested</li>
+            <li>Financial transactions being processed</li>
+            <li>Malware being distributed</li>
+            <li>Active promotion through ads or large-scale email campaigns</li>
+          </ul>
+          <p>
+            <strong className="text-landing-foreground">High (Same-day action required):</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Convincing website clone without active phishing yet</li>
+            <li>Fake social media accounts with significant followers</li>
+            <li>Impersonation targeting your customers directly</li>
+          </ul>
+          <p>
+            <strong className="text-landing-foreground">Medium (Action within 24-48 hours):</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Parked domains or placeholder pages</li>
+            <li>Low-engagement fake social accounts</li>
+            <li>Typosquats not yet actively used</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 3: Check for Related Attacks</h3>
+          <p>
+            Attackers rarely stop at one domain or account. Search for:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Similar domain variations (try common typos, different TLDs, hyphenated versions)</li>
+            <li>Related social media accounts (search your brand name on all major platforms)</li>
+            <li>Lookalike accounts on LinkedIn pretending to be your employees</li>
+            <li>Fake mobile apps in app stores</li>
+            <li>Domain registrations with common suffixes like &quot;-official&quot;, &quot;-support&quot;, &quot;-help&quot;</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Phase 2: Immediate Containment (Hours 1-4)</h2>
+          <p>
+            Now that you know what you are dealing with, it is time to start shutting it down.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 4: Report to Browser Safe Browsing</h3>
+          <p>
+            This is the fastest way to protect users. When a site is flagged by Google Safe Browsing or Microsoft SmartScreen, browsers will display warning pages before users can access the malicious site.
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Google Safe Browsing:</strong> safebrowsing.google.com/safebrowsing/report_phish/</li>
+            <li><strong>Microsoft SmartScreen:</strong> microsoft.com/wdsi/support/report-unsafe-site</li>
+          </ul>
+          <p>
+            Reports typically take effect within 2-4 hours. This does not take down the site, but it neutralises the threat by warning visitors.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 5: Contact the Domain Registrar</h3>
+          <p>
+            Domain registrars are legally obligated to investigate abuse reports. Find the registrar through a WHOIS lookup, then locate their abuse reporting process (usually at [registrar].com/abuse or in their support center).
+          </p>
+          <p>
+            <strong className="text-landing-foreground">Your abuse report should include:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Your business name and trademark registration numbers (if applicable)</li>
+            <li>The infringing domain name</li>
+            <li>Clear explanation of the impersonation or phishing activity</li>
+            <li>Screenshots showing the violation</li>
+            <li>Your contact information</li>
+            <li>A formal request for suspension under their Acceptable Use Policy</li>
+          </ul>
+          <p>
+            For phishing and trademark infringement, most registrars will suspend domains within 24-48 hours of a valid abuse report.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 6: Contact the Hosting Provider</h3>
+          <p>
+            If registrar action is slow or you want parallel tracks, go directly to the hosting provider. Use tools like SecurityTrails, IPinfo, or BuiltWith to identify who hosts the fake site.
+          </p>
+          <p>
+            <strong className="text-landing-foreground">Major hosting provider abuse contacts:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Cloudflare: cloudflare.com/abuse</li>
+            <li>Amazon AWS: aws.amazon.com/premiumsupport/knowledge-center/report-abuse/</li>
+            <li>Google Cloud: support.google.com/code/contact/cloud_platform_report</li>
+            <li>GoDaddy: godaddy.com/help/report-abuse-27154</li>
+            <li>Namecheap: namecheap.com/support/knowledgebase/article.aspx/9196/5/how-to-report-abuse</li>
+            <li>DigitalOcean: digitalocean.com/legal</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 7: File DMCA or Trademark Complaints</h3>
+          <p>
+            If the impersonation uses your copyrighted content (logo images, website text, product photos), file a DMCA takedown notice. If it uses your trademarked name or logo, file a trademark complaint.
+          </p>
+          <p>
+            <strong className="text-landing-foreground">For DMCA:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Most hosting providers and platforms have DMCA forms</li>
+            <li>Include the exact URLs of infringing content</li>
+            <li>State that you have a good faith belief the use is not authorised</li>
+            <li>Include your contact information and electronic signature</li>
+          </ul>
+          <p>
+            <strong className="text-landing-foreground">For trademark infringement:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Most platforms have brand protection/trademark report forms</li>
+            <li>Provide your trademark registration numbers</li>
+            <li>Explain how the use creates confusion with your brand</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 8: Report Social Media Impersonation</h3>
+          <p>
+            If the impersonation extends to social platforms, report through each platform&apos;s brand protection channels:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Facebook/Instagram:</strong> facebook.com/help/contact/357439354283890 (for business impersonation)</li>
+            <li><strong>LinkedIn:</strong> linkedin.com/help/linkedin/ask/TS-RPP</li>
+            <li><strong>X/Twitter:</strong> help.twitter.com/forms/impersonation</li>
+            <li><strong>TikTok:</strong> tiktok.com/legal/report/feedback</li>
+            <li><strong>YouTube:</strong> support.google.com/youtube/answer/2801947</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Phase 3: Customer Protection (Hours 4-24)</h2>
+          <p>
+            While takedown efforts are underway, protect the customers who might encounter the impersonation.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 9: Issue a Customer Alert</h3>
+          <p>
+            Transparency builds trust. Proactively communicate the threat:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Send an email to your customer list describing the impersonation</li>
+            <li>Post warnings on your official social media accounts</li>
+            <li>Add a banner to your website if the threat is significant</li>
+            <li>Update your support team so they can answer customer questions</li>
+          </ul>
+          <p>
+            <strong className="text-landing-foreground">Your alert should include:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Description of the impersonation (fake website URL, social accounts, etc.)</li>
+            <li>Your official website and social media handles</li>
+            <li>How customers can verify legitimate communications from you</li>
+            <li>What to do if they interacted with the fake site (change passwords, contact banks, etc.)</li>
+            <li>Your official customer service contact for questions</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 10: Activate Your Incident Response Team</h3>
+          <p>
+            If you have a team, brief them immediately:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Customer support:</strong> Prepare responses for inquiries about the fake site</li>
+            <li><strong>Social media team:</strong> Monitor for mentions and respond to confused customers</li>
+            <li><strong>Legal:</strong> Prepare for potential escalations or customer claims</li>
+            <li><strong>IT/Security:</strong> Check if any internal systems were compromised (if the impersonation involved stolen content)</li>
+            <li><strong>Leadership:</strong> Keep executives informed of status and potential business impact</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 11: Report to Relevant Authorities</h3>
+          <p>
+            Depending on the severity, report to appropriate authorities:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>United States:</strong> FBI IC3 (ic3.gov) for significant fraud; FTC (reportfraud.ftc.gov) for consumer protection</li>
+            <li><strong>United Kingdom:</strong> Action Fraud (actionfraud.police.uk)</li>
+            <li><strong>Australia:</strong> ReportCyber (cyber.gov.au/acsc/report)</li>
+            <li><strong>EU:</strong> National cybercrime units via Europol links</li>
+          </ul>
+          <p>
+            Include all the evidence you collected in Phase 1. Law enforcement moves slowly, but a report creates a record if the issue escalates.
+          </p>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Phase 4: Recovery and Hardening (Day 2-7)</h2>
+          <p>
+            Once the immediate threat is contained, focus on preventing recurrence.
+          </p>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 12: Verify Complete Takedown</h3>
+          <p>
+            Confirm the impersonation is fully removed:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Check that the domain returns an error or parked page</li>
+            <li>Verify social media accounts are suspended</li>
+            <li>Confirm fake apps are removed from app stores</li>
+            <li>Check for any new variations the attacker might have registered</li>
+            <li>Monitor for DNS changes that might indicate the attacker is moving hosts</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 13: Conduct a Post-Incident Review</h3>
+          <p>
+            Document what happened and how you responded:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Timeline of the attack and your response</li>
+            <li>How the impersonation was discovered</li>
+            <li>Which takedown methods were most effective</li>
+            <li>Any customer impact (complaints, reported fraud, refund requests)</li>
+            <li>Lessons learned and process improvements</li>
+          </ul>
+          <h3 className="text-xl font-semibold text-landing-foreground mt-8 mb-3">Step 14: Implement Proactive Monitoring</h3>
+          <p>
+            The best response to impersonation is preventing it from happening again. You need continuous monitoring that alerts you to lookalike domains and accounts before they are used against you.
+          </p>
+          <p>
+            <strong className="text-landing-foreground">DoppelDown</strong> provides automated domain monitoring that detects:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>Typosquats and character-swapped domains</li>
+            <li>Homoglyph attacks using lookalike Unicode characters</li>
+            <li>Combosquats with appended words like &quot;-support&quot; or &quot;-official&quot;</li>
+            <li>New TLD variations of your brand</li>
+            <li>Active website content on suspicious domains</li>
+          </ul>
+          <p>
+            With DoppelDown, you will know about impersonation attempts within hours of domain registration — often before the attacker has even built the fake site. Real-time alerts, risk scoring, and automated evidence collection mean you can initiate takedowns faster than ever before.
+          </p>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">When to Consider Legal Action</h2>
+          <p>
+            Most brand impersonation can be resolved through takedown requests, but some situations warrant legal action:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Significant financial losses:</strong> If customers lost money or you suffered measurable revenue impact</li>
+            <li><strong>Repeat offenders:</strong> When the same attacker keeps registering new domains</li>
+            <li><strong>Registrar non-compliance:</strong> If registrars refuse to act on valid abuse reports</li>
+            <li><strong>Data breaches:</strong> If customer data was stolen through the impersonation</li>
+            <li><strong>Defamation:</strong> If the fake site damages your reputation beyond standard impersonation</li>
+          </ul>
+          <p>
+            <strong className="text-landing-foreground">Legal options include:</strong>
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Cease and desist letters:</strong> Often sufficient for clear-cut cases</li>
+            <li><strong>UDRP proceedings:</strong> For domain name disputes under ICANN rules (costs $1,500-5,000)</li>
+            <li><strong>Court injunctions:</strong> To force immediate takedown</li>
+            <li><strong>Civil litigation:</strong> To recover damages in severe cases</li>
+          </ul>
+          <p>
+            Consult an intellectual property attorney familiar with internet law. Many offer flat-fee packages for standard takedown situations.
+          </p>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Building Your Brand Protection Playbook</h2>
+          <p>
+            Do not wait for the next incident. Create a documented brand protection playbook now:
+          </p>
+          <ol className="list-decimal pl-6 space-y-2">
+            <li><strong>Assign roles:</strong> Who is responsible for monitoring, who handles takedowns, who communicates with customers?</li>
+            <li><strong>Document your official presence:</strong> Maintain a list of your exact domain names, social media handles, and app store listings</li>
+            <li><strong>Create templates:</strong> Pre-write abuse report templates for common registrars and platforms</li>
+            <li><strong>Establish relationships:</strong> Connect with platform trust and safety teams before you need them</li>
+            <li><strong>Set up monitoring:</strong> Implement automated detection that alerts you to new threats</li>
+            <li><strong>Review quarterly:</strong> Update your playbook as your online presence evolves</li>
+          </ol>
+
+          <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Prevention Is Your Strongest Defense</h2>
+          <p>
+            Brand impersonation is stressful, time-consuming, and damaging. Every hour you spend fighting a fake site is an hour not spent growing your business. The businesses that avoid this fate are not lucky — they are prepared.
+          </p>
+          <p>
+            <strong className="text-landing-foreground">DoppelDown</strong> exists to make that preparation automatic. Our platform monitors the entire domain namespace for threats to your brand, alerting you to lookalike domains, suspicious registrations, and active impersonation attempts in real-time.
+          </p>
+          <p>
+            Instead of discovering impersonation through customer complaints, you will know about it before the site even goes live. Instead of scrambling to collect evidence, you will have automated documentation ready for takedown requests. Instead of constantly watching for the next attack, you will have peace of mind knowing DoppelDown is watching for you.
+          </p>
+          <p>
+            <Link href="/auth/signup" className="text-primary-400 hover:text-primary-300 underline">Start protecting your brand with DoppelDown today</Link> — it is free to start, requires no credit card, and takes less than five minutes to set up. Do not wait for the next impersonation crisis. Get ahead of it.
+          </p>
+
+          <div className="border-t border-landing-border mt-12 pt-8">
+            <p className="text-landing-muted italic">
+              Brand impersonation is an attack, but it is also an opportunity — to demonstrate your commitment to customer safety, to strengthen your defenses, and to build a brand that is resilient against those who would exploit it. Respond quickly, communicate transparently, and invest in prevention. Your customers will notice the difference.
+            </p>
           </div>
         </div>
-
-        <h2>Brand Impersonation Response Checklist</h2>
-        <p>Print this and keep it handy:</p>
-        <ul>
-          <li>☐ <strong>Assess:</strong> Identify type and severity of impersonation</li>
-          <li>☐ <strong>Document:</strong> Screenshots, URLs, WHOIS, timestamps</li>
-          <li>☐ <strong>Report:</strong> Google Safe Browsing, hosting provider, registrar, platform</li>
-          <li>☐ <strong>Protect:</strong> Warn customers via email, social media, and website banner</li>
-          <li>☐ <strong>Escalate:</strong> DMCA, trademark complaint, law enforcement if needed</li>
-          <li>☐ <strong>Prevent:</strong> DMARC, domain monitoring, defensive registrations</li>
-        </ul>
-
-        <h2>How Quickly Can Impersonation Be Taken Down?</h2>
-        <p>Realistic timelines based on 2026 data:</p>
-        <ul>
-          <li><strong>Social media impersonation:</strong> 24–72 hours (faster with verified accounts)</li>
-          <li><strong>Phishing website (hosting takedown):</strong> 4–72 hours</li>
-          <li><strong>Google Safe Browsing flag:</strong> 12–48 hours</li>
-          <li><strong>Domain suspension (registrar):</strong> 3–7 days</li>
-          <li><strong>DMCA content removal:</strong> 5–14 days</li>
-          <li><strong>UDRP domain transfer:</strong> 45–60 days</li>
-        </ul>
-        <p>
-          The key lesson: <strong>prevention is always faster than response.</strong> An automated monitoring tool that catches a lookalike domain on Day 1 of registration — before any phishing campaign launches — is worth far more than the fastest takedown after customers have already been harmed.
-        </p>
       </article>
     </BlogLayout>
   )
