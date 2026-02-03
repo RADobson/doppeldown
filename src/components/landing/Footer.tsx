@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-landing text-landing-muted py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div>
             <div className="flex items-center text-landing-foreground mb-4">
               <Logo mode="light" size="md" />
@@ -28,6 +28,17 @@ export default function Footer() {
               <li><a href="#" className="hover:text-landing-foreground">About</a></li>
               <li><Link href="/blog" className="hover:text-landing-foreground">Blog</Link></li>
               <li><a href="#" className="hover:text-landing-foreground">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-landing-foreground font-semibold mb-4">Compare</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/compare/brandshield" className="hover:text-landing-foreground">vs BrandShield</Link></li>
+              <li><Link href="/compare/red-points" className="hover:text-landing-foreground">vs Red Points</Link></li>
+              <li><Link href="/compare/phishlabs" className="hover:text-landing-foreground">vs PhishLabs</Link></li>
+              <li><Link href="/compare/zerofox" className="hover:text-landing-foreground">vs ZeroFox</Link></li>
+              <li><Link href="/compare/bolster" className="hover:text-landing-foreground">vs Bolster</Link></li>
+              <li><Link href="/compare/allure-security" className="hover:text-landing-foreground">vs Allure Security</Link></li>
             </ul>
           </div>
           <div>

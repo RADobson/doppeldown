@@ -3,37 +3,38 @@ import { Logo } from '@/components/Logo'
 import { Shield, CheckCircle, XCircle, ArrowRight } from 'lucide-react'
 
 export const metadata = {
-  title: 'DoppelDown vs Red Points — Brand Protection Comparison | DoppelDown',
+  title: 'DoppelDown vs Bolster (CheckPhish) — Brand Protection Comparison | DoppelDown',
   description:
-    'Compare DoppelDown and Red Points for brand protection. DoppelDown starts free — Red Points costs $25K–$100K/year with long onboarding. See the full feature comparison.',
+    'Compare DoppelDown and Bolster (CheckPhish) for brand protection. DoppelDown starts free with transparent pricing — Bolster requires custom enterprise quotes. Full feature comparison.',
   openGraph: {
-    title: 'DoppelDown vs Red Points — Brand Protection Comparison',
+    title: 'DoppelDown vs Bolster (CheckPhish) — Brand Protection Comparison',
     description:
-      'See why growing businesses choose DoppelDown over Red Points. Free tier, instant setup, and plans from $49/mo vs $25K+/year.',
-    url: 'https://doppeldown.com/compare/red-points',
+      'See why growing businesses choose DoppelDown over Bolster. Free tier, transparent pricing, and plans from $49/mo vs $20K+/year enterprise quotes.',
+    url: 'https://doppeldown.com/compare/bolster',
   },
   alternates: {
-    canonical: 'https://doppeldown.com/compare/red-points',
+    canonical: 'https://doppeldown.com/compare/bolster',
   },
 }
 
 const comparisonRows = [
-  { feature: 'Starting Price', doppeldown: 'Free ($0)', competitor: '$25,000/year', winner: 'doppeldown' },
-  { feature: 'Paid Plans From', doppeldown: '$49/month', competitor: '$25K–$100K/year', winner: 'doppeldown' },
-  { feature: 'Free Tier Available', doppeldown: true, competitor: false, winner: 'doppeldown' },
+  { feature: 'Starting Price', doppeldown: 'Free ($0)', competitor: '~$20,000/year', winner: 'doppeldown' },
+  { feature: 'Paid Plans From', doppeldown: '$49/month', competitor: '$20K–$100K/year', winner: 'doppeldown' },
+  { feature: 'Free Tier Available', doppeldown: true, competitor: 'CheckPhish scanner only', winner: 'doppeldown' },
   { feature: 'Self-Serve Signup', doppeldown: true, competitor: false, winner: 'doppeldown' },
-  { feature: 'Setup Time', doppeldown: 'Under 5 minutes', competitor: '4–8 weeks (onboarding)', winner: 'doppeldown' },
+  { feature: 'Transparent Pricing', doppeldown: true, competitor: false, winner: 'doppeldown' },
+  { feature: 'Setup Time', doppeldown: 'Under 5 minutes', competitor: 'Weeks (sales + onboarding)', winner: 'doppeldown' },
   { feature: 'Domain Monitoring', doppeldown: true, competitor: true, winner: 'both' },
   { feature: 'Social Media Monitoring', doppeldown: true, competitor: true, winner: 'both' },
-  { feature: 'Phishing Detection', doppeldown: true, competitor: 'Limited', winner: 'doppeldown' },
-  { feature: 'Counterfeit Goods Detection', doppeldown: 'Basic', competitor: 'Deep (marketplace focus)', winner: 'competitor' },
-  { feature: 'Marketplace Monitoring', doppeldown: 'Social platforms', competitor: 'Extensive (Amazon, eBay, etc.)', winner: 'competitor' },
+  { feature: 'Phishing Detection', doppeldown: true, competitor: 'Deep (core focus)', winner: 'competitor' },
+  { feature: 'Real-Time Phishing Analysis', doppeldown: 'Scheduled scans', competitor: 'Real-time AI detection', winner: 'competitor' },
+  { feature: 'Automated Takedowns', doppeldown: 'Takedown reports', competitor: 'Automated takedown service', winner: 'competitor' },
   { feature: 'Takedown Reports', doppeldown: true, competitor: true, winner: 'both' },
   { feature: 'NRD (New Domain) Feed', doppeldown: 'Enterprise plan', competitor: true, winner: 'both' },
   { feature: 'API Access', doppeldown: 'Pro & Enterprise', competitor: 'Enterprise only', winner: 'doppeldown' },
   { feature: 'Evidence Packages', doppeldown: true, competitor: true, winner: 'both' },
-  { feature: 'Ideal For', doppeldown: 'SMBs to Enterprise', competitor: 'Large enterprise / retail brands', winner: 'doppeldown' },
-  { feature: 'Contract Required', doppeldown: 'No — cancel anytime', competitor: 'Annual contract', winner: 'doppeldown' },
+  { feature: 'Ideal For', doppeldown: 'SMBs to Enterprise', competitor: 'Mid-market to Enterprise', winner: 'doppeldown' },
+  { feature: 'Contract Required', doppeldown: 'No — cancel anytime', competitor: 'Annual contract typical', winner: 'doppeldown' },
 ]
 
 function CellValue({ value }: { value: string | boolean }) {
@@ -47,7 +48,7 @@ function CellValue({ value }: { value: string | boolean }) {
   return <span>{value}</span>
 }
 
-export default function RedPointsComparisonPage() {
+export default function BolsterComparisonPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -66,12 +67,13 @@ export default function RedPointsComparisonPage() {
         {/* Hero */}
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            DoppelDown vs Red Points — Brand Protection Comparison
+            DoppelDown vs Bolster (CheckPhish) — Brand Protection Comparison
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Red Points charges <strong className="text-foreground">$25,000–$100,000 per year</strong> and
-            requires weeks of onboarding. DoppelDown lets you{' '}
-            <strong className="text-foreground">start protecting your brand in minutes — for free</strong>.
+            Bolster offers AI-powered phishing detection but charges{' '}
+            <strong className="text-foreground">$20,000–$100,000+ per year</strong> with no published
+            pricing. DoppelDown gives you{' '}
+            <strong className="text-foreground">transparent pricing, a free tier, and instant setup</strong>.
           </p>
         </div>
 
@@ -79,8 +81,8 @@ export default function RedPointsComparisonPage() {
         <div className="grid md:grid-cols-3 gap-6 mb-14">
           {[
             { label: 'DoppelDown Free Tier', value: '$0/month', sub: 'No credit card required' },
-            { label: 'Red Points Starting Price', value: '$25K+/year', sub: 'Requires sales call' },
-            { label: 'You Save Up To', value: '99%', sub: 'Compared to Red Points' },
+            { label: 'Bolster Starting Price', value: '$20K+/year', sub: 'Custom quotes only' },
+            { label: 'You Save Up To', value: '98%+', sub: 'Compared to Bolster' },
           ].map((stat) => (
             <div key={stat.label} className="bg-card rounded-xl border border-border p-6 text-center">
               <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
@@ -98,7 +100,7 @@ export default function RedPointsComparisonPage() {
               <tr className="border-b-2 border-border">
                 <th className="text-left py-3 px-4 text-muted-foreground font-medium">Feature</th>
                 <th className="text-center py-3 px-4 text-primary-600 font-semibold">DoppelDown</th>
-                <th className="text-center py-3 px-4 text-muted-foreground font-semibold">Red Points</th>
+                <th className="text-center py-3 px-4 text-muted-foreground font-semibold">Bolster (CheckPhish)</th>
               </tr>
             </thead>
             <tbody>
@@ -135,25 +137,25 @@ export default function RedPointsComparisonPage() {
         {/* Why DoppelDown */}
         <section className="mb-14">
           <h2 className="text-2xl font-bold text-foreground mb-6">
-            Why Businesses Choose DoppelDown Over Red Points
+            Why Businesses Choose DoppelDown Over Bolster
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
               {
-                title: 'Start Free, Scale When Ready',
-                desc: 'Red Points has no free tier and requires a lengthy sales process. DoppelDown lets you start monitoring your brand today at no cost — no calls, no demos, no contracts.',
+                title: 'Transparent Pricing — No Surprises',
+                desc: 'Bolster has no published pricing — you need to go through a sales process to even learn what it costs. DoppelDown\'s plans are listed publicly: $0, $49, $99, or $249/month. What you see is what you pay.',
               },
               {
-                title: 'Transparent, Predictable Pricing',
-                desc: 'Our plans are publicly listed: $49, $99, or $249/month. Red Points pricing is opaque and can reach $100K/year for larger deployments.',
+                title: 'True Free Tier, Not Just a Scanner',
+                desc: 'Bolster offers CheckPhish as a free URL scanner, but their actual brand protection platform requires enterprise pricing. DoppelDown\'s free tier includes real ongoing brand monitoring — not just a one-off scan.',
               },
               {
-                title: 'Get Started in Minutes, Not Months',
-                desc: 'Red Points is known for 4–8 week onboarding cycles. With DoppelDown, sign up, add your brand, and start scanning in under 5 minutes.',
+                title: 'No Sales Calls Needed',
+                desc: 'With Bolster, you can\'t even get started without talking to sales. DoppelDown is fully self-serve — sign up, add your brand, and start scanning in under 5 minutes.',
               },
               {
-                title: 'Beyond Counterfeits',
-                desc: 'Red Points focuses heavily on counterfeit goods and marketplace enforcement. DoppelDown provides broader brand protection including phishing, domain squatting, and social impersonation.',
+                title: 'Built for Every Business Size',
+                desc: 'Bolster primarily serves mid-market and enterprise clients. DoppelDown scales from solo founders to growing businesses without forcing you into a contract you can\'t afford.',
               },
             ].map((item) => (
               <div key={item.title} className="bg-card rounded-xl border border-border p-6">
@@ -164,20 +166,22 @@ export default function RedPointsComparisonPage() {
           </div>
         </section>
 
-        {/* When Red Points Might Be Better */}
+        {/* When Bolster Might Be Better */}
         <section className="mb-14 bg-card rounded-xl border border-border p-6 md:p-8">
           <h2 className="text-xl font-bold text-foreground mb-4">
-            When Red Points Might Be a Better Fit
+            When Bolster Might Be a Better Fit
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            Red Points has deep marketplace integrations (Amazon, eBay, Alibaba) and specialises in
-            counterfeit goods takedowns. If your <em>primary</em> concern is physical counterfeit
-            products sold on e-commerce marketplaces and you have the budget ($25K+/year), Red Points
-            may serve that niche better.
+            Bolster (also known for their CheckPhish scanner) has built an impressive AI-powered
+            phishing detection engine with real-time analysis and a large data lake of known threats.
+            Their automated takedown service handles the entire takedown lifecycle, and their
+            detection speed for new phishing pages is among the fastest in the industry.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            For everything else — domain monitoring, phishing, social impersonation, lookalike sites —
-            DoppelDown delivers comparable or better coverage at a fraction of the cost.
+            If your business faces high-volume phishing campaigns and you need real-time detection
+            with fully managed automated takedowns — and you have the budget ($20K+/year) — Bolster&apos;s
+            specialised phishing focus may be worth the premium. For broader brand protection
+            at an accessible price, DoppelDown is the clear choice.
           </p>
         </section>
 
@@ -206,11 +210,11 @@ export default function RedPointsComparisonPage() {
         {/* CTA */}
         <section className="bg-primary-600 rounded-2xl p-8 md:p-12 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Brand Protection Shouldn&apos;t Cost $25K+ Per Year
+            Brand Protection With Pricing You Can Actually See
           </h2>
           <p className="text-primary-100 mb-8 max-w-xl mx-auto">
-            Get the same core brand protection features at a price that makes sense.
-            Start free — no credit card, no sales call, no multi-week onboarding.
+            No &quot;contact sales for pricing&quot; games. No surprise quotes. Just transparent plans
+            and a free tier to get started. Protect your brand today.
           </p>
           <Link
             href="/auth/signup"
@@ -228,20 +232,24 @@ export default function RedPointsComparisonPage() {
           <div className="space-y-4">
             {[
               {
-                q: 'Is DoppelDown a good alternative to Red Points?',
-                a: 'Yes. DoppelDown offers domain monitoring, phishing detection, social media scanning, and takedown reports — starting at $0/month instead of $25,000/year. For non-marketplace brand threats, DoppelDown provides comparable coverage.',
+                q: 'Is DoppelDown a good alternative to Bolster?',
+                a: 'Yes. DoppelDown offers domain monitoring, phishing detection, social media scanning, and takedown reports — starting at $0/month with transparent pricing. If you don\'t need Bolster\'s real-time phishing-specific AI engine, DoppelDown provides comparable brand protection at a fraction of the cost.',
               },
               {
-                q: 'Does DoppelDown detect counterfeit products?',
-                a: 'DoppelDown focuses on digital brand threats: domain squatting, phishing sites, and social media impersonation. For deep marketplace counterfeit detection, Red Points may still be relevant — but most businesses need digital protection first.',
+                q: 'What is CheckPhish and how does it relate to Bolster?',
+                a: 'CheckPhish is a free URL phishing scanner built by Bolster. It lets anyone check if a URL is a phishing site. However, CheckPhish is just a single-URL scanner — Bolster\'s full brand protection platform is a separate enterprise product with custom pricing.',
               },
               {
-                q: 'How much does Red Points cost?',
-                a: 'Red Points pricing is not publicly available and typically ranges from $25,000 to $100,000 per year. An annual contract and lengthy sales process are required.',
+                q: 'How much does Bolster cost?',
+                a: 'Bolster does not publish pricing. Based on industry reports, their brand protection platform typically costs $20,000 to $100,000+ per year depending on the scope of coverage and number of brands monitored. A sales call is required to get a quote.',
               },
               {
-                q: 'Can I use DoppelDown and Red Points together?',
-                a: 'Yes. Some businesses use DoppelDown for domain and phishing protection while using Red Points for marketplace enforcement. DoppelDown\'s affordable pricing makes this combination practical.',
+                q: 'Does DoppelDown detect phishing sites?',
+                a: 'Yes. DoppelDown monitors for lookalike domains, phishing pages, and brand impersonation across the web. While Bolster offers more specialised real-time phishing AI, DoppelDown\'s phishing detection covers the most common threats that affect SMBs and growing businesses.',
+              },
+              {
+                q: 'Can I try DoppelDown before paying?',
+                a: 'Absolutely. DoppelDown offers a completely free tier that lets you monitor 1 brand with basic scanning — no credit card required. With Bolster, you can\'t even access the platform without going through a sales process.',
               },
             ].map((faq) => (
               <div key={faq.q} className="bg-card rounded-lg border border-border p-6">
@@ -263,6 +271,12 @@ export default function RedPointsComparisonPage() {
               DoppelDown vs BrandShield
             </Link>
             <Link
+              href="/compare/red-points"
+              className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
+            >
+              DoppelDown vs Red Points
+            </Link>
+            <Link
               href="/compare/phishlabs"
               className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
             >
@@ -273,12 +287,6 @@ export default function RedPointsComparisonPage() {
               className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
             >
               DoppelDown vs ZeroFox
-            </Link>
-            <Link
-              href="/compare/bolster"
-              className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
-            >
-              DoppelDown vs Bolster
             </Link>
             <Link
               href="/compare/allure-security"

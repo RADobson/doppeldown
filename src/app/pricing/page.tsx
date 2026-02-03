@@ -8,6 +8,23 @@ import { createClient } from '@/lib/supabase/client'
 
 const PLANS = [
   {
+    id: 'free',
+    name: 'Free',
+    price: '$0',
+    priceAmount: 0,
+    description: 'Get started — forever free',
+    features: [
+      '1 brand to monitor',
+      '1 manual scan per week',
+      '25 domain variations checked',
+      '1 social platform',
+      'Basic threat alerts',
+      'Community support',
+      '7-day evidence storage'
+    ],
+    popular: false
+  },
+  {
     id: 'starter',
     name: 'Starter',
     price: '$49',
@@ -103,6 +120,11 @@ export default function PricingPage() {
   }
 
   async function handleSubscribe(planId: string) {
+    if (planId === 'free') {
+      router.push('/auth/signup')
+      return
+    }
+
     if (!isLoggedIn) {
       router.push(`/auth/signup?plan=${planId}`)
       return

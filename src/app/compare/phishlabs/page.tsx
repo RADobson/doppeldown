@@ -271,6 +271,24 @@ export default function PhishLabsComparisonPage() {
             >
               DoppelDown vs Red Points
             </Link>
+            <Link
+              href="/compare/zerofox"
+              className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
+            >
+              DoppelDown vs ZeroFox
+            </Link>
+            <Link
+              href="/compare/bolster"
+              className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
+            >
+              DoppelDown vs Bolster
+            </Link>
+            <Link
+              href="/compare/allure-security"
+              className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4"
+            >
+              DoppelDown vs Allure Security
+            </Link>
           </div>
         </section>
       </main>
