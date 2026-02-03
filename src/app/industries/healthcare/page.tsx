@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { Shield, Heart, AlertTriangle, Search, ShieldCheck, BarChart3, Lock, ArrowRight } from 'lucide-react'
+import { Shield, Heart, AlertTriangle, Search, ShieldCheck, BarChart3, ArrowRight, FileWarning } from 'lucide-react'
 import Footer from '@/components/landing/Footer'
 
 export const metadata = {
-  title: 'Brand Protection for Healthcare Organizations — Hospital & Telehealth Phishing Defense | DoppelDown',
+  title: 'Brand Protection for Healthcare Organizations — Stop Phishing & Impersonation | DoppelDown',
   description:
-    'Protect your healthcare brand from fake pharmacy sites, telehealth impersonation, and patient data phishing. DoppelDown monitors for domain squatting and brand impersonation targeting hospitals, clinics, and healthcare providers. Free tier available.',
+    'Protect your healthcare brand from fake pharmacy sites, telehealth impersonation, and patient-targeting phishing attacks. DoppelDown monitors for lookalike domains threatening your organization and patients. Free tier available.',
   keywords: [
     'healthcare brand protection',
     'hospital phishing protection',
@@ -13,9 +13,9 @@ export const metadata = {
     'fake pharmacy site detection',
     'healthcare cybersecurity',
     'medical brand impersonation',
+    'patient phishing protection',
     'HIPAA phishing compliance',
     'healthcare domain squatting',
-    'patient data phishing protection',
   ],
   alternates: {
     canonical: 'https://doppeldown.com/industries/healthcare',
@@ -23,7 +23,7 @@ export const metadata = {
   openGraph: {
     title: 'Brand Protection for Healthcare Organizations | DoppelDown',
     description:
-      'Defend hospitals, clinics, and healthcare providers from fake pharmacy sites, telehealth impersonation, and patient data phishing. AI-powered monitoring from $0/month.',
+      'Stop fake pharmacy sites, telehealth impersonation, and patient-targeting phishing with AI-powered brand monitoring. Starting at $0/month.',
     url: 'https://doppeldown.com/industries/healthcare',
   },
 }
@@ -34,7 +34,7 @@ export default function HealthcareIndustryPage() {
     '@type': 'WebPage',
     name: 'Brand Protection for Healthcare Organizations',
     description:
-      'Protect healthcare brands from fake pharmacy sites, telehealth impersonation, and patient data phishing with AI-powered monitoring from DoppelDown.',
+      'Protect your healthcare brand from fake pharmacy sites, telehealth impersonation, and patient-targeting phishing attacks with AI-powered monitoring from DoppelDown.',
     url: 'https://doppeldown.com/industries/healthcare',
     publisher: {
       '@type': 'Organization',
@@ -51,7 +51,7 @@ export default function HealthcareIndustryPage() {
       serviceType: 'Brand Protection',
       areaServed: 'Worldwide',
       description:
-        'AI-powered brand protection for healthcare organizations. Detects fake pharmacy sites, telehealth impersonation, and patient data phishing.',
+        'AI-powered brand protection for healthcare organizations. Detects fake pharmacy sites, telehealth impersonation, and patient-targeting phishing.',
       offers: {
         '@type': 'Offer',
         price: '0',
@@ -110,16 +110,15 @@ export default function HealthcareIndustryPage() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-primary-600/10 text-primary-500 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Heart className="h-4 w-4" />
-            Healthcare Organizations
+            Healthcare &amp; Medical
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-landing-foreground mb-4">
             Brand Protection for Healthcare Organizations
           </h1>
           <p className="text-lg text-landing-muted max-w-2xl mx-auto">
-            Healthcare brands face uniquely dangerous impersonation threats. Fake pharmacy sites sell
-            counterfeit medications. Phishing pages harvest protected health information. Telehealth
-            impersonation puts patients at risk. DoppelDown monitors for these threats so you can
-            protect patients and compliance.
+            Fake pharmacy sites, telehealth impersonators, and patient-targeting phishing attacks
+            don&apos;t just damage your brand — they endanger lives. DoppelDown detects these threats
+            automatically so you can protect your patients and your reputation.
           </p>
         </div>
       </section>
@@ -128,27 +127,27 @@ export default function HealthcareIndustryPage() {
       <section className="py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-landing-foreground mb-8 text-center">
-            Why Healthcare Brands Face Critical Impersonation Risks
+            Why Healthcare Brands Face Unique Threats
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                icon: AlertTriangle,
-                title: 'Fake Pharmacy & Medication Sites',
+                icon: Heart,
+                title: 'Fake Pharmacy Sites',
                 description:
-                  'Attackers register domains mimicking your healthcare brand to sell counterfeit or unregulated medications. These fake pharmacy sites exploit the trust patients place in your organization\'s name. Unlike other industries, the consequences aren\'t just financial — patients may receive ineffective or dangerous products. The FDA reports thousands of illegal pharmacy sites operating at any given time, many impersonating legitimate healthcare brands.',
+                  'Attackers register domains mimicking your hospital or clinic to sell counterfeit medications. Patients searching for your pharmacy online land on convincing lookalikes that sell unregulated, potentially dangerous drugs under your brand name. These sites erode patient trust and create serious liability exposure for your organization.',
               },
               {
-                icon: Heart,
+                icon: Search,
                 title: 'Telehealth Impersonation',
                 description:
-                  'The rapid growth of telehealth has created a new attack surface. Fake appointment booking pages impersonate your clinic to collect patient information, insurance details, and payment data. Patients who believe they\'re scheduling legitimate consultations instead hand over their most sensitive personal and medical information to criminals. These attacks have surged alongside the mainstreaming of virtual care.',
+                  'The explosion of telehealth has created a new attack surface. Fake telehealth portals clone your patient login pages to harvest credentials, insurance details, and medical information. Patients believe they\'re accessing your legitimate portal — instead, their most sensitive health data is being stolen and sold on dark web marketplaces.',
               },
               {
-                icon: Lock,
+                icon: FileWarning,
                 title: 'HIPAA & Compliance Implications',
                 description:
-                  'When a phishing attack impersonates your healthcare brand and harvests protected health information (PHI), the regulatory fallout can be severe. Even though the breach occurred on an attacker\'s infrastructure, your organization faces reputational damage, potential investigation, and the burden of patient notification. Proactive brand monitoring demonstrates the due diligence that regulators and patients expect from healthcare providers.',
+                  'When patients submit health information to a phishing site impersonating your organization, the regulatory fallout lands on your desk. Even though you didn\'t create the fake site, patients and regulators expect you to be monitoring for brand impersonation. Failure to detect and report these threats can compound breach notification obligations and regulatory scrutiny.',
               },
             ].map((item) => {
               const Icon = item.icon
@@ -179,27 +178,27 @@ export default function HealthcareIndustryPage() {
             {[
               {
                 icon: Search,
-                title: 'Domain & Brand Monitoring',
+                title: 'Continuous Domain Surveillance',
                 description:
-                  'DoppelDown continuously monitors for domains impersonating your hospital, clinic, or healthcare network name. Our AI generates thousands of variations — typosquats, homoglyphs, and keyword combinations — and alerts you when new threats emerge.',
+                  'DoppelDown monitors for domains impersonating your hospital, clinic, or telehealth platform name. Our AI generates thousands of typosquat and homoglyph variations, scanning new domain registrations daily to catch threats before patients are exposed.',
               },
               {
                 icon: ShieldCheck,
-                title: 'Fake Site Detection',
+                title: 'Patient Portal Phishing Detection',
                 description:
-                  'Our engine detects pages that mimic your patient portals, appointment booking systems, and pharmacy storefronts. Visual fingerprinting catches clones even when attackers modify layouts, helping you catch threats that keyword-based scanners miss.',
+                  'We detect cloned patient portals and fake telehealth login pages by analyzing visual similarity, form structures, and SSL certificate patterns. Get alerted the moment an impersonation site goes live — not weeks later when patients start reporting fraud.',
               },
               {
                 icon: BarChart3,
-                title: 'Prioritized Threat Intelligence',
+                title: 'Risk-Prioritized Threat Intelligence',
                 description:
-                  'Healthcare security teams are stretched thin. DoppelDown\'s AI threat scoring separates active, patient-facing threats from benign domain registrations — so your team responds to real risks first, not sifts through noise.',
+                  'Not every similar domain is an active threat. DoppelDown\'s AI scoring engine assesses hosting infrastructure, content similarity, and targeting signals to surface the domains that pose genuine risk to your patients — reducing alert fatigue for your security team.',
               },
               {
-                icon: Lock,
-                title: 'Compliance-Ready Evidence',
+                icon: AlertTriangle,
+                title: 'Compliance-Ready Evidence Packages',
                 description:
-                  'Every detection includes screenshots, WHOIS records, DNS history, and content analysis — ready for regulatory documentation, legal proceedings, or reporting to the HHS Office for Civil Rights. Demonstrate proactive monitoring in your next compliance review.',
+                  'Each detected threat includes timestamped screenshots, WHOIS records, DNS data, and content analysis. Use these evidence packages for registrar takedown requests, law enforcement referrals, or regulatory documentation — all exportable in one click.',
               },
             ].map((item) => {
               const Icon = item.icon
@@ -225,16 +224,16 @@ export default function HealthcareIndustryPage() {
         <div className="max-w-4xl mx-auto bg-landing-elevated border border-landing-border rounded-xl p-8">
           <div className="grid sm:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-primary-500">$10.9M</div>
-              <div className="text-sm text-landing-muted mt-1">average cost of a healthcare data breach</div>
-            </div>
-            <div>
               <div className="text-3xl font-bold text-primary-500">89%</div>
-              <div className="text-sm text-landing-muted mt-1">of healthcare organizations experienced a cyberattack</div>
+              <div className="text-sm text-landing-muted mt-1">of healthcare organizations experienced a cyberattack in the past year</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-500">1,200+</div>
-              <div className="text-sm text-landing-muted mt-1">healthcare phishing campaigns detected monthly</div>
+              <div className="text-3xl font-bold text-primary-500">$10.9M</div>
+              <div className="text-sm text-landing-muted mt-1">average cost of a healthcare data breach — highest of any industry</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold text-primary-500">56%</div>
+              <div className="text-sm text-landing-muted mt-1">of healthcare breaches involve phishing as the initial attack vector</div>
             </div>
           </div>
         </div>
@@ -244,17 +243,18 @@ export default function HealthcareIndustryPage() {
       <section className="py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold text-landing-foreground mb-6 text-center">
-            For Healthcare Organizations of Every Size
+            Built for Healthcare Organizations of Every Size
           </h2>
           <p className="text-landing-muted text-center max-w-2xl mx-auto mb-8">
-            From independent clinics to hospital networks, DoppelDown makes brand protection accessible.
-            You don&apos;t need an enterprise security budget to protect your patients and your reputation.
+            Whether you&apos;re a single-location clinic or a multi-hospital health system,
+            DoppelDown scales to fit. Our free tier lets you start monitoring immediately —
+            upgrade as your organization&apos;s needs grow.
           </p>
           <div className="grid sm:grid-cols-3 gap-4 text-center">
             {[
               { label: 'Clinics & Practices', plan: 'Free — $0/month', desc: '1 brand, basic monitoring' },
-              { label: 'Regional Health Systems', plan: 'Pro — $99/month', desc: '10 brands, 6-hour scans, API' },
-              { label: 'Hospital Networks', plan: 'Enterprise — $249/month', desc: 'Unlimited brands, NRD feed' },
+              { label: 'Hospitals & Groups', plan: 'Starter — $49/month', desc: '3 brands, daily scans' },
+              { label: 'Health Systems', plan: 'Enterprise — $249/month', desc: 'Unlimited brands, NRD feed' },
             ].map((tier) => (
               <div key={tier.label} className="bg-landing-elevated border border-landing-border rounded-xl p-5">
                 <p className="text-sm font-semibold text-landing-foreground">{tier.label}</p>
@@ -276,28 +276,28 @@ export default function HealthcareIndustryPage() {
               className="bg-landing-elevated border border-landing-border rounded-lg p-4 hover:border-primary-500/50 transition-colors"
             >
               <p className="text-sm font-medium text-landing-foreground">Phishing Attack Statistics 2026</p>
-              <p className="text-xs text-landing-muted mt-1">The latest data on phishing attacks across all industries including healthcare.</p>
-            </Link>
-            <Link
-              href="/blog/brand-protection-for-small-business-practical-guide"
-              className="bg-landing-elevated border border-landing-border rounded-lg p-4 hover:border-primary-500/50 transition-colors"
-            >
-              <p className="text-sm font-medium text-landing-foreground">Brand Protection for Small Business</p>
-              <p className="text-xs text-landing-muted mt-1">A practical guide for smaller healthcare practices starting brand monitoring.</p>
+              <p className="text-xs text-landing-muted mt-1">Key data on phishing trends affecting healthcare organizations.</p>
             </Link>
             <Link
               href="/blog/what-is-domain-squatting-how-to-protect-your-brand"
               className="bg-landing-elevated border border-landing-border rounded-lg p-4 hover:border-primary-500/50 transition-colors"
             >
               <p className="text-sm font-medium text-landing-foreground">What Is Domain Squatting?</p>
-              <p className="text-xs text-landing-muted mt-1">Understand how attackers register domains targeting healthcare organizations.</p>
+              <p className="text-xs text-landing-muted mt-1">How attackers target healthcare domains and what you can do about it.</p>
+            </Link>
+            <Link
+              href="/blog/how-to-check-if-someone-registered-domain-similar-to-yours"
+              className="bg-landing-elevated border border-landing-border rounded-lg p-4 hover:border-primary-500/50 transition-colors"
+            >
+              <p className="text-sm font-medium text-landing-foreground">Check for Lookalike Domains</p>
+              <p className="text-xs text-landing-muted mt-1">5 methods to find domains impersonating your healthcare brand.</p>
             </Link>
             <Link
               href="/compare/zerofox"
               className="bg-landing-elevated border border-landing-border rounded-lg p-4 hover:border-primary-500/50 transition-colors"
             >
               <p className="text-sm font-medium text-landing-foreground">DoppelDown vs ZeroFox</p>
-              <p className="text-xs text-landing-muted mt-1">Compare healthcare-grade brand protection at accessible pricing.</p>
+              <p className="text-xs text-landing-muted mt-1">Compare brand protection solutions for healthcare.</p>
             </Link>
           </div>
         </div>
@@ -307,11 +307,11 @@ export default function HealthcareIndustryPage() {
       <section className="py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-landing-foreground mb-4">
-            Protect Your Patients and Your Healthcare Brand
+            Protect Your Patients. Protect Your Brand.
           </h2>
           <p className="text-landing-muted mb-8">
-            Start monitoring for threats to your healthcare organization today — free, no credit card required.
-            Protect patient trust and demonstrate compliance with proactive brand monitoring.
+            Start monitoring your healthcare brand today — free, no credit card required.
+            Detect impersonation threats before they reach your patients.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
