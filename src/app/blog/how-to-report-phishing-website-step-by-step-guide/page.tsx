@@ -144,7 +144,7 @@ export default function BlogPost() {
             <li>Submit the report</li>
           </ol>
           <p>
-            Google typically processes phishing reports within a few hours to one business day. You will not receive a direct response, but you can check if the site has been flagged by using the Safe Browsing Site Status checker at <code className="transparency-report.google.com/safe-browsing/search</code>
+            Google typically processes phishing reports within a few hours to one business day. You will not receive a direct response, but you can check if the site has been flagged by using the Safe Browsing Site Status checker at <code className="text-primary-400 bg-landing-elevated px-1.5 py-0.5 rounded text-sm">transparency-report.google.com/safe-browsing/search</code>
           </p>
 
           <h2 className="text-2xl font-bold text-landing-foreground mt-12 mb-4">Step 3: Report to the Anti-Phishing Working Group (APWG)</h2>
