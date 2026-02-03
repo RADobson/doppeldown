@@ -32,6 +32,27 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'Phishing Attack Statistics 2026: What SMBs Need to Know',
+    slug: 'phishing-attack-statistics-2026-what-smbs-need-to-know',
+    date: '2026-02-03',
+    category: 'Phishing Prevention',
+    excerpt: 'The latest phishing attack statistics for 2026. Learn how often SMBs are targeted, the average cost of a phishing breach, emerging AI-powered attack trends, and how to protect your small business.',
+  },
+  {
+    title: 'What is Domain Squatting and How to Protect Your Brand',
+    slug: 'what-is-domain-squatting-how-to-protect-your-brand',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Domain squatting (cybersquatting) is the practice of registering domains containing trademarked brand names. Learn the six types, your legal remedies, and practical strategies to protect your business in 2026.',
+  },
+  {
+    title: 'How to Check if Someone Registered a Domain Similar to Yours',
+    slug: 'how-to-check-if-someone-registered-domain-similar-to-yours',
+    date: '2026-02-03',
+    category: 'Domain Security',
+    excerpt: 'Someone may have registered a domain that looks almost identical to yours. Learn five methods to find lookalike domains — from manual WHOIS lookups to automated monitoring — and protect your brand.',
+  },
+  {
     title: 'What is Typosquatting? The Complete Guide for Business Owners (2026)',
     slug: 'what-is-typosquatting-complete-guide-2026',
     date: '2026-02-03',
