@@ -162,7 +162,7 @@ export default function SignUpPage() {
               <div className="font-semibold">Enterprise-grade at startup prices</div>
             </div>
             <p className="text-primary-100 text-sm">
-              Same AI-powered detection used by Fortune 500 companies, now accessible to businesses of all sizes. Start free, upgrade when you're ready.
+              Same AI-powered detection used by Fortune 500 companies, now accessible to businesses of all sizes. Start free, upgrade when you&apos;re ready.
             </p>
           </div>
         </div>

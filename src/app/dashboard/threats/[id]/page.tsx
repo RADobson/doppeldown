@@ -781,7 +781,7 @@ export default function ThreatDetailPage() {
                       </pre>
                     )}
                     <p className="text-xs text-muted-foreground">
-                      Rendered preview is sandboxed (no scripts). Use "Download" for the full file.
+                      Rendered preview is sandboxed (no scripts). Use &quot;Download&quot; for the full file.
                     </p>
                   </div>
                 ) : threat.evidence?.html_snapshots?.[0]?.html_preview || threat.evidence?.html_snapshots?.[0]?.html ? (

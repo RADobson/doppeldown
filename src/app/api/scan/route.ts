@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { getEffectiveTier, getTierLimits, getManualScanLimit, MANUAL_SCAN_PERIOD_MS } from '@/lib/tier-limits'
+import { getEffectiveTier, getTierLimits, getManualScanLimit } from '@/lib/tier-limits'
+import { TIER_CONFIG, CRON_CONFIG } from '@/lib/constants'
 
+/**
+ * Allowed scan types
+ */
 const ALLOWED_SCAN_TYPES = new Set(['full', 'quick', 'domain_only', 'web_only', 'social_only'])
 
+/**
+ * POST handler to queue a new scan
+ * 
+ * @param request - Next.js request object
+ * @returns JSON response with scan details
+ */
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
@@ -46,7 +56,7 @@ export async function POST(request: NextRequest) {
     )
     const tierLimits = getTierLimits(effectiveTier)
 
-    // Manual scan quota enforcement (admin bypass pattern from Phase 1)
+    // Manual scan quota enforcement (admin bypass pattern)
     const manualScanLimit = getManualScanLimit(effectiveTier)
     if (!userData?.is_admin && manualScanLimit !== null) {
       const now = new Date()
@@ -54,7 +64,7 @@ export async function POST(request: NextRequest) {
 
       // Check if period expired (7 days)
       const periodExpired = !periodStart ||
-        (now.getTime() - new Date(periodStart).getTime() > MANUAL_SCAN_PERIOD_MS)
+        (now.getTime() - new Date(periodStart).getTime() > TIER_CONFIG.MANUAL_SCAN_PERIOD_MS)
 
       if (periodExpired) {
         // Reset period atomically with first scan of new period
@@ -62,14 +72,14 @@ export async function POST(request: NextRequest) {
           .from('users')
           .update({
             manual_scans_period_start: now.toISOString(),
-            manual_scans_count: 1  // Count this scan
+            manual_scans_count: 1
           })
           .eq('id', user.id)
       } else {
         // Check quota
         const scansUsed = userData?.manual_scans_count || 0
         if (scansUsed >= manualScanLimit) {
-          const resetsAt = new Date(periodStart).getTime() + MANUAL_SCAN_PERIOD_MS
+          const resetsAt = new Date(periodStart).getTime() + TIER_CONFIG.MANUAL_SCAN_PERIOD_MS
           return NextResponse.json(
             {
               error: 'Manual scan quota exceeded',
@@ -132,7 +142,7 @@ export async function POST(request: NextRequest) {
         scan_id: scan.id,
         scan_type: normalizedScanType,
         status: 'queued',
-        priority: 0,
+        priority: CRON_CONFIG.MANUAL_SCAN_PRIORITY,
         scheduled_at: new Date().toISOString(),
         payload: {
           variationLimit: tierLimits.variationLimit,
@@ -168,6 +178,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
+/**
+ * GET handler to fetch scan status
+ * 
+ * @param request - Next.js request object
+ * @returns JSON response with scan details
+ */
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()

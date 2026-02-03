@@ -3,68 +3,88 @@
  * This is the single source of truth for all tier-based limits across the application.
  */
 
+import { DOMAIN_CONFIG, TIER_CONFIG } from './constants'
+
+/**
+ * Available subscription tiers
+ */
 export type TierName = 'free' | 'starter' | 'professional' | 'enterprise'
 
+/**
+ * Limit configuration for each tier
+ */
 export interface TierLimits {
+  /** Maximum number of brands allowed */
   brands: number
+  /** Maximum number of domain variations to check */
   variationLimit: number
+  /** Maximum number of social platforms allowed */
   socialPlatforms: number
-  scanFrequencyDays: number | null  // null = manual only, 0 = continuous (deprecated, use scanFrequencyHours)
-  scanFrequencyHours: number | null  // null = manual only, hours between automated scans
+  /** 
+   * Days between automated scans (deprecated, use scanFrequencyHours)
+   * @deprecated
+   */
+  scanFrequencyDays: number | null
+  /** Hours between automated scans (null = manual only) */
+  scanFrequencyHours: number | null
+  /** Whether NRD (Newly Registered Domains) monitoring is enabled */
   nrdMonitoring: boolean
 }
 
+/**
+ * Tier limit configurations
+ */
 export const TIER_LIMITS: Record<TierName, TierLimits> = {
   free: {
     brands: 1,
-    variationLimit: 25,
+    variationLimit: DOMAIN_CONFIG.MAX_VARIATIONS.free,
     socialPlatforms: 1,
-    scanFrequencyDays: null,  // Manual only (deprecated)
-    scanFrequencyHours: null,  // Manual only
+    scanFrequencyDays: null,
+    scanFrequencyHours: null,
     nrdMonitoring: false,
   },
   starter: {
     brands: 3,
-    variationLimit: 100,
+    variationLimit: DOMAIN_CONFIG.MAX_VARIATIONS.starter,
     socialPlatforms: 3,
-    scanFrequencyDays: 7,  // Weekly (deprecated)
-    scanFrequencyHours: 24,  // Daily
+    scanFrequencyDays: 7,
+    scanFrequencyHours: 24,
     nrdMonitoring: false,
   },
   professional: {
     brands: 10,
-    variationLimit: 500,
+    variationLimit: DOMAIN_CONFIG.MAX_VARIATIONS.professional,
     socialPlatforms: 6,
-    scanFrequencyDays: 1,  // Daily (deprecated)
-    scanFrequencyHours: 6,  // Every 6 hours
+    scanFrequencyDays: 1,
+    scanFrequencyHours: 6,
     nrdMonitoring: false,
   },
   enterprise: {
     brands: Infinity,
-    variationLimit: 2500,
-    socialPlatforms: 8,  // All platforms
-    scanFrequencyDays: 0,  // Continuous (deprecated)
-    scanFrequencyHours: 1,  // Hourly
+    variationLimit: DOMAIN_CONFIG.MAX_VARIATIONS.enterprise,
+    socialPlatforms: 8,
+    scanFrequencyDays: 0,
+    scanFrequencyHours: 1,
     nrdMonitoring: true,
   },
 }
 
-export const ALL_SOCIAL_PLATFORMS = [
-  'twitter',
-  'facebook',
-  'instagram',
-  'linkedin',
-  'tiktok',
-  'youtube',
-  'telegram',
-  'discord',
-] as const
+/**
+ * All available social platforms
+ */
+export const ALL_SOCIAL_PLATFORMS = TIER_CONFIG.ALL_PLATFORMS
 
+/**
+ * Social platform type derived from the platforms array
+ */
 export type SocialPlatform = typeof ALL_SOCIAL_PLATFORMS[number]
 
 /**
  * Get the limits for a specific tier.
  * Defaults to free tier if tier is not recognized.
+ * 
+ * @param tier - Tier name
+ * @returns Tier limits configuration
  */
 export function getTierLimits(tier: string): TierLimits {
   const normalizedTier = tier?.toLowerCase() as TierName
@@ -74,6 +94,10 @@ export function getTierLimits(tier: string): TierLimits {
 /**
  * Get the effective tier based on subscription status.
  * Returns 'free' if subscription is not active.
+ * 
+ * @param subscriptionStatus - Current subscription status
+ * @param subscriptionTier - Current subscription tier
+ * @returns Effective tier name
  */
 export function getEffectiveTier(
   subscriptionStatus: string | null | undefined,
@@ -89,6 +113,9 @@ export function getEffectiveTier(
 /**
  * Get brand limit as a number suitable for comparison.
  * Returns MAX_SAFE_INTEGER for unlimited tiers.
+ * 
+ * @param tier - Tier name
+ * @returns Brand limit number
  */
 export function getBrandLimit(tier: string): number {
   const limits = getTierLimits(tier)
@@ -97,6 +124,9 @@ export function getBrandLimit(tier: string): number {
 
 /**
  * Check if a tier has access to NRD monitoring.
+ * 
+ * @param tier - Tier name
+ * @returns True if NRD monitoring is available
  */
 export function hasNrdAccess(tier: string): boolean {
   return getTierLimits(tier).nrdMonitoring
@@ -104,6 +134,9 @@ export function hasNrdAccess(tier: string): boolean {
 
 /**
  * Get the number of social platforms allowed for a tier.
+ * 
+ * @param tier - Tier name
+ * @returns Number of allowed social platforms
  */
 export function getSocialPlatformLimit(tier: string): number {
   return getTierLimits(tier).socialPlatforms
@@ -111,6 +144,9 @@ export function getSocialPlatformLimit(tier: string): number {
 
 /**
  * Check if automated scans are enabled for a tier.
+ * 
+ * @param tier - Tier name
+ * @returns True if automated scans are available
  */
 export function hasAutomatedScans(tier: string): boolean {
   const limits = getTierLimits(tier)
@@ -120,6 +156,9 @@ export function hasAutomatedScans(tier: string): boolean {
 /**
  * Get the scan frequency in hours for a tier.
  * Returns null for tiers without automated scanning (manual only).
+ * 
+ * @param tier - Tier name
+ * @returns Hours between scans or null
  */
 export function getScanFrequencyHours(tier: string): number | null {
   return getTierLimits(tier).scanFrequencyHours
@@ -127,12 +166,16 @@ export function getScanFrequencyHours(tier: string): number | null {
 
 /**
  * Manual scan quota period duration (7 days in milliseconds).
+ * @deprecated Use TIER_CONFIG.MANUAL_SCAN_PERIOD_MS instead
  */
-export const MANUAL_SCAN_PERIOD_MS = 604800000 // 7 * 24 * 60 * 60 * 1000
+export const MANUAL_SCAN_PERIOD_MS = TIER_CONFIG.MANUAL_SCAN_PERIOD_MS
 
 /**
  * Get the manual scan limit for a tier.
  * Returns null for unlimited tiers, number for limited tiers.
+ * 
+ * @param tier - Tier name
+ * @returns Scan limit or null for unlimited
  */
 export function getManualScanLimit(tier: string): number | null {
   const normalizedTier = tier?.toLowerCase() as TierName
@@ -142,4 +185,51 @@ export function getManualScanLimit(tier: string): number | null {
     return 1
   }
   return null // unlimited
+}
+
+/**
+ * Check if a tier supports a specific feature
+ * 
+ * @param tier - Tier name
+ * @param feature - Feature to check ('nrd', 'automated', etc.)
+ * @returns True if feature is available
+ */
+export function hasFeature(tier: string, feature: 'nrd' | 'automated' | 'api'): boolean {
+  const limits = getTierLimits(tier)
+  switch (feature) {
+    case 'nrd':
+      return limits.nrdMonitoring
+    case 'automated':
+      return limits.scanFrequencyHours !== null
+    case 'api':
+      return tier !== 'free'
+    default:
+      return false
+  }
+}
+
+/**
+ * Get the maximum number of brands that can be added for a tier,
+ * taking into account current brand count
+ * 
+ * @param tier - Tier name
+ * @param currentBrands - Current number of brands
+ * @returns Remaining brand slots or Infinity
+ */
+export function getRemainingBrandSlots(tier: string, currentBrands: number): number {
+  const limit = getBrandLimit(tier)
+  const remaining = limit - currentBrands
+  return remaining > 0 ? remaining : 0
+}
+
+/**
+ * Check if adding a brand would exceed the tier limit
+ * 
+ * @param tier - Tier name
+ * @param currentBrands - Current number of brands
+ * @returns True if at or over limit
+ */
+export function isAtBrandLimit(tier: string, currentBrands: number): boolean {
+  const limit = getBrandLimit(tier)
+  return currentBrands >= limit
 }

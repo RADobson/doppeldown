@@ -1,7 +1,11 @@
 import { DomainVariation, VariationType, ThreatSeverity } from '../types'
 import { dnsQueue } from './scan-queue'
+import { DOMAIN_CONFIG, SCAN_CONFIG } from './constants'
 
-// Homoglyphs - characters that look similar
+/**
+ * Homoglyphs - characters that look similar to ASCII letters
+ * Used for generating typosquatting variations
+ */
 const HOMOGLYPHS: Record<string, string[]> = {
   'a': ['@', '4', 'а', 'ä', 'à', 'á', 'â', 'ã', 'å', 'ą'],
   'b': ['d', '6', 'ḃ', 'ḅ', 'ƀ'],
@@ -31,7 +35,10 @@ const HOMOGLYPHS: Record<string, string[]> = {
   'z': ['2', 'ẑ', 'ż', 'ž', 'з'],
 }
 
-// Common keyboard proximity typos
+/**
+ * Common keyboard proximity typos
+ * Maps each letter to adjacent keys on QWERTY keyboard
+ */
 const KEYBOARD_PROXIMITY: Record<string, string[]> = {
   'a': ['q', 'w', 's', 'z'],
   'b': ['v', 'g', 'h', 'n'],
@@ -61,25 +68,18 @@ const KEYBOARD_PROXIMITY: Record<string, string[]> = {
   'z': ['a', 's', 'x'],
 }
 
-// Common TLDs for variation
-const COMMON_TLDS = [
-  'com', 'net', 'org', 'io', 'co', 'app', 'dev', 'xyz', 'info',
-  'biz', 'us', 'uk', 'de', 'fr', 'ru', 'cn', 'jp', 'ca', 'au',
-  'shop', 'store', 'online', 'site', 'website', 'tech', 'cloud'
-]
-const NETWORK_TIMEOUT_MS = parseInt(process.env.SCAN_NETWORK_TIMEOUT_MS || '4000', 10)
+/**
+ * Network timeout for DNS queries
+ */
+const NETWORK_TIMEOUT_MS = SCAN_CONFIG.NETWORK_TIMEOUT_MS
 
-const MULTI_PART_TLDS = [
-  'com.au', 'net.au', 'org.au', 'gov.au', 'edu.au',
-  'co.uk', 'org.uk', 'gov.uk', 'ac.uk',
-  'co.nz', 'co.jp', 'co.kr', 'co.za',
-  'com.br', 'com.mx', 'com.ar', 'com.co',
-  'com.sg', 'com.hk', 'com.tr', 'com.tw',
-  'com.ph', 'com.my', 'com.id', 'com.vn',
-  'com.th', 'com.ua', 'com.pl', 'com.ru',
-  'com.sa', 'com.eg', 'com.ng', 'com.pk'
-]
-
+/**
+ * Split a domain into its base name and TLD
+ * Handles multi-part TLDs like .co.uk
+ * 
+ * @param domain - Domain name to split
+ * @returns Object with baseName and tld
+ */
 export function splitDomainAndTld(domain: string): { baseName: string; tld: string } {
   const cleaned = domain
     .toLowerCase()
@@ -92,7 +92,7 @@ export function splitDomainAndTld(domain: string): { baseName: string; tld: stri
   }
 
   const lastTwo = parts.slice(-2).join('.')
-  if (MULTI_PART_TLDS.includes(lastTwo) && parts.length >= 3) {
+  if (DOMAIN_CONFIG.MULTI_PART_TLDS.includes(lastTwo as typeof DOMAIN_CONFIG.MULTI_PART_TLDS[number]) && parts.length >= 3) {
     const base = parts.slice(0, -2).join('.')
     return { baseName: base.replace(/[^a-z0-9]/g, ''), tld: lastTwo }
   }
@@ -102,6 +102,14 @@ export function splitDomainAndTld(domain: string): { baseName: string; tld: stri
   return { baseName: base.replace(/[^a-z0-9]/g, ''), tld }
 }
 
+/**
+ * Generate domain variations for typosquatting detection
+ * Creates multiple types of variations including typos, homoglyphs, and TLD swaps
+ * 
+ * @param brandName - Base brand name
+ * @param originalTld - Original TLD (default: 'com')
+ * @returns Array of domain variations with their types
+ */
 export function generateDomainVariations(
   brandName: string,
   originalTld: string = 'com'
@@ -176,15 +184,14 @@ export function generateDomainVariations(
   }
 
   // 8. TLD swap variations
-  for (const tld of COMMON_TLDS) {
+  for (const tld of DOMAIN_CONFIG.COMMON_TLDS) {
     if (tld !== originalTld) {
       variations.set(`${baseName}.${tld}`, 'tld_swap')
     }
   }
 
   // 9. Subdomain squatting
-  const subdomainPrefixes = ['www', 'login', 'secure', 'account', 'my', 'portal', 'app']
-  for (const prefix of subdomainPrefixes) {
+  for (const prefix of DOMAIN_CONFIG.SUBDOMAIN_PREFIXES) {
     variations.set(`${prefix}${baseName}.${originalTld}`, 'subdomain')
     variations.set(`${baseName}${prefix}.${originalTld}`, 'subdomain')
   }
@@ -213,6 +220,13 @@ export function generateDomainVariations(
   }))
 }
 
+/**
+ * Assess threat level based on variation type and registration status
+ * 
+ * @param variationType - Type of domain variation
+ * @param isRegistered - Whether the domain is registered
+ * @returns Threat severity level
+ */
 export function assessThreatLevel(
   variationType: VariationType,
   isRegistered: boolean
@@ -230,6 +244,14 @@ export function assessThreatLevel(
   return 'low'
 }
 
+/**
+ * Perform a DNS query using Google or Cloudflare DNS over HTTPS
+ * 
+ * @param domain - Domain to query
+ * @param type - DNS record type (A, AAAA, CNAME, etc.)
+ * @param provider - DNS provider to use
+ * @returns True if records exist
+ */
 async function dnsQuery(domain: string, type: string, provider: 'google' | 'cloudflare') {
   if (provider === 'google') {
     const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${type}`, {
@@ -249,6 +271,12 @@ async function dnsQuery(domain: string, type: string, provider: 'google' | 'clou
   return data.Status === 0 && Array.isArray(data.Answer) && data.Answer.length > 0
 }
 
+/**
+ * Check if a domain is registered by querying DNS records
+ * 
+ * @param domain - Domain to check
+ * @returns True if the domain is registered
+ */
 export async function checkDomainRegistration(domain: string): Promise<boolean> {
   return dnsQueue.add(async () => {
     const recordTypes = ['A', 'AAAA', 'CNAME', 'NS', 'SOA']
@@ -257,12 +285,12 @@ export async function checkDomainRegistration(domain: string): Promise<boolean> 
       try {
         if (await dnsQuery(domain, type, 'google')) return true
       } catch {
-        // continue to fallback
+        // Continue to fallback
       }
       try {
         if (await dnsQuery(domain, type, 'cloudflare')) return true
       } catch {
-        // continue to next type
+        // Continue to next type
       }
     }
 
@@ -270,6 +298,12 @@ export async function checkDomainRegistration(domain: string): Promise<boolean> 
   }) as Promise<boolean>
 }
 
+/**
+ * Group domain variations by their risk level
+ * 
+ * @param variations - Array of domain variations
+ * @returns Object with variations grouped by severity
+ */
 export function groupVariationsByRisk(
   variations: DomainVariation[]
 ): Record<ThreatSeverity, DomainVariation[]> {

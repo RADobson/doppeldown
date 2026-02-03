@@ -354,7 +354,7 @@ export default function NewBrandPage() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Social Media Handles</CardTitle>
-            <CardDescription>Add your official social handles - we'll scan for fake accounts impersonating these</CardDescription>
+            <CardDescription>Add your official social handles - we&apos;ll scan for fake accounts impersonating these</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {SOCIAL_PLATFORMS.map((platform) => {

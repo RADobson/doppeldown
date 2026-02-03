@@ -81,11 +81,15 @@ export interface WhoisData {
   registrar?: string;
   creation_date?: string;
   expiration_date?: string;
+  updated_date?: string;
   registrant_name?: string;
   registrant_org?: string;
   registrant_country?: string;
   name_servers?: string[];
+  statuses?: string[];
+  registrar_iana_id?: string;
   raw?: string;
+  retrieved_at?: string;
 }
 
 export interface Evidence {
@@ -95,6 +99,8 @@ export interface Evidence {
   timestamps: string[];
   storage_bucket?: string;
   storage_provider?: 'supabase';
+  collected_at?: string;
+  collection_errors?: string[];
 }
 
 export interface ScreenshotEvidence {
@@ -104,6 +110,12 @@ export interface ScreenshotEvidence {
   public_url?: string;
   content_type?: string;
   size_bytes?: number;
+  content_hash?: string;
+  metadata?: {
+    width: number;
+    height: number;
+    captureTime: number;
+  };
 }
 
 export interface WhoisSnapshot {
@@ -120,6 +132,8 @@ export interface HtmlSnapshot {
   content_type?: string;
   size_bytes?: number;
   truncated?: boolean;
+  original_size?: number;
+  content_hash?: string;
   analysis?: PageAnalysis;
 }
 
@@ -128,6 +142,7 @@ export interface PageAnalysis {
   hasPaymentForm: boolean;
   hasBrandMentions: number;
   suspiciousElements: string[];
+  riskScore?: number;
 }
 
 export interface ThreatAnalysis {

@@ -1,138 +1,93 @@
 import { Threat, ThreatSeverity, ThreatType } from '../types'
+import {
+  SearchResult,
+  SCAN_CONFIG,
+  isSafeDomain,
+  fetchWithRetry,
+  searchDuckDuckGo,
+  searchSerpApi,
+} from './scan-utils'
 
-interface SearchResult {
-  title: string
-  url: string
-  snippet: string
-}
+// ============================================================================
+// Configuration
+// ============================================================================
 
-const NETWORK_TIMEOUT_MS = parseInt(process.env.SCAN_NETWORK_TIMEOUT_MS || '4000', 10)
-const WEB_SEARCH_PROVIDER = (process.env.WEB_SEARCH_PROVIDER || process.env.SEARCH_PROVIDER || '').toLowerCase()
-const WEB_SEARCH_FALLBACK_ENABLED = process.env.WEB_SEARCH_FALLBACK !== 'false'
+const MAX_QUERIES_PER_SCAN = parseInt(process.env.SCAN_MAX_QUERIES || '5', 10)
+const SERP_API_KEY = process.env.SERPAPI_API_KEY
 
-function decodeHtmlEntities(value: string): string {
-  return value
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, ' ')
-}
+// ============================================================================
+// Search Query Generation
+// ============================================================================
 
-function normalizeSearchResultUrl(rawUrl: string): string | null {
-  const cleaned = decodeHtmlEntities(rawUrl.trim())
-  if (!cleaned) return null
-
-  try {
-    const parsed = new URL(cleaned, 'https://duckduckgo.com')
-    const isDuckDuckGoRedirect = parsed.hostname.includes('duckduckgo.com') && parsed.pathname === '/l/'
-    const redirectTarget = parsed.searchParams.get('uddg')
-
-    if (isDuckDuckGoRedirect && redirectTarget) {
-      return normalizeHttpUrl(decodeURIComponent(redirectTarget))
-    }
-
-    return normalizeHttpUrl(parsed.toString())
-  } catch {
-    return null
-  }
-}
-
-function normalizeHttpUrl(value: string): string | null {
-  try {
-    const parsed = new URL(value)
-    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null
-    return parsed.toString()
-  } catch {
-    return null
-  }
-}
-
-function stripHtml(value: string): string {
-  return value
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
-function extractDuckDuckGoResults(html: string, limit: number): SearchResult[] {
-  const results: SearchResult[] = []
-  const seen = new Set<string>()
-
-  const pushResult = (rawUrl: string, rawTitle: string, rawSnippet: string) => {
-    const normalizedUrl = normalizeSearchResultUrl(rawUrl)
-    if (!normalizedUrl || seen.has(normalizedUrl)) return
-    seen.add(normalizedUrl)
-    results.push({
-      url: normalizedUrl,
-      title: stripHtml(decodeHtmlEntities(rawTitle || '')),
-      snippet: stripHtml(decodeHtmlEntities(rawSnippet || ''))
-    })
-  }
-
-  const htmlLinkRegex = /<a class="result__a" href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g
-  let match
-  while ((match = htmlLinkRegex.exec(html)) !== null && results.length < limit) {
-    const snippetMatch = html
-      .slice(match.index)
-      .match(/class="result__snippet"[^>]*>([\s\S]*?)<\/(?:a|div|span|p)>/i)
-    pushResult(match[1], match[2], snippetMatch?.[1] || '')
-  }
-
-  if (results.length >= limit) return results
-
-  const liteLinkRegex = /<a[^>]*class="result-link"[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g
-  while ((match = liteLinkRegex.exec(html)) !== null && results.length < limit) {
-    const snippetMatch = html
-      .slice(match.index)
-      .match(/class="result-snippet"[^>]*>([\s\S]*?)<\/(?:td|span|div|p)>/i)
-    pushResult(match[1], match[2], snippetMatch?.[1] || '')
-  }
-
-  return results
-}
-
-// Search queries to find potential threats
+/**
+ * Generate search queries to find potential brand threats
+ */
 export function generateSearchQueries(brandName: string, domain: string): string[] {
-  const queries = [
-    // Direct brand searches
-    `"${brandName}" login`,
-    `"${brandName}" account`,
-    `"${brandName}" sign in`,
-    `"${brandName}" official`,
+  const quotedBrand = `"${brandName}"`
+  const brandSlug = brandName.toLowerCase().replace(/\s+/g, '')
 
-    // Scam indicators
-    `"${brandName}" -site:${domain} login`,
-    `"${brandName}" giveaway -site:${domain}`,
-    `"${brandName}" free -site:${domain}`,
-    `"${brandName}" support -site:${domain}`,
+  return [
+    // Direct brand searches (high-value targets)
+    `${quotedBrand} login`,
+    `${quotedBrand} account`,
+    `${quotedBrand} sign in`,
+    `${quotedBrand} official`,
+
+    // Scam indicators (exclude legitimate domain)
+    `${quotedBrand} -site:${domain} login`,
+    `${quotedBrand} giveaway -site:${domain}`,
+    `${quotedBrand} free -site:${domain}`,
+    `${quotedBrand} support -site:${domain}`,
 
     // Phishing indicators
-    `"${brandName}" verify account`,
-    `"${brandName}" confirm identity`,
-    `"${brandName}" update payment`,
+    `${quotedBrand} verify account`,
+    `${quotedBrand} confirm identity`,
+    `${quotedBrand} update payment`,
 
-    // Domain variations
-    `inurl:${brandName.toLowerCase()} login -site:${domain}`,
+    // Domain/URL variations
+    `inurl:${brandSlug} login -site:${domain}`,
   ]
-
-  return queries
 }
 
-// Analyze a URL for threat indicators
+// ============================================================================
+// Threat Analysis
+// ============================================================================
+
+interface ThreatAnalysis {
+  isThreat: boolean
+  severity: ThreatSeverity
+  type: ThreatType
+  reason: string
+}
+
+// Keywords indicating potential phishing attempts
+const PHISHING_KEYWORDS = [
+  'login', 'signin', 'sign-in', 'account', 'verify', 'confirm',
+  'secure', 'update', 'suspended', 'locked', 'password', 'credential',
+]
+
+// Keywords indicating potential scam attempts
+const SCAM_KEYWORDS = [
+  'giveaway', 'free', 'winner', 'congratulations', 'claim', 'prize',
+  'gift', 'reward', 'bonus', 'limited', 'urgent', 'act now',
+]
+
+/**
+ * Analyze a URL for threat indicators
+ * @returns ThreatAnalysis if threat detected, null otherwise
+ */
 export function analyzeUrl(
   url: string,
   title: string,
   snippet: string,
   brandName: string,
   legitimateDomain: string
-): { isThreat: boolean; severity: ThreatSeverity; type: ThreatType; reason: string } | null {
+): ThreatAnalysis | null {
   const urlLower = url.toLowerCase()
   const titleLower = title.toLowerCase()
+  const snippetLower = snippet.toLowerCase()
   const brandLower = brandName.toLowerCase()
+  const brandNoSpaces = brandLower.replace(/\s/g, '')
   const domainLower = legitimateDomain.toLowerCase()
 
   // Skip legitimate domain
@@ -141,43 +96,25 @@ export function analyzeUrl(
   }
 
   // Skip known safe domains
-  const safeDomains = [
-    'google.com', 'bing.com', 'yahoo.com', 'facebook.com', 'twitter.com',
-    'linkedin.com', 'instagram.com', 'youtube.com', 'reddit.com', 'wikipedia.org',
-    'github.com', 'stackoverflow.com', 'medium.com', 'trustpilot.com',
-    'bbb.org', 'glassdoor.com', 'indeed.com', 'crunchbase.com'
-  ]
-
-  for (const safe of safeDomains) {
-    if (urlLower.includes(safe)) {
-      return null
-    }
+  if (isSafeDomain(url)) {
+    return null
   }
-
-  // Check for phishing indicators
-  const phishingKeywords = [
-    'login', 'signin', 'sign-in', 'account', 'verify', 'confirm',
-    'secure', 'update', 'suspended', 'locked', 'password', 'credential'
-  ]
-
-  const scamKeywords = [
-    'giveaway', 'free', 'winner', 'congratulations', 'claim', 'prize',
-    'gift', 'reward', 'bonus', 'limited', 'urgent', 'act now'
-  ]
 
   let isThreat = false
   let severity: ThreatSeverity = 'low'
   let type: ThreatType = 'brand_impersonation'
   let reason = ''
 
-  // Check if URL contains brand name (potential typosquat)
-  if (urlLower.includes(brandLower) || urlLower.includes(brandLower.replace(/\s/g, ''))) {
+  // Check if URL contains brand name (potential typosquat/lookalike)
+  const urlContainsBrand = urlLower.includes(brandLower) || urlLower.includes(brandNoSpaces)
+
+  if (urlContainsBrand) {
     isThreat = true
     reason = 'URL contains brand name'
 
-    // Check for phishing indicators
-    const hasPhishing = phishingKeywords.some(kw =>
-      urlLower.includes(kw) || titleLower.includes(kw)
+    // Check for phishing indicators - escalate severity
+    const hasPhishing = PHISHING_KEYWORDS.some(
+      (kw) => urlLower.includes(kw) || titleLower.includes(kw)
     )
 
     if (hasPhishing) {
@@ -190,106 +127,73 @@ export function analyzeUrl(
     }
   }
 
-  // Check for scam indicators
-  const hasScamKeywords = scamKeywords.some(kw =>
-    titleLower.includes(kw) || snippet.toLowerCase().includes(kw)
+  // Check for scam indicators (with brand mention)
+  const hasScamKeywords = SCAM_KEYWORDS.some(
+    (kw) => titleLower.includes(kw) || snippetLower.includes(kw)
   )
 
-  if (hasScamKeywords && titleLower.includes(brandLower)) {
+  if (hasScamKeywords && (titleLower.includes(brandLower) || snippetLower.includes(brandLower))) {
     isThreat = true
-    severity = 'high'
+    if (severity === 'low') severity = 'high'
     type = 'brand_impersonation'
-    reason = 'Contains scam keywords with brand name'
+    reason = reason
+      ? `${reason}; Contains scam keywords with brand name`
+      : 'Contains scam keywords with brand name'
   }
 
-  if (!isThreat) {
-    return null
-  }
-
-  return { isThreat, severity, type, reason }
+  return isThreat ? { isThreat, severity, type, reason } : null
 }
 
-// Search using a simple web search approach
+// ============================================================================
+// Web Search
+// ============================================================================
+
+/**
+ * Search the web for potential threats
+ * Uses SerpAPI if configured, falls back to DuckDuckGo
+ */
 export async function searchWeb(query: string): Promise<SearchResult[]> {
-  // Search via SerpAPI when configured; otherwise use DuckDuckGo HTML.
   try {
-    const encodedQuery = encodeURIComponent(query)
-    const serpApiKey = process.env.SERPAPI_API_KEY
-    let results: SearchResult[] = []
-
-    if (WEB_SEARCH_PROVIDER === 'serpapi' && serpApiKey) {
-      const params = new URLSearchParams({
-        engine: 'google',
-        q: query,
-        api_key: serpApiKey
-      })
-      const response = await fetch(
-        `https://serpapi.com/search?${params.toString()}`,
-        { signal: AbortSignal.timeout(NETWORK_TIMEOUT_MS) }
-      )
-
-      if (response.ok) {
-        const data = await response.json()
-        const organic = Array.isArray(data?.organic_results) ? data.organic_results : []
-        results = organic
-          .map((item: any) => ({
-            url: item?.link,
-            title: item?.title || '',
-            snippet: item?.snippet || ''
-          }))
-          .filter((item: SearchResult) => Boolean(item.url))
-          .slice(0, 10)
+    // Try SerpAPI first if configured
+    if (SCAN_CONFIG.webSearchProvider === 'serpapi' && SERP_API_KEY) {
+      try {
+        return await searchSerpApi(query, SERP_API_KEY, 10)
+      } catch (error) {
+        console.warn('SerpAPI search failed, falling back:', error)
       }
     }
 
-    if (results.length === 0 && WEB_SEARCH_FALLBACK_ENABLED) {
-      const response = await fetch(
-        `https://html.duckduckgo.com/html/?q=${encodedQuery}`,
-        {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          },
-          signal: AbortSignal.timeout(NETWORK_TIMEOUT_MS)
-        }
-      )
-
-      if (response.ok) {
-        const html = await response.text()
-        results = extractDuckDuckGoResults(html, 10)
-      }
+    // Fall back to DuckDuckGo
+    if (SCAN_CONFIG.fallbackEnabled) {
+      return await searchDuckDuckGo(query, 10)
     }
 
-    if (results.length === 0 && WEB_SEARCH_FALLBACK_ENABLED) {
-      const liteResponse = await fetch(
-        `https://lite.duckduckgo.com/lite/?q=${encodedQuery}`,
-        {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          },
-          signal: AbortSignal.timeout(NETWORK_TIMEOUT_MS)
-        }
-      )
-
-      if (liteResponse.ok) {
-        const liteHtml = await liteResponse.text()
-        results = extractDuckDuckGoResults(liteHtml, 10)
-      }
-    }
-
-    return results
+    return []
   } catch (error) {
     console.error('Search error:', error)
     return []
   }
 }
 
-// Main scanning function
+// ============================================================================
+// Main Scanning
+// ============================================================================
+
+export interface ScanOptions {
+  onProgress?: (delta: number) => void
+  maxQueries?: number
+}
+
+/**
+ * Scan for threats targeting a brand
+ */
 export async function scanForThreats(
   brandName: string,
   domain: string,
   keywords: string[] = [],
-  options?: { onProgress?: (delta: number) => void }
+  options: ScanOptions = {}
 ): Promise<Partial<Threat>[]> {
+  const { onProgress, maxQueries = MAX_QUERIES_PER_SCAN } = options
   const threats: Partial<Threat>[] = []
   const seenUrls = new Set<string>()
 
@@ -302,11 +206,15 @@ export async function scanForThreats(
   }
 
   // Execute searches (limited to avoid rate limiting)
-  for (const query of queries.slice(0, 5)) {
+  const queriesToRun = queries.slice(0, maxQueries)
+
+  for (let i = 0; i < queriesToRun.length; i++) {
+    const query = queriesToRun[i]
     const results = await searchWeb(query)
 
     for (const result of results) {
-      options?.onProgress?.(1)
+      onProgress?.(1)
+
       if (seenUrls.has(result.url)) continue
       seenUrls.add(result.url)
 
@@ -331,38 +239,53 @@ export async function scanForThreats(
             screenshots: [],
             whois_snapshots: [],
             html_snapshots: [],
-            timestamps: [new Date().toISOString()]
-          }
+            timestamps: [new Date().toISOString()],
+          },
         })
       }
     }
 
-    // Rate limiting between queries
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Rate limiting between queries (skip after last)
+    if (i < queriesToRun.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, SCAN_CONFIG.rateLimitDelayMs))
+    }
   }
 
   return threats
 }
 
-// Check if a URL is currently active/reachable
-export async function checkUrlStatus(url: string): Promise<{
+// ============================================================================
+// URL Status Checking
+// ============================================================================
+
+export interface UrlStatus {
   active: boolean
   statusCode?: number
   redirectUrl?: string
-}> {
+  error?: string
+}
+
+/**
+ * Check if a URL is currently active/reachable
+ */
+export async function checkUrlStatus(url: string): Promise<UrlStatus> {
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method: 'HEAD',
       redirect: 'manual',
-      signal: AbortSignal.timeout(5000)
-    })
+    }, 1) // Single retry for URL checks
+
+    const isRedirect = response.status >= 300 && response.status < 400
 
     return {
-      active: response.ok || response.status === 301 || response.status === 302,
+      active: response.ok || isRedirect,
       statusCode: response.status,
-      redirectUrl: response.headers.get('location') || undefined
+      redirectUrl: isRedirect ? response.headers.get('location') || undefined : undefined,
     }
-  } catch {
-    return { active: false }
+  } catch (error) {
+    return {
+      active: false,
+      error: error instanceof Error ? error.message : 'Request failed',
+    }
   }
 }

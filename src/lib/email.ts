@@ -1,10 +1,17 @@
+/**
+ * Email service for sending notifications, alerts, and digests
+ */
 import nodemailer from 'nodemailer'
 import { Threat, Brand, ThreatSeverity } from '../types'
 import { format } from 'date-fns'
+import { EMAIL_CONFIG } from './constants'
 
+/**
+ * Email transporter instance
+ */
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587'),
+  host: process.env.SMTP_HOST || EMAIL_CONFIG.DEFAULT_SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT || String(EMAIL_CONFIG.DEFAULT_SMTP_PORT)),
   secure: false,
   auth: {
     user: process.env.SMTP_USER,
@@ -119,7 +126,7 @@ export async function sendThreatAlert(
 `
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'alerts@doppeldown.app',
+    from: process.env.EMAIL_FROM || EMAIL_CONFIG.DEFAULT_FROM_ALERTS,
     to,
     subject,
     html,
@@ -267,7 +274,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<void> 
 `
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'welcome@doppeldown.app',
+    from: process.env.EMAIL_FROM || EMAIL_CONFIG.DEFAULT_FROM_WELCOME,
     to,
     subject: 'Welcome to DoppelDown - Let\'s protect your brand',
     html,
@@ -397,7 +404,7 @@ export async function sendScanSummary(
 `
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'scans@doppeldown.app',
+    from: process.env.EMAIL_FROM || EMAIL_CONFIG.DEFAULT_FROM_SCANS,
     to,
     subject,
     html,
@@ -524,7 +531,7 @@ export async function sendWeeklyDigest(
 `
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'digest@doppeldown.app',
+    from: process.env.EMAIL_FROM || EMAIL_CONFIG.DEFAULT_FROM_DIGEST,
     to,
     subject,
     html,

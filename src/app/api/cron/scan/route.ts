@@ -2,7 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { randomInt } from 'crypto'
 import { createServiceClient } from '@/lib/supabase/server'
 import { getEffectiveTier, getTierLimits, getScanFrequencyHours } from '@/lib/tier-limits'
+import { CRON_CONFIG } from '@/lib/constants'
 
+/**
+ * GET handler for automated scan cron job
+ * Queues scans for brands that are due based on their tier's frequency
+ * 
+ * @param request - Next.js request object
+ * @returns JSON response with queueing results
+ */
 export async function GET(request: NextRequest) {
   // Verify cron secret to prevent unauthorized access
   const authHeader = request.headers.get('authorization')
@@ -98,7 +106,7 @@ export async function GET(request: NextRequest) {
           : undefined
 
         // Create scan job with jitter to spread load
-        const jitterMs = randomInt(0, 5 * 60 * 1000)  // 0-5 minutes
+        const jitterMs = randomInt(0, CRON_CONFIG.JITTER_MAX_MS)
         const tierLimits = getTierLimits(effectiveTier)
         const { error: jobError } = await supabase
           .from('scan_jobs')
@@ -107,7 +115,7 @@ export async function GET(request: NextRequest) {
             scan_id: scan.id,
             scan_type: 'automated',
             status: 'queued',
-            priority: 1,
+            priority: CRON_CONFIG.AUTOMATED_SCAN_PRIORITY,
             scheduled_at: new Date(Date.now() + jitterMs).toISOString(),
             payload: {
               variationLimit: tierLimits.variationLimit,

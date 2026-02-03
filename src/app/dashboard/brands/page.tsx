@@ -150,7 +150,7 @@ export default function BrandsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Brands</h1>
-          <p className="text-muted-foreground mt-1">Manage the brands you're monitoring</p>
+          <p className="text-muted-foreground mt-1">Manage the brands you&apos;re monitoring</p>
         </div>
         <Link href="/dashboard/brands/new">
           <Button>

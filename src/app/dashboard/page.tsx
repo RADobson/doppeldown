@@ -488,7 +488,7 @@ function OnboardingFlow() {
           <Rocket className="h-8 w-8 text-primary-600" />
         </div>
         <h1 className="text-3xl font-bold text-foreground">Welcome to DoppelDown</h1>
-        <p className="text-muted-foreground mt-2">Let's set up protection for your first brand</p>
+        <p className="text-muted-foreground mt-2">Let&apos;s set up protection for your first brand</p>
       </div>
 
       {/* Progress Steps */}
@@ -611,7 +611,7 @@ function OnboardingFlow() {
                   Ready to scan {createdBrand?.name}
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  We'll check for typosquatting domains, fake social accounts, and lookalike websites.
+                  We&apos;ll check for typosquatting domains, fake social accounts, and lookalike websites.
                   This may take a few minutes.
                 </p>
                 <Button onClick={handleStartScan}>
@@ -679,7 +679,7 @@ function OnboardingFlow() {
       {step === 3 && (
         <Card>
           <CardHeader>
-            <CardTitle>You're All Set!</CardTitle>
+            <CardTitle>You&apos;re All Set!</CardTitle>
           </CardHeader>
           <CardContent className="text-center py-8">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -689,7 +689,7 @@ function OnboardingFlow() {
               {createdBrand?.name} is now protected
             </h3>
             <p className="text-muted-foreground mb-6">
-              We'll continuously monitor for threats and alert you when we find something.
+              We&apos;ll continuously monitor for threats and alert you when we find something.
             </p>
 
             <div className="bg-muted rounded-lg p-4 mb-6 text-left">
