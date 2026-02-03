@@ -32,6 +32,20 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'What is Typosquatting? The Complete Guide for Business Owners (2026)',
+    slug: 'what-is-typosquatting-complete-guide-2026',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Typosquatting is one of the oldest tricks in the domain fraud playbook — and in 2026 it\'s more dangerous than ever. Learn the five types of typosquatting attacks, real-world examples, and how to protect your business.',
+  },
+  {
+    title: 'Brand Protection for Small Business: A Practical Guide',
+    slug: 'brand-protection-for-small-business-practical-guide',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Small businesses are now the primary target for brand impersonation attacks. This step-by-step guide covers affordable strategies to monitor your brand, prevent impersonation, and protect your business online.',
+  },
+  {
     title: 'How to Protect Your Brand from Domain Squatting and Phishing in 2026',
     slug: 'how-to-protect-your-brand-from-domain-squatting-and-phishing-2026',
     date: '2026-02-03',

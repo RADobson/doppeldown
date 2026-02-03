@@ -83,6 +83,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/blog/what-is-typosquatting-complete-guide-2026`,
+      lastModified: new Date('2026-02-03'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/blog/brand-protection-for-small-business-practical-guide`,
+      lastModified: new Date('2026-02-03'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/blog/how-to-protect-your-brand-from-domain-squatting-and-phishing-2026`,
       lastModified: new Date('2026-02-03'),
       changeFrequency: 'monthly',

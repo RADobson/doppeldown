@@ -1,0 +1,16 @@
+{
+  "name": "DoppelDown - Brand Protection",
+  "short_name": "DoppelDown",
+  "description": "AI-powered brand protection for SMBs. Detect fake domains, phishing sites, and brand impostors.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
