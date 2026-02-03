@@ -155,16 +155,15 @@ export default function SignUpPage() {
           </ul>
 
           <div className="mt-12 p-6 bg-primary-700/50 rounded-xl">
-            <p className="text-primary-100 italic">
-              "DoppelDown helped us identify and take down 15 phishing sites targeting our customers within the first week."
-            </p>
-            <div className="mt-4 flex items-center">
-              <div className="w-10 h-10 bg-primary-500 rounded-full" />
-              <div className="ml-3">
-                <div className="font-semibold">Sarah Chen</div>
-                <div className="text-sm text-primary-200">Security Lead, TechCorp</div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-5 w-5 text-white" />
               </div>
+              <div className="font-semibold">Enterprise-grade at startup prices</div>
             </div>
+            <p className="text-primary-100 text-sm">
+              Same AI-powered detection used by Fortune 500 companies, now accessible to businesses of all sizes. Start free, upgrade when you're ready.
+            </p>
           </div>
         </div>
       </div>

@@ -1,12 +1,12 @@
 import Hero from '@/components/landing/Hero'
-import LogoCloud from '@/components/landing/LogoCloud'
+// import LogoCloud from '@/components/landing/LogoCloud' // TODO: Add real customer logos when available
 import WhyNow from '@/components/landing/WhyNow'
 import Features from '@/components/landing/Features'
 import TrustSignals from '@/components/landing/TrustSignals'
 import HowItWorks from '@/components/landing/HowItWorks'
 import Pricing from '@/components/landing/Pricing'
 import DemoPreview from '@/components/landing/DemoPreview'
-import Testimonials from '@/components/landing/Testimonials'
+// import Testimonials from '@/components/landing/Testimonials' // TODO: Add real testimonials when available
 import FAQ from '@/components/landing/FAQ'
 import Newsletter from '@/components/landing/Newsletter'
 import Cta from '@/components/landing/Cta'
@@ -19,13 +19,13 @@ export default function HomePage() {
       <SoftwareApplicationSchema />
       <FAQSchema />
       <Hero />
-      <LogoCloud />
+      {/* <LogoCloud /> */}
       <WhyNow />
       <Features />
       <TrustSignals />
       <HowItWorks />
       <DemoPreview />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Pricing />
       <FAQ />
       <Newsletter />
