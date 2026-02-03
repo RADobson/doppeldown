@@ -215,7 +215,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-2 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto px-2 sm:px-0">
             {PLANS.map((plan) => {
               const isCurrentPlan = currentPlan === plan.id
               const isSubscribing = subscribing === plan.id
@@ -314,13 +314,51 @@ export default function PricingPage() {
               ))}
             </div>
           </div>
+
+          {/* Competitor Comparison */}
+          <div className="mt-20 max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-foreground mb-4 text-center">
+              How We Compare
+            </h2>
+            <p className="text-muted-foreground text-center mb-8">
+              Traditional brand protection costs a fortune. DoppelDown doesn&apos;t.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { name: 'BrandShield', price: '$15K–$50K/yr', link: '/compare/brandshield' },
+                { name: 'Red Points', price: '$25K–$100K/yr', link: '/compare/red-points' },
+                { name: 'PhishLabs', price: '$50K–$250K/yr', link: '/compare/phishlabs' },
+              ].map((comp) => (
+                <Link
+                  key={comp.name}
+                  href={comp.link}
+                  className="bg-card border border-border rounded-lg p-4 hover:border-primary-600 transition group"
+                >
+                  <div className="font-semibold text-foreground group-hover:text-primary-600 transition">
+                    DoppelDown vs {comp.name}
+                  </div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    They charge {comp.price}. We start at $0.
+                  </div>
+                  <div className="text-xs text-primary-600 mt-2 group-hover:underline">
+                    See full comparison →
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="bg-card border-t border-border py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} DoppelDown. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Dobson Development Pty Ltd. All rights reserved.</p>
+          <div className="mt-2 space-x-4 text-sm">
+            <Link href="/terms" className="hover:text-foreground">Terms</Link>
+            <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
+            <Link href="/blog" className="hover:text-foreground">Blog</Link>
+          </div>
         </div>
       </footer>
     </div>
