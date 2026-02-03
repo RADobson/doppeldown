@@ -1,17 +1,57 @@
 import Link from 'next/link'
 import { Shield, Target, Users, Zap } from 'lucide-react'
 import Footer from '@/components/landing/Footer'
+import { Logo } from '@/components/Logo'
+
+function AboutPageSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'About DoppelDown',
+    description:
+      'DoppelDown was built to democratize brand protection. Enterprise-grade phishing and typosquatting detection accessible to every business.',
+    url: 'https://doppeldown.com/about',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'Dobson Development Pty Ltd',
+      url: 'https://doppeldown.com',
+      description:
+        'Australian software company building accessible cybersecurity tools for small and medium businesses.',
+      foundingDate: '2026',
+      founders: [{ '@type': 'Person', name: 'Richard Dobson' }],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Sunshine Coast',
+        addressRegion: 'Queensland',
+        addressCountry: 'AU',
+      },
+      brand: {
+        '@type': 'Brand',
+        name: 'DoppelDown',
+        url: 'https://doppeldown.com',
+      },
+    },
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  )
+}
 
 export const metadata = {
   title: 'About DoppelDown — Our Mission',
   description:
-    'DoppelDown was built to democratize brand protection. We believe every business deserves protection from phishing, typosquatting, and brand impersonation — not just enterprises with $15K+ budgets.',
+    'DoppelDown was built by Dobson Development Pty Ltd in Queensland, Australia to democratize brand protection. We believe every business deserves protection from phishing, typosquatting, and brand impersonation — not just enterprises with $15K–$250K budgets.',
   alternates: {
     canonical: 'https://doppeldown.com/about',
   },
   openGraph: {
-    title: 'About DoppelDown',
-    description: 'Brand protection shouldn\'t be a luxury. Learn why we built DoppelDown.',
+    title: 'About DoppelDown — Enterprise-Grade Brand Protection for Every Business',
+    description:
+      'Brand protection shouldn\'t be a luxury. Learn why Dobson Development built DoppelDown to make it accessible to SMBs.',
     url: 'https://doppeldown.com/about',
   },
 }
@@ -19,13 +59,14 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-landing">
+      <AboutPageSchema />
+
       {/* Header */}
       <nav className="bg-landing border-b border-landing-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <Shield className="h-8 w-8 text-primary-600" />
-              <span className="ml-2 text-xl font-bold text-landing-foreground">DoppelDown</span>
+            <Link href="/">
+              <Logo mode="light" size="md" />
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/pricing" className="text-landing-muted hover:text-landing-foreground text-sm">
@@ -130,6 +171,17 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Our Mission */}
+      <section className="py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-landing-foreground mb-6">Our Mission</h2>
+          <p className="text-landing-muted text-lg leading-relaxed mb-8">
+            Make enterprise-grade brand protection accessible to every business — regardless
+            of size, budget, or technical expertise.
+          </p>
+        </div>
+      </section>
+
       {/* Company */}
       <section className="py-12 px-4">
         <div className="max-w-3xl mx-auto">
@@ -148,7 +200,10 @@ export default function AboutPage() {
             <p>
               Our founder comes from a cybersecurity background in managed detection and
               response (MDR), and saw firsthand how small businesses were left unprotected
-              by an industry focused on Fortune 500 clients.
+              by an industry focused on Fortune 500 clients. DoppelDown was born from a
+              simple frustration: existing brand protection solutions cost $15,000–$250,000
+              per year, effectively pricing out every small and medium business. We decided
+              to build something better.
             </p>
           </div>
           <div className="mt-8 p-6 bg-landing-elevated border border-landing-border rounded-lg">

@@ -25,9 +25,9 @@ export default function Footer() {
           <div>
             <h4 className="text-landing-foreground font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-landing-foreground">About</a></li>
+              <li><Link href="/about" className="hover:text-landing-foreground">About</Link></li>
               <li><Link href="/blog" className="hover:text-landing-foreground">Blog</Link></li>
-              <li><a href="#" className="hover:text-landing-foreground">Contact</a></li>
+              <li><a href="mailto:support@doppeldown.com" className="hover:text-landing-foreground">Contact</a></li>
             </ul>
           </div>
           <div>

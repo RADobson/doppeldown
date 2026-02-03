@@ -7,6 +7,7 @@ import DemoPreview from '@/components/landing/DemoPreview'
 import Cta from '@/components/landing/Cta'
 import Footer from '@/components/landing/Footer'
 import FAQ from '@/components/landing/FAQ'
+import Newsletter from '@/components/landing/Newsletter'
 import { SoftwareApplicationSchema, FAQSchema } from '@/components/structured-data'
 
 export default function HomePage() {
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Pricing />
       <DemoPreview />
       <FAQ />
+      <Newsletter />
       <Cta />
       <Footer />
     </div>

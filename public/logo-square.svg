@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="128" fill="#6366f1"/>
+  
+  <!-- Shield shape -->
+  <path d="M512 160 
+           C512 160 760 200 760 200 
+           C770 200 780 210 780 220 
+           L780 480 
+           C780 620 680 740 512 840 
+           C344 740 244 620 244 480 
+           L244 220 
+           C244 210 254 200 264 200 
+           C264 200 512 160 512 160Z" 
+        fill="rgba(255,255,255,0.15)" 
+        stroke="rgba(255,255,255,0.3)" 
+        stroke-width="4"/>
+  
+  <!-- Bold D letter -->
+  <text x="512" y="545" 
+        font-family="Arial Black, Arial, Helvetica, sans-serif" 
+        font-weight="900" 
+        font-size="420" 
+        fill="white" 
+        text-anchor="middle" 
+        dominant-baseline="central"
+        letter-spacing="-10">D</text>
+</svg>
