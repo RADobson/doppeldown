@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
@@ -31,7 +32,7 @@ const faqs = [
   {
     question: 'What happens when a threat is detected?',
     answer:
-      'When DoppelDown detects a suspicious domain or social media account, it scores the threat using AI, collects evidence (screenshots, DNS records, WHOIS data), and provides you with everything you need to take action — whether that\'s a takedown request to the registrar or a report to law enforcement.',
+      "When DoppelDown detects a suspicious domain or social media account, it scores the threat using AI, collects evidence (screenshots, DNS records, WHOIS data), and provides you with everything you need to take action — whether that's a takedown request to the registrar or a report to law enforcement.",
   },
   {
     question: 'Can I try DoppelDown before paying?',
@@ -41,54 +42,74 @@ const faqs = [
 ]
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
 
   return (
-    <section id="faq" className="py-16 bg-landing">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-landing-foreground text-center mb-4">
-          Frequently Asked Questions
-        </h2>
-        <p className="text-landing-muted text-center mb-12">
-          Everything you need to know about protecting your brand with DoppelDown.
-        </p>
+    <section id="faq" className="py-20 lg:py-28 bg-landing-elevated/50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary-600/10 text-primary-400 text-sm font-medium mb-4">
+            FAQ
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-landing-foreground mb-4">
+            Frequently asked questions
+          </h2>
+          <p className="text-xl text-landing-muted">
+            Everything you need to know about protecting your brand.
+          </p>
+        </div>
 
-        <div className="space-y-3">
+        {/* Accordion */}
+        <div className="space-y-4">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="border border-landing-border rounded-lg overflow-hidden"
+              className={`rounded-2xl border transition-all duration-200 ${
+                openIndex === i 
+                  ? 'bg-landing border-primary-500/30 shadow-lg shadow-primary-600/5' 
+                  : 'bg-landing border-landing-border hover:border-landing-border/80'
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-landing-elevated transition-colors"
+                className="w-full flex items-center justify-between p-6 text-left"
               >
-                <span className="font-medium text-landing-foreground pr-4">
+                <span className="font-medium text-landing-foreground pr-8 text-lg">
                   {faq.question}
                 </span>
-                <svg
-                  className={`w-5 h-5 text-landing-muted shrink-0 transition-transform ${
-                    openIndex === i ? 'rotate-180' : ''
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-landing-elevated border border-landing-border flex items-center justify-center transition-transform duration-200 ${
+                  openIndex === i ? 'rotate-180 bg-primary-600/10 border-primary-500/30' : ''
+                }`}>
+                  <ChevronDown className="w-4 h-4 text-landing-muted" />
+                </div>
               </button>
-              {openIndex === i && (
-                <div className="px-6 pb-4 text-landing-muted text-sm leading-relaxed">
+              
+              <div className={`overflow-hidden transition-all duration-200 ${
+                openIndex === i ? 'max-h-96' : 'max-h-0'
+              }`}>
+                <div className="px-6 pb-6 text-landing-muted leading-relaxed">
                   {faq.answer}
                 </div>
-              )}
+              </div>
             </div>
           ))}
+        </div>
+
+        {/* Still have questions */}
+        <div className="mt-12 text-center">
+          <p className="text-landing-muted mb-4">
+            Still have questions?
+          </p>
+          <a 
+            href="mailto:support@doppeldown.com"
+            className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 font-medium transition-colors"
+          >
+            Contact our team
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>
