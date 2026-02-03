@@ -32,6 +32,27 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'How to Check if a Website is Legitimate: A Complete Guide',
+    slug: 'how-to-check-if-website-is-legitimate-complete-guide',
+    date: '2026-02-03',
+    category: 'Cybersecurity',
+    excerpt: 'Learn how to check if a website is legitimate with our step-by-step guide. Discover how to spot fake websites, verify SSL certificates, check WHOIS data, and identify red flags before you share personal information.',
+  },
+  {
+    title: 'What is Typosquatting? Examples and How to Protect Your Brand',
+    slug: 'typosquatting-examples-protect-brand',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Learn what typosquatting is with real examples like amaz0n.com and gooogle.com. Discover how attackers profit from domain squatting, the legal aspects, and practical protection strategies for your business.',
+  },
+  {
+    title: 'The True Cost of Brand Impersonation: Statistics and Case Studies (2026)',
+    slug: 'brand-impersonation-statistics-case-studies-2026',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Discover brand impersonation statistics for 2026. Learn the true cost of phishing attacks, including financial losses, reputation damage, and customer trust erosion. See real case studies and calculate the ROI of brand protection.',
+  },
+  {
     title: 'What to Do When Someone Impersonates Your Business Online',
     slug: 'what-to-do-when-someone-impersonates-your-business-online',
     date: '2026-02-03',
