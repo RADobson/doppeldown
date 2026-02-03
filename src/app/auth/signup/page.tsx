@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { CheckCircle } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 import { createClient } from '@/lib/supabase/client'
+import { gtagEvent } from '@/components/analytics'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -35,6 +36,16 @@ export default function SignUpPage() {
       })
 
       if (error) throw error
+
+      // Track signup conversion for Google Ads
+      gtagEvent('sign_up', { method: 'email' })
+      gtagEvent('conversion', {
+        send_to: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
+          ? `${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}/signup`
+          : undefined,
+        value: 1.0,
+        currency: 'USD',
+      })
 
       router.push('/dashboard')
     } catch (err) {
@@ -101,9 +112,9 @@ export default function SignUpPage() {
 
             <p className="text-sm text-muted-foreground text-center">
               By signing up, you agree to our{' '}
-              <a href="#" className="text-primary-600 hover:underline">Terms</a>
+              <Link href="/terms" className="text-primary-600 hover:underline">Terms</Link>
               {' '}and{' '}
-              <a href="#" className="text-primary-600 hover:underline">Privacy Policy</a>
+              <Link href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</Link>
             </p>
           </form>
 
