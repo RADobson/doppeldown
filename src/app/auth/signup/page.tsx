@@ -37,15 +37,20 @@ export default function SignUpPage() {
 
       if (error) throw error
 
-      // Track signup conversion for Google Ads
+      // Track signup conversion
+      // 1. GA4 event - tracked via GA4 and flows to Google Ads if linked
       gtagEvent('sign_up', { method: 'email' })
-      gtagEvent('conversion', {
-        send_to: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
-          ? `${process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}/signup`
-          : undefined,
-        value: 1.0,
-        currency: 'USD',
-      })
+      
+      // 2. Google Ads conversion - only fires if proper conversion label is configured
+      // Format: AW-CONVERSION_ID/CONVERSION_LABEL (e.g., AW-11489904624/AbCdEfGhIjK)
+      const conversionLabel = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL
+      if (conversionLabel) {
+        gtagEvent('conversion', {
+          send_to: conversionLabel,
+          value: 1.0,
+          currency: 'USD',
+        })
+      }
 
       router.push('/dashboard')
     } catch (err) {
