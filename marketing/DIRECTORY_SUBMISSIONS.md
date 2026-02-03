@@ -15,8 +15,8 @@
 |---|-----------|------|--------|-----------------|
 | 1 | Product Hunt | Free | ❌ Needs manual action | Create account, set up launch |
 | 2 | BetaList | Free (slow) / $99+ fast | ❌ Needs manual action | Create account, submit |
-| 3 | Launching Next | Free / $99 expedited | ❌ Needs manual action | Fill web form (no account needed) |
-| 4 | SaaSHub | Free | ❌ Needs manual action | Submit product via their form |
+| 3 | Launching Next | Free / $99 expedited | ✅ **SUBMITTED** #125029 | Awaiting review |
+| 4 | SaaSHub | Free | ✅ **SUBMITTED** | Pending approval (up to 21 days) |
 | 5 | AlternativeTo | Free | ❌ Needs manual action | Create account, add software (CF-blocked) |
 | 6 | G2 | Free | ❌ Needs manual action | Fill request form at sell.g2.com |
 | 7 | Capterra | Free basic listing | ❌ Needs manual action | Vendor signup (CF-blocked) |
