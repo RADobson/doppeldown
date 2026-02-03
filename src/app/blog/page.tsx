@@ -32,6 +32,48 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    title: 'What to Do When Someone Impersonates Your Business Online',
+    slug: 'what-to-do-when-someone-impersonates-your-business-online',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'Found someone impersonating your brand online? Here is your emergency response playbook — assess the threat, document evidence, file takedown reports, protect your customers, and set up prevention to stop it happening again.',
+  },
+  {
+    title: 'DMARC, SPF, and DKIM Explained: Email Authentication for Small Businesses',
+    slug: 'dmarc-spf-dkim-explained-email-authentication-small-business',
+    date: '2026-02-03',
+    category: 'Email Security',
+    excerpt: 'Email spoofing lets attackers send emails that look like they come from your domain. DMARC, SPF, and DKIM stop that — here is how they work, a plain-English explanation, and a step-by-step setup guide for small businesses.',
+  },
+  {
+    title: 'How to Report a Phishing Website: Step-by-Step Guide (2026)',
+    slug: 'how-to-report-phishing-website-step-by-step-guide',
+    date: '2026-02-03',
+    category: 'Phishing Prevention',
+    excerpt: 'Found a fake website impersonating your business? Here is exactly how to report it to Google Safe Browsing, hosting providers, domain registrars, and law enforcement — and get it taken down fast.',
+  },
+  {
+    title: 'How to Monitor Your Brand Online: A Guide for Small Businesses',
+    slug: 'how-to-monitor-your-brand-online-guide-for-small-businesses',
+    date: '2026-02-03',
+    category: 'Brand Monitoring',
+    excerpt: 'Learn how to set up effective online brand monitoring for your small business. Step-by-step guide covering the 5 pillars of brand monitoring: domain monitoring, social media scanning, website clone detection, search result monitoring, and dark web monitoring.',
+  },
+  {
+    title: 'Free vs Paid Brand Protection: What\'s the Real Difference?',
+    slug: 'free-vs-paid-brand-protection-whats-the-difference',
+    date: '2026-02-03',
+    category: 'Brand Protection',
+    excerpt: 'An honest comparison of free and paid brand protection tools at every price point. Learn what Google Alerts misses, what $49/month gets you, and when enterprise solutions make sense.',
+  },
+  {
+    title: 'How Cybercriminals Clone Websites: What Business Owners Need to Know',
+    slug: 'how-cybercriminals-clone-websites-what-businesses-need-to-know',
+    date: '2026-02-03',
+    category: 'Cybersecurity',
+    excerpt: 'Creating a pixel-perfect copy of any website takes less than 60 seconds. Learn how website cloning attacks work, why small businesses are prime targets, and how to detect and prevent these attacks.',
+  },
+  {
     title: 'Phishing Attack Statistics 2026: What SMBs Need to Know',
     slug: 'phishing-attack-statistics-2026-what-smbs-need-to-know',
     date: '2026-02-03',
