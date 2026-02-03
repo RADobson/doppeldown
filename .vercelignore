@@ -1,0 +1,5 @@
+# Prevent non-app assets from being uploaded with deployments
+# (reduces risk of accidental exposure / route collisions)
+
+# Product Hunt demo-video assets (should never be served from production)
+marketing/demo-video/
