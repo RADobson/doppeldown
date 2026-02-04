@@ -1,0 +1,81 @@
+# Transformer Dependencies for Advanced DoppelDown NLP Threat Detection
+# Install with: pip install -r requirements-transformers.txt
+
+# =============================================================================
+# Core Transformer Libraries
+# =============================================================================
+
+# HuggingFace Transformers - State-of-the-art NLP models
+transformers>=4.35.0
+
+# Sentence Transformers - Semantic similarity and embeddings
+sentence-transformers>=2.2.2
+
+# PyTorch - Deep learning framework (CPU version by default)
+# For GPU support, install torch separately: pip install torch --index-url https://download.pytorch.org/whl/cu118
+torch>=2.0.0
+
+# Tokenizers - Fast tokenization
+tokenizers>=0.15.0
+
+# =============================================================================
+# ML and Data Processing
+# =============================================================================
+
+# Core ML
+scikit-learn>=1.3.0
+numpy>=1.24.0
+
+# Data handling
+pandas>=2.0.0
+
+# =============================================================================
+# NLP Utilities
+# =============================================================================
+
+# spaCy - Advanced NLP
+spacy>=3.7.0
+
+# NLTK - Natural Language Toolkit
+nltk>=3.8.1
+
+# Text processing
+regex>=2023.0.0
+python-Levenshtein>=0.21.0  # Fast edit distance
+
+# =============================================================================
+# API and Serving
+# =============================================================================
+
+# FastAPI for REST API
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+
+# =============================================================================
+# Testing and Development
+# =============================================================================
+
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+
+# =============================================================================
+# Optional: Enhanced Models (uncomment for better accuracy)
+# =============================================================================
+
+# For cross-encoder models
+# sentence-transformers[cross-encoders]>=2.2.2
+
+# For accelerated inference
+# optimum>=1.13.0
+# onnxruntime>=1.16.0
+
+# For model quantization
+# bitsandbytes>=0.41.0
+
+# =============================================================================
+# Recommended: Install spaCy English model after packages
+# =============================================================================
+# python -m spacy download en_core_web_sm
+# python -m spacy download en_core_web_md  # For better accuracy
