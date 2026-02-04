@@ -9,3 +9,14 @@ build
 coverage
 tmp
 out
+
+# Exclude non-app directories
+marketing
+.planning
+docs
+assets
+content
+ml
+research
+scripts
+supabase
