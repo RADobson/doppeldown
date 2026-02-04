@@ -1,5 +1,5 @@
 /**
- * Next.js Middleware with Helmet Security Headers
+ * Next.js Middleware with Helmet Security Headers & Auth
  * 
  * Provides:
  * - Content Security Policy (CSP)
@@ -8,10 +8,13 @@
  * - X-Content-Type-Options
  * - Referrer-Policy
  * - Permissions-Policy
+ * - Auth protection for dashboard routes
+ * - Onboarding redirect for new users
  */
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
 // Security header configuration
 const securityHeaders = {
@@ -77,20 +80,90 @@ const publicAssetPaths = [
   '/favicon.ico',
   '/robots.txt',
   '/sitemap.xml',
+  '/googlea9a8923ee74d23ab.html',
 ]
 
 function isPublicAsset(path: string): boolean {
   return publicAssetPaths.some(prefix => path.startsWith(prefix))
 }
 
+// Routes that require authentication
+const protectedRoutes = ['/dashboard', '/onboarding']
+
+// Routes that should redirect to dashboard if already logged in
+const authRoutes = ['/auth/login', '/auth/signup', '/auth/register']
+
+// Routes that skip onboarding check (to avoid infinite redirects)
+const skipOnboardingCheck = ['/onboarding', '/api', '/auth']
+
 /**
  * Next.js Middleware
- * Applies security headers to all responses
+ * Applies security headers and handles auth/onboarding redirects
  */
-export function middleware(request: NextRequest): NextResponse {
-  // Get the response
-  const response = NextResponse.next()
+export async function middleware(request: NextRequest): Promise<NextResponse> {
   const path = request.nextUrl.pathname
+  
+  // Create a response to potentially modify
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  // Create Supabase client for auth checks on protected routes
+  if (protectedRoutes.some(route => path.startsWith(route)) || 
+      authRoutes.some(route => path.startsWith(route))) {
+    
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+            response = NextResponse.next({
+              request,
+            })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Check for protected routes - redirect to login if not authenticated
+    if (protectedRoutes.some(route => path.startsWith(route)) && !user) {
+      const redirectUrl = new URL('/auth/login', request.url)
+      redirectUrl.searchParams.set('redirect', path)
+      return NextResponse.redirect(redirectUrl)
+    }
+
+    // Check for auth routes - redirect to dashboard if already logged in
+    if (authRoutes.some(route => path.startsWith(route)) && user) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    // Check onboarding status for authenticated users going to dashboard
+    if (user && path.startsWith('/dashboard') && !skipOnboardingCheck.some(route => path.startsWith(route))) {
+      // Check if user needs onboarding
+      const { data: onboarding } = await supabase
+        .from('user_onboarding')
+        .select('status')
+        .eq('user_id', user.id)
+        .single()
+
+      // Redirect to onboarding if incomplete
+      if (!onboarding || onboarding.status === 'incomplete') {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+    }
+  }
 
   // Apply security headers to all responses
   for (const [header, value] of Object.entries(securityHeaders)) {
@@ -144,7 +217,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - .html files (for verification)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff|woff2|html)$).*)',
   ],
 }
