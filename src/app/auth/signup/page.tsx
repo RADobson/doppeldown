@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, Mail } from 'lucide-react'
 import { Logo } from '@/components/Logo'
 import { createClient } from '@/lib/supabase/client'
 import { gtagEvent } from '@/components/analytics'
@@ -17,6 +17,7 @@ export default function SignUpPage() {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [confirmationSent, setConfirmationSent] = useState(false)
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,13 +26,14 @@ export default function SignUpPage() {
 
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             full_name: name,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup`,
         },
       })
 
@@ -52,12 +54,74 @@ export default function SignUpPage() {
         })
       }
 
-      router.push('/dashboard')
+      // Check if email confirmation is required
+      // When Supabase has email confirmation enabled, user won't have a session yet
+      if (data.user && !data.session) {
+        // Email confirmation required — show confirmation UI
+        setConfirmationSent(true)
+      } else {
+        // Auto-confirm is on or session was created immediately
+        router.push('/dashboard')
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create account')
     } finally {
       setLoading(false)
     }
+  }
+
+  // Show email confirmation screen
+  if (confirmationSent) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+          <Link href="/" className="flex justify-center items-center mb-8">
+            <Logo mode="dark" size="lg" />
+          </Link>
+
+          <div className="bg-card py-10 px-6 shadow-sm sm:rounded-xl border border-border">
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+                <Mail className="h-8 w-8 text-primary-600" />
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-foreground mb-3">
+              Check your email
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              We sent a confirmation link to{' '}
+              <span className="font-medium text-foreground">{email}</span>.
+              Click the link to activate your account.
+            </p>
+
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg text-sm mb-6">
+              <strong>Didn&apos;t get the email?</strong> Check your spam folder, or make sure you entered the correct email address.
+            </div>
+
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                setConfirmationSent(false)
+                setEmail('')
+                setPassword('')
+                setName('')
+              }}
+            >
+              Try a different email
+            </Button>
+          </div>
+
+          <p className="mt-6 text-sm text-muted-foreground">
+            Already confirmed?{' '}
+            <Link href="/auth/login" className="text-primary-600 hover:text-primary-500 font-medium">
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
