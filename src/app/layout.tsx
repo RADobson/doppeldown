@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
+import { ToastProvider } from '@/components/toast-provider'
 import { Analytics } from '@/components/analytics'
 import { OrganizationSchema, WebSiteSchema } from '@/components/structured-data'
+import { ErrorBoundary } from '@/components/error-boundary'
+import { ErrorInit } from '@/components/error-init'
+import { OfflineIndicator } from '@/components/ui/graceful-states'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -67,8 +71,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // Add Google Search Console verification when available
-    // google: 'verification-code-here',
+    google: 'qZQYfJbkON0CN6vjLFUnTf99-IW2iCPFXBi_BiWLbsg',
   },
 }
 
@@ -88,8 +91,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Analytics />
-          {children}
+          <ToastProvider>
+            <ErrorInit />
+            <Analytics />
+            <ErrorBoundary componentName="App">
+              {children}
+            </ErrorBoundary>
+            <OfflineIndicator />
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
