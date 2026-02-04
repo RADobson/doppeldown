@@ -160,10 +160,27 @@ export default function NewBrandPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to create brand')
+        // Try to surface server-provided error details
+        let msg = 'Failed to create brand'
+        try {
+          const data = await response.json()
+          // New-style API envelope
+          if (data?.success === false && data?.error?.message) {
+            msg = data.error.message
+          // Legacy/simple error shape
+          } else if (typeof data?.error === 'string') {
+            msg = data.error
+          } else if (typeof data?.message === 'string') {
+            msg = data.message
+          }
+        } catch {
+          // ignore JSON parse failures
+        }
+        throw new Error(msg)
       }
 
-      const brand = await response.json()
+      const data = await response.json()
+      const brand = data?.data ?? data
 
       if (logoFile) {
         try {

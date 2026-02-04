@@ -393,14 +393,28 @@ function OnboardingFlow() {
         })
       })
 
-      if (!response.ok) throw new Error('Failed to create brand')
+      if (!response.ok) {
+        let msg = 'Failed to create brand'
+        try {
+          const data = await response.json()
+          if (data?.success === false && data?.error?.message) {
+            msg = data.error.message
+          } else if (typeof data?.error === 'string') {
+            msg = data.error
+          } else if (typeof data?.message === 'string') {
+            msg = data.message
+          }
+        } catch {}
+        throw new Error(msg)
+      }
 
-      const brand = await response.json()
+      const data = await response.json()
+      const brand = data?.data ?? data
       setCreatedBrand(brand)
       setStep(2)
     } catch (error) {
       console.error('Error creating brand:', error)
-      alert('Failed to create brand. Please try again.')
+      alert(error instanceof Error ? error.message : 'Failed to create brand. Please try again.')
     } finally {
       setLoading(false)
     }
